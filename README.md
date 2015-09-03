@@ -20,7 +20,7 @@ Please read the Features section below and issues to make sure your issue is not
 - [ ] File Type Icons
 - [ ] File Size
 - [ ] Directory Child Count
-- [ ] Filter Filtes
+- [ ] Filter Files
 - [ ] Show / Hide hidden files
 - [ ] Show directories first
 - [ ] Share files
