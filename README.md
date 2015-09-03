@@ -7,10 +7,12 @@ Please read the Features section below and issues to make sure your issue is not
 
 # Features
 
-- [ ] Breadcrumb
+- [x] Breadcrumb
 - [x] Delete Files
+- [x] Refresh
 - [ ] Rename Files
 - [ ] Create new files and directories
+- [ ] Different views (List, Icons, etc)
 - [ ] Share Files
 - [ ] Search
 - [ ] FTP Browser
