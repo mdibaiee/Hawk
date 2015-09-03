@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>Share</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.14 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Components" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Toolbar" sketch:type="MSArtboardGroup" transform="translate(-260.000000, -14.000000)">
+            <g sketch:type="MSLayerGroup">
+                <rect id="Box" stroke="#CDCDCD" fill="#F0F0F0" filter="url(#filter-1)" sketch:type="MSShapeGroup" x="0" y="0" width="360" height="50"></rect>
+                <g id="Buttons" transform="translate(26.000000, 10.000000)" sketch:type="MSShapeGroup">
+                    <g id="Share" transform="translate(234.000000, 3.000000)">
+                        <rect id="Rectangle-16-Copy-3" stroke="#63B0CD" x="0.25" y="2.25" width="23.5" height="23.5" rx="4"></rect>
+                        <rect id="Rectangle-16-Copy-4" stroke="#63B0CD" stroke-width="2" x="0.25" y="2.25" width="23.5" height="23.5" rx="4"></rect>
+                        <g id="Arrow-Copy" transform="translate(3.970456, 1.794010)">
+                            <path d="M16.4464007,0.565580823 C15.8587351,0.0896986089 15.0003038,0.175692837 14.5216385,0.766795217 L14.5216385,0.766795217 C14.0462873,1.35380507 14.1365328,2.21479885 14.7250017,2.69133155 L17.5569614,4.98460728 C18.1446269,5.4604895 19.0030583,5.37449527 19.4817235,4.78339289 L19.4817235,4.78339289 C19.9570747,4.19638303 19.8668292,3.33538925 19.2783604,2.85885655 L16.4464007,0.565580823 L16.4464007,0.565580823 Z" id="Rectangle-14-Copy-3" fill="#F0F0F0"></path>
+                            <path d="M17.8233203,3.7510408 C18.4192017,3.28548725 19.2760014,3.38645007 19.7442777,3.98581629 L19.7442777,3.98581629 C20.2093117,4.58103276 20.1040536,5.4403204 19.5073577,5.90651033 L16.6358061,8.15001227 C16.0399247,8.61556582 15.183125,8.514603 14.7148488,7.91523679 L14.7148488,7.91523679 C14.2498147,7.32002031 14.3550729,6.46073267 14.9517688,5.99454274 L17.8233203,3.7510408 L17.8233203,3.7510408 Z" id="Rectangle-14-Copy-2" fill="#F0F0F0"></path>
+                            <path d="M0.904641558,19.4099998 C0.904641558,19.4099998 0.306664788,12.8190133 2.56325912,7.07847426 C4.48673229,2.18536051 7.7523107,1.65650733 15.0028897,2.14586395" id="Path-8" stroke="#F0F0F0" stroke-width="4" stroke-linecap="round"></path>
+                        </g>
+                        <g id="Arrow" transform="translate(4.970456, 0.882233)">
+                            <path d="M14.8349944,0.565580823 C14.2473288,0.0896986089 13.3888974,0.175692837 12.9102322,0.766795217 L12.9102322,0.766795217 C12.434881,1.35380507 12.5251265,2.21479885 13.1135954,2.69133155 L15.945555,4.98460728 C16.5332206,5.4604895 17.3916519,5.37449527 17.8703172,4.78339289 L17.8703172,4.78339289 C18.3456684,4.19638303 18.2554229,3.33538925 17.666954,2.85885655 L14.8349944,0.565580823 L14.8349944,0.565580823 Z" id="Rectangle-14-Copy-3" fill="#63B0CD"></path>
+                            <path d="M16.1100388,3.7510408 C16.7059201,3.28548725 17.5627199,3.38645007 18.0309961,3.98581629 L18.0309961,3.98581629 C18.4960302,4.58103276 18.390772,5.4403204 17.7940761,5.90651033 L14.9225246,8.15001227 C14.3266432,8.61556582 13.4698434,8.514603 13.0015672,7.91523679 L13.0015672,7.91523679 C12.5365331,7.32002031 12.6417913,6.46073267 13.2384872,5.99454274 L16.1100388,3.7510408 L16.1100388,3.7510408 Z" id="Rectangle-14-Copy-2" fill="#63B0CD"></path>
+                            <path d="M0.911776696,17.2355339 C0.911776696,17.2355339 0.254336053,12.3622456 2.73533014,8.117767 C4.85007689,4.49986342 8.44039022,4.10883637 16.4119797,4.47066018" id="Path-8" stroke="#63B0CD" stroke-width="4" stroke-linecap="round"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

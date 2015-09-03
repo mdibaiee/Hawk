@@ -4,12 +4,14 @@ module.exports = function(grunt) {
   grunt.initConfig({
     browserify: {
       dev: {
-        files: {
-          'build/main.js': ['src/js/**/*', '!src/js/libs/**']
-        },
+        files: [{
+          dest: 'build/main.js',
+          src: ['src/js/**/*', '!src/js/libs/**']
+        }],
         options: {
           alias: {
-            store: './src/js/store.js'
+            store: './src/js/store.js',
+            utils: './src/js/utils.js'
           },
           transform: [['babelify', {
             optional: ['es7.asyncFunctions', 'asyncToGenerator',
@@ -38,26 +40,32 @@ module.exports = function(grunt) {
                   src: '**/*.js',
                   expose: 'api',
                   cwd: __dirname + '/src/js/api'
+                },
+                {
+                  src: '**/*.js',
+                  expose: 'libs',
+                  cwd: __dirname + '/src/js/libs'
                 }
               ]
             ]
           ]
         }
+      }
+    },
+    mochify: {
+      options: {
+        reporter: 'land'
       },
-      prod: {
-        files: {
-          'build/main.js': 'src/js/**/*'
-        },
-        options: {
-          transform: ['babelify', 'uglifyify']
-        }
+      tests: {
+        src: 'test/**/*.js',
+        options: '<%= browserify.dev.options %>'
       }
     },
     less: {
       dev: {
         files: [{
-          src: 'less/main.less',
-          dest: 'style.css'
+          src: 'src/less/main.less',
+          dest: 'build/style.css'
         }]
       },
       prod: {
@@ -65,8 +73,8 @@ module.exports = function(grunt) {
           plugins: require('less-plugin-clean-css')()
         },
         files: [{
-          src: 'less/main.less',
-          dest: 'style.css'
+          src: 'src/less/main.less',
+          dest: 'build/style.css'
         }]
       }
     },
@@ -79,6 +87,14 @@ module.exports = function(grunt) {
           src: ['index.html', 'manifest.webapp',
                 'fonts/**', 'img/**', 'js/libs/**']
         }]
+      }
+    },
+    mochaTest: {
+      tests: {
+        src: ['tests/**/*.js'],
+        options: {
+          reporter: 'landing'
+        }
       }
     },
     watch: {
@@ -100,4 +116,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['browserify:dev', 'less:dev', 'copy']);
   grunt.registerTask('production', ['browserify:prod', 'less:prod', 'copy']);
+  grunt.registerTask('test', 'mochaTest');
 };

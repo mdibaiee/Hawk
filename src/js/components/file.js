@@ -1,20 +1,35 @@
 import React, { Component } from 'react';
+import { show } from 'actions/menu';
+import { active } from 'actions/file';
+import { MENU_WIDTH } from './menu';
 import store from 'store';
-import changedir from 'actions/changedir';
+
+const MENU_TOP_SPACE = 20;
 
 export default class File extends Component {
+  constructor() {
+    super();
+  }
+
   render() {
     return (
-      <div onClick={this.peekInside.bind(this)}>
-        <p>{this.props.index}. {this.props.name}</p>
+      <div className='file' ref='container'
+           onContextMenu={this.contextMenu.bind(this)}>
+        <i></i>
+        <p>{this.props.name}</p>
       </div>
     );
   }
 
-  peekInside() {
-    let file = store.getState().get('files')[this.props.index];
+  contextMenu(e) {
+    e.preventDefault();
 
-    console.log(file);
-    store.dispatch(changedir(file.path.slice(1) + file.name));
+    let rect = React.findDOMNode(this.refs.container).getBoundingClientRect();
+    let {x, y, width, height} = rect;
+
+    let left = x + width / 2 - MENU_WIDTH / 2,
+        top  = y + height / 2 + MENU_TOP_SPACE;
+    store.dispatch(show('fileMenu', left, top));
+    store.dispatch(active(this.props.index));
   }
 }

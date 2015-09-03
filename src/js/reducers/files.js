@@ -1,10 +1,29 @@
-import { LIST_FILES } from 'actions/types';
+import { LIST_FILES, RENAME_FILE, DELETE_FILE } from 'actions/types';
+import { refresh } from 'actions/files-view';
+import { rename, sdcard } from 'api/files';
 
 export default function(state = [], action) {
-  switch (action.type) {
-    case LIST_FILES:
-      return action.files;
-    default:
-      return state;
+  if (action.type === LIST_FILES) {
+    return action.files;
   }
+
+
+  if (action.type === RENAME_FILE) {
+    let file = state[action.file];
+
+    rename(file, action.name).then(refresh);
+
+    return state;
+  }
+
+  if (action.type === DELETE_FILE) {
+    let file = state[action.file];
+
+    sdcard().delete((file.path || '') + '/' + file.name);
+    let copy = state.slice(0);
+    copy.splice(action.file, 1);
+    return copy;
+  }
+
+  return state;
 }

@@ -20904,6 +20904,7 @@ exports['default'] = changedir;
 var _actionsTypes = require('actions/types');
 
 function changedir(dir) {
+  if (dir === 'sdcard') dir = '';
   return {
     type: _actionsTypes.CHANGE_DIRECTORY,
     dir: dir
@@ -20912,7 +20913,145 @@ function changedir(dir) {
 
 module.exports = exports['default'];
 
-},{"actions/types":177}],176:[function(require,module,exports){
+},{"actions/types":182}],176:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.show = show;
+exports.hide = hide;
+exports.toggle = toggle;
+exports.hideAll = hideAll;
+
+var _actionsTypes = require('actions/types');
+
+function show(id) {
+  return {
+    type: _actionsTypes.DIALOG,
+    active: true,
+    id: id
+  };
+}
+
+function hide(id) {
+  return {
+    type: _actionsTypes.DIALOG,
+    active: false,
+    id: id
+  };
+}
+
+function toggle(id) {
+  return {
+    type: _actionsTypes.DIALOG,
+    active: 'toggle',
+    id: id
+  };
+}
+
+function hideAll() {
+  return {
+    type: _actionsTypes.DIALOG,
+    active: false
+  };
+}
+
+},{"actions/types":182}],177:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.create = create;
+exports.share = share;
+exports.rename = rename;
+exports.active = active;
+exports.deleteFile = deleteFile;
+
+var _actionsTypes = require('actions/types');
+
+function create(path, name) {
+  return {
+    type: _actionsTypes.CREATE_FILE,
+    path: path, name: name
+  };
+}
+
+function share() {
+  return {
+    type: _actionsTypes.SHARE_FILE
+  };
+}
+
+function rename(file, name) {
+  return {
+    type: _actionsTypes.RENAME_FILE,
+    file: file, name: name
+  };
+}
+
+function active(file) {
+  return {
+    type: _actionsTypes.ACTIVE_FILE,
+    file: file
+  };
+}
+
+function deleteFile(file) {
+  return {
+    type: _actionsTypes.DELETE_FILE,
+    file: file
+  };
+}
+
+},{"actions/types":182}],178:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.refresh = refresh;
+exports.toggle = toggle;
+exports.details = details;
+exports.list = list;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _actionsTypes = require('actions/types');
+
+var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
+
+function refresh() {
+  return {
+    type: _actionsTypes.REFRESH
+  };
+}
+
+function toggle(state) {
+  return {
+    type: _actionsTypes.FILES_VIEW,
+    view: 'toggle'
+  };
+}
+
+function details(state) {
+  return {
+    type: _actionsTypes.FILES_VIEW,
+    view: 'details'
+  };
+}
+
+function list(state) {
+  return {
+    type: _actionsTypes.FILES_VIEW,
+    view: 'list'
+  };
+}
+
+},{"actions/types":182,"store":"store"}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -20931,53 +21070,528 @@ function listFiles(files) {
 
 module.exports = exports['default'];
 
-},{"actions/types":177}],177:[function(require,module,exports){
-"use strict";
+},{"actions/types":182}],180:[function(require,module,exports){
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.show = show;
+exports.hide = hide;
+exports.toggle = toggle;
+exports.hideAll = hideAll;
+
+var _actionsTypes = require('actions/types');
+
+function show(id, x, y) {
+  return {
+    type: _actionsTypes.MENU,
+    active: true,
+    id: id, x: x, y: y
+  };
+}
+
+function hide(id) {
+  return {
+    type: _actionsTypes.MENU,
+    active: false,
+    id: id
+  };
+}
+
+function toggle(id, x, y) {
+  return {
+    type: _actionsTypes.MENU,
+    active: 'toggle',
+    id: id, x: x, y: y
+  };
+}
+
+function hideAll() {
+  return {
+    type: _actionsTypes.MENU,
+    active: false
+  };
+}
+
+},{"actions/types":182}],181:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.show = show;
+exports.hide = hide;
+exports.toggle = toggle;
+
+var _actionsTypes = require('actions/types');
+
+function show() {
+  return {
+    type: _actionsTypes.NAVIGATION,
+    active: true
+  };
+}
+
+function hide() {
+  return {
+    type: _actionsTypes.NAVIGATION,
+    active: false
+  };
+}
+
+function toggle() {
+  return {
+    type: _actionsTypes.NAVIGATION,
+    active: _actionsTypes.TOGGLE
+  };
+}
+
+},{"actions/types":182}],182:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 var TYPES = {
-  CHANGE_DIRECTORY: Symbol(),
-  LIST_FILES: Symbol(),
-  SORT: Symbol(),
-  SEARCH: Symbol(),
-  REFRESH: Symbol()
+  CHANGE_DIRECTORY: Symbol('CHANGE_DIRECTORY'),
+
+  LIST_FILES: Symbol('LIST_FILES'),
+  FILES_VIEW: Symbol('FILES_VIEW'),
+
+  NAVIGATION: Symbol('NAVIGATION'),
+  TOGGLE: Symbol('TOGGLE'),
+  REFRESH: Symbol('REFRESH'),
+  SORT: Symbol('SORT'),
+
+  NEW_FILE: Symbol('NEW_FILE'),
+  CREATE_FILE: Symbol('CREATE_FILE'),
+  SHARE_FILE: Symbol('SHARE_FILE'),
+  RENAME_FILE: Symbol('RENAME_FILE'),
+  ACTIVE_FILE: Symbol('ACTIVE_FILE'),
+  DELETE_FILE: Symbol('DELETE_FILE'),
+
+  MENU: Symbol('MENU'),
+
+  DIALOG: Symbol('DEBUG'),
+
+  SEARCH: Symbol('SEARCH')
 };
 
-exports["default"] = TYPES;
-module.exports = exports["default"];
+exports['default'] = TYPES;
+module.exports = exports['default'];
 
-},{}],178:[function(require,module,exports){
+},{}],183:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.sdcard = sdcard;
+
+var root = _asyncToGenerator(function* () {
+  if (ROOT_CACHE) return ROOT_CACHE;
+
+  ROOT_CACHE = yield sdcard().getRoot();
+  return ROOT_CACHE;
+});
+
+exports.root = root;
+
+var getFile = _asyncToGenerator(function* () {
+  var dir = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+
+  var parent = yield root();
+
+  if (dir === '/' || !dir) return root();
+
+  return yield parent.get(dir);
+});
+
+exports.getFile = getFile;
+
+var children = _asyncToGenerator(function* (dir) {
+  var parent = yield getFile(dir);
+  return yield parent.getFilesAndDirectories();
+});
+
+exports.children = children;
+
+var readFile = _asyncToGenerator(function* (path) {
+  var file = yield getFile(path);
+
+  return new Promise(function (resolve, reject) {
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.onabort = reject;
+    reader.readAsArrayBuffer(file);
+  });
+});
+
+exports.readFile = readFile;
+
+var createFile = _asyncToGenerator(function* () {
+  var parent = yield root();
+
+  return yield parent.createFile.apply(parent, arguments);
+});
+
+exports.createFile = createFile;
+
+var createDirectory = _asyncToGenerator(function* () {
+  var parent = yield root();
+
+  return yield parent.createDirectory.apply(parent, arguments);
+});
+
+exports.createDirectory = createDirectory;
+
+var rename = _asyncToGenerator(function* (file, newName) {
+  console.log(file);
+  var path = (file.path || '').slice(1); // remove starting slash
+  var oldPath = path + file.name;
+  var newPath = path + newName;
+
+  var target = yield getFile(oldPath);
+
+  if ((0, _utils.type)(target) === 'Directory') {
+    yield createDirectory(newPath);
+    var childs = yield target.getFilesAndDirectories();
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = childs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var child = _step.value;
+
+        yield rename(child, newPath + '/' + child.name);
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator['return']) {
+          _iterator['return']();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    target['delete']();
+    return;
+  } else {
+    var content = yield readFile(fullpath);
+
+    var blob = new Blob([content], { type: target.type });
+
+    sdcard()['delete'](fullpath);
+
+    sdcard().addNamed(blob, path + newName);
+  }
+});
+
+exports.rename = rename;
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, 'next'); var callThrow = step.bind(null, 'throw'); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+
+var _utils = require('utils');
+
+var SD_CACHE = undefined;
+
+function sdcard() {
+  if (SD_CACHE) return SD_CACHE;
+
+  SD_CACHE = navigator.getDeviceStorage('sdcard');
+  return SD_CACHE;
+}
+
+var ROOT_CACHE = undefined;
+
+},{"utils":"utils"}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var directory = _asyncToGenerator(function* () {
-  var dir = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  var storage = navigator.getDeviceStorage('sdcard');
-  var root = yield storage.getRoot();
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-  if (dir === '/' || !dir) return root;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-  return yield root.get(dir);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _actionsChangedir = require('actions/changedir');
+
+var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
+
+var _store = require('store');
+
+var Breadcrumb = (function (_Component) {
+  _inherits(Breadcrumb, _Component);
+
+  function Breadcrumb() {
+    _classCallCheck(this, _Breadcrumb);
+
+    _get(Object.getPrototypeOf(_Breadcrumb.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Breadcrumb, [{
+    key: 'render',
+    value: function render() {
+      var directories = this.props.cwd.split('/');
+      directories.unshift('sdcard');
+
+      var els = directories.map(function (dir, index, arr) {
+        var path = arr.slice(1, index + 1).join('/');
+        var slash = index > 0 ? '/' : '';
+
+        return _react2['default'].createElement(
+          'span',
+          { key: index, onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
+          _react2['default'].createElement(
+            'i',
+            null,
+            slash
+          ),
+          dir
+        );
+      });
+
+      var lastDirectories = this.props.lwd.split('/');
+      if (lastDirectories.length > directories.length - 1) {
+        lastDirectories.splice(0, directories.length - 1);
+        var _history = lastDirectories.map(function (dir, index, arr) {
+          var current = directories.slice(1).concat(arr.slice(0, index + 1));
+          var path = current.join('/');
+
+          return _react2['default'].createElement(
+            'span',
+            { key: directories.length + index, className: 'history', onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
+            _react2['default'].createElement(
+              'i',
+              null,
+              '/'
+            ),
+            dir
+          );
+        });
+
+        els = els.concat(_history);
+      }
+
+      return _react2['default'].createElement(
+        'div',
+        { className: 'breadcrumb' },
+        els
+      );
+    }
+  }]);
+
+  var _Breadcrumb = Breadcrumb;
+  Breadcrumb = (0, _reactRedux.connect)(props)(Breadcrumb) || Breadcrumb;
+  return Breadcrumb;
+})(_react.Component);
+
+exports['default'] = Breadcrumb;
+
+function props(state) {
+  return {
+    lwd: state.get('lwd'), // last working directory
+    cwd: state.get('cwd')
+  };
+}
+module.exports = exports['default'];
+
+},{"actions/changedir":175,"react":165,"react-redux":5,"store":"store"}],185:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
 });
 
-exports.directory = directory;
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var children = _asyncToGenerator(function* (dir) {
-  var parent = yield directory(dir);
-  return yield parent.getFilesAndDirectories();
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var Dialog = (function (_Component) {
+  _inherits(Dialog, _Component);
+
+  function Dialog() {
+    _classCallCheck(this, Dialog);
+
+    _get(Object.getPrototypeOf(Dialog.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Dialog, [{
+    key: 'render',
+    value: function render() {
+      var _this = this;
+
+      var conditionalInput = this.props.input ? _react2['default'].createElement('input', { ref: 'input' }) : '';
+      var buttons = this.props.buttons.map(function (button, i) {
+        return _react2['default'].createElement(
+          'button',
+          { className: button.className + ' btn', key: i,
+            onClick: button.action.bind(_this) },
+          button.text
+        );
+      });
+
+      var className = this.props.active ? 'dialog active' : 'dialog';
+
+      return _react2['default'].createElement(
+        'div',
+        { className: className },
+        _react2['default'].createElement(
+          'p',
+          { className: 'regular-medium' },
+          this.props.title
+        ),
+        _react2['default'].createElement(
+          'p',
+          { className: 'light-medium' },
+          this.props.description
+        ),
+        conditionalInput,
+        _react2['default'].createElement(
+          'div',
+          { className: 'foot' },
+          buttons
+        )
+      );
+    }
+  }]);
+
+  return Dialog;
+})(_react.Component);
+
+exports['default'] = Dialog;
+module.exports = exports['default'];
+
+},{"react":165}],186:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
 });
 
-exports.children = children;
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, 'next'); var callThrow = step.bind(null, 'throw'); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-},{}],179:[function(require,module,exports){
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _actionsChangedir = require('actions/changedir');
+
+var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
+
+var _actionsMenu = require('actions/menu');
+
+var _actionsFile = require('actions/file');
+
+var _menu = require('./menu');
+
+var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
+
+var MENU_TOP_SPACE = 20;
+
+var Directory = (function (_Component) {
+  _inherits(Directory, _Component);
+
+  function Directory() {
+    _classCallCheck(this, Directory);
+
+    _get(Object.getPrototypeOf(Directory.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Directory, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        { className: 'directory', ref: 'container',
+          onClick: this.peek.bind(this),
+          onContextMenu: this.contextMenu.bind(this) },
+        _react2['default'].createElement('i', null),
+        _react2['default'].createElement(
+          'p',
+          null,
+          this.props.name
+        )
+      );
+    }
+  }, {
+    key: 'peek',
+    value: function peek() {
+      var file = _store2['default'].getState().get('files')[this.props.index];
+
+      _store2['default'].dispatch((0, _actionsChangedir2['default'])(file.path.slice(1) + file.name));
+    }
+  }, {
+    key: 'contextMenu',
+    value: function contextMenu(e) {
+      e.preventDefault();
+
+      var rect = _react2['default'].findDOMNode(this.refs.container).getBoundingClientRect();
+      var x = rect.x;
+      var y = rect.y;
+      var width = rect.width;
+      var height = rect.height;
+
+      var left = x + width / 2 - _menu.MENU_WIDTH / 2,
+          top = y + height / 2 + MENU_TOP_SPACE;
+      _store2['default'].dispatch((0, _actionsMenu.show)('directoryMenu', left, top));
+      _store2['default'].dispatch((0, _actionsFile.active)(this.props.index));
+    }
+  }]);
+
+  return Directory;
+})(_react.Component);
+
+exports['default'] = Directory;
+module.exports = exports['default'];
+
+},{"./menu":190,"actions/changedir":175,"actions/file":177,"actions/menu":180,"react":165,"store":"store"}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -21013,6 +21627,10 @@ var _file = require('./file');
 
 var _file2 = _interopRequireDefault(_file);
 
+var _directory = require('./directory');
+
+var _directory2 = _interopRequireDefault(_directory);
+
 var FileList = (function (_Component) {
   _inherits(FileList, _Component);
 
@@ -21025,23 +21643,19 @@ var FileList = (function (_Component) {
   _createClass(FileList, [{
     key: 'render',
     value: function render() {
-      var _props = this.props;
-      var cwd = _props.cwd;
-      var files = _props.files;
+      var files = this.props.files;
 
       var els = files.map(function (file, index) {
-        return _react2['default'].createElement(_file2['default'], { key: index, index: index, name: file.name });
+        if (fileType(file) === 'File') {
+          return _react2['default'].createElement(_file2['default'], { key: index, index: index, name: file.name });
+        } else {
+          return _react2['default'].createElement(_directory2['default'], { key: index, index: index, name: file.name });
+        }
       });
 
       return _react2['default'].createElement(
         'div',
-        null,
-        _react2['default'].createElement(
-          'strong',
-          null,
-          'cwd: ',
-          cwd
-        ),
+        { className: 'file-list' },
         els
       );
     }
@@ -21056,14 +21670,16 @@ exports['default'] = FileList;
 
 function props(state) {
   return {
-    cwd: state.get('cwd'),
     files: state.get('files')
   };
 }
 
+function fileType(file) {
+  return Object.prototype.toString.call(file).slice(8, -1);
+}
 module.exports = exports['default'];
 
-},{"./file":180,"react":165,"react-redux":5}],180:[function(require,module,exports){
+},{"./directory":186,"./file":188,"react":165,"react-redux":5}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -21084,13 +21700,17 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _actionsMenu = require('actions/menu');
+
+var _actionsFile = require('actions/file');
+
+var _menu = require('./menu');
+
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
 
-var _actionsChangedir = require('actions/changedir');
-
-var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
+var MENU_TOP_SPACE = 20;
 
 var File = (function (_Component) {
   _inherits(File, _Component);
@@ -21098,7 +21718,7 @@ var File = (function (_Component) {
   function File() {
     _classCallCheck(this, File);
 
-    _get(Object.getPrototypeOf(File.prototype), 'constructor', this).apply(this, arguments);
+    _get(Object.getPrototypeOf(File.prototype), 'constructor', this).call(this);
   }
 
   _createClass(File, [{
@@ -21106,23 +21726,31 @@ var File = (function (_Component) {
     value: function render() {
       return _react2['default'].createElement(
         'div',
-        { onClick: this.peekInside.bind(this) },
+        { className: 'file', ref: 'container',
+          onContextMenu: this.contextMenu.bind(this) },
+        _react2['default'].createElement('i', null),
         _react2['default'].createElement(
           'p',
           null,
-          this.props.index,
-          '. ',
           this.props.name
         )
       );
     }
   }, {
-    key: 'peekInside',
-    value: function peekInside() {
-      var file = _store2['default'].getState().get('files')[this.props.index];
+    key: 'contextMenu',
+    value: function contextMenu(e) {
+      e.preventDefault();
 
-      console.log(file);
-      _store2['default'].dispatch((0, _actionsChangedir2['default'])(file.path.slice(1) + file.name));
+      var rect = _react2['default'].findDOMNode(this.refs.container).getBoundingClientRect();
+      var x = rect.x;
+      var y = rect.y;
+      var width = rect.width;
+      var height = rect.height;
+
+      var left = x + width / 2 - _menu.MENU_WIDTH / 2,
+          top = y + height / 2 + MENU_TOP_SPACE;
+      _store2['default'].dispatch((0, _actionsMenu.show)('fileMenu', left, top));
+      _store2['default'].dispatch((0, _actionsFile.active)(this.props.index));
     }
   }]);
 
@@ -21132,7 +21760,270 @@ var File = (function (_Component) {
 exports['default'] = File;
 module.exports = exports['default'];
 
-},{"actions/changedir":175,"react":165,"store":"store"}],181:[function(require,module,exports){
+},{"./menu":190,"actions/file":177,"actions/menu":180,"react":165,"store":"store"}],189:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _actionsNavigation = require('actions/navigation');
+
+var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
+
+var Header = (function (_Component) {
+  _inherits(Header, _Component);
+
+  function Header() {
+    _classCallCheck(this, Header);
+
+    _get(Object.getPrototypeOf(Header.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Header, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'header',
+        null,
+        _react2['default'].createElement('button', { className: 'drawer', onClick: this.toggleNavigation.bind(this) }),
+        _react2['default'].createElement(
+          'h1',
+          { className: 'regular-medium' },
+          'Hawk'
+        )
+      );
+    }
+  }, {
+    key: 'toggleNavigation',
+    value: function toggleNavigation() {
+      _store2['default'].dispatch((0, _actionsNavigation.toggle)());
+    }
+  }]);
+
+  return Header;
+})(_react.Component);
+
+exports['default'] = Header;
+module.exports = exports['default'];
+
+},{"actions/navigation":181,"react":165,"store":"store"}],190:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var MENU_WIDTH = 245;
+
+exports.MENU_WIDTH = MENU_WIDTH;
+
+var Menu = (function (_Component) {
+  _inherits(Menu, _Component);
+
+  function Menu() {
+    _classCallCheck(this, Menu);
+
+    _get(Object.getPrototypeOf(Menu.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Menu, [{
+    key: 'render',
+    value: function render() {
+      var _this = this;
+
+      var _props = this.props;
+      var items = _props.items;
+      var active = _props.active;
+      var style = _props.style;
+
+      items = items || [];
+
+      var els = items.map(function (item, index) {
+        return _react2['default'].createElement(
+          'li',
+          { key: index, onClick: item.action.bind(_this) },
+          item.name
+        );
+      });
+      var className = 'menu ' + (active ? 'active' : '');
+
+      return _react2['default'].createElement(
+        'div',
+        { className: className, style: style },
+        _react2['default'].createElement(
+          'ul',
+          null,
+          els
+        )
+      );
+    }
+  }]);
+
+  return Menu;
+})(_react.Component);
+
+exports['default'] = Menu;
+
+},{"react":165}],191:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _actionsNavigation = require('actions/navigation');
+
+var Navigation = (function (_Component) {
+  _inherits(Navigation, _Component);
+
+  function Navigation() {
+    _classCallCheck(this, _Navigation);
+
+    _get(Object.getPrototypeOf(_Navigation.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Navigation, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'nav',
+        { className: this.props.active ? 'active' : '' },
+        _react2['default'].createElement('i', { onClick: this.hide.bind(this) }),
+        _react2['default'].createElement(
+          'p',
+          null,
+          'Filter'
+        ),
+        _react2['default'].createElement(
+          'ul',
+          null,
+          _react2['default'].createElement(
+            'li',
+            null,
+            'Picture'
+          ),
+          _react2['default'].createElement(
+            'li',
+            null,
+            'Video'
+          ),
+          _react2['default'].createElement(
+            'li',
+            null,
+            'Audio'
+          )
+        ),
+        _react2['default'].createElement(
+          'p',
+          null,
+          'Tools'
+        ),
+        _react2['default'].createElement(
+          'ul',
+          null,
+          _react2['default'].createElement(
+            'li',
+            null,
+            'FTP Browser'
+          )
+        ),
+        _react2['default'].createElement(
+          'p',
+          null,
+          'Preferences'
+        ),
+        _react2['default'].createElement(
+          'ul',
+          null,
+          _react2['default'].createElement(
+            'li',
+            null,
+            'Show Hidden Files ',
+            _react2['default'].createElement('input', { type: 'checkbox' })
+          ),
+          _react2['default'].createElement(
+            'li',
+            null,
+            'Show Directories First ',
+            _react2['default'].createElement('input', { type: 'checkbox' })
+          ),
+          _react2['default'].createElement(
+            'li',
+            null,
+            'Advanced Preferences'
+          )
+        )
+      );
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      this.props.dispatch((0, _actionsNavigation.hide)());
+    }
+  }]);
+
+  var _Navigation = Navigation;
+  Navigation = (0, _reactRedux.connect)(props)(Navigation) || Navigation;
+  return Navigation;
+})(_react.Component);
+
+exports['default'] = Navigation;
+
+function props(store) {
+  return {
+    active: store.get('navigation')
+  };
+}
+module.exports = exports['default'];
+
+},{"actions/navigation":181,"react":165,"react-redux":5}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -21157,6 +22048,34 @@ var _componentsFileList = require('components/file-list');
 
 var _componentsFileList2 = _interopRequireDefault(_componentsFileList);
 
+var _componentsNavigation = require('components/navigation');
+
+var _componentsNavigation2 = _interopRequireDefault(_componentsNavigation);
+
+var _componentsHeader = require('components/header');
+
+var _componentsHeader2 = _interopRequireDefault(_componentsHeader);
+
+var _componentsBreadcrumb = require('components/breadcrumb');
+
+var _componentsBreadcrumb2 = _interopRequireDefault(_componentsBreadcrumb);
+
+var _componentsToolbar = require('components/toolbar');
+
+var _componentsToolbar2 = _interopRequireDefault(_componentsToolbar);
+
+var _componentsMenu = require('components/menu');
+
+var _componentsMenu2 = _interopRequireDefault(_componentsMenu);
+
+var _componentsDialog = require('components/dialog');
+
+var _componentsDialog2 = _interopRequireDefault(_componentsDialog);
+
+var _reactRedux = require('react-redux');
+
+var _actionsMenu = require('actions/menu');
+
 var _actionsChangedir = require('actions/changedir');
 
 var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
@@ -21167,6 +22086,17 @@ var _store2 = _interopRequireDefault(_store);
 
 window.store = _store2['default'];
 window.changedir = _actionsChangedir2['default'];
+
+var FileMenu = (0, _reactRedux.connect)(function (state) {
+  return state.get('fileMenu');
+})(_componentsMenu2['default']);
+var DirectoryMenu = (0, _reactRedux.connect)(function (state) {
+  return state.get('directoryMenu');
+})(_componentsMenu2['default']);
+
+var RenameDialog = (0, _reactRedux.connect)(function (state) {
+  return state.get('renameDialog');
+})(_componentsDialog2['default']);
 
 var Root = (function (_Component) {
   _inherits(Root, _Component);
@@ -21182,10 +22112,23 @@ var Root = (function (_Component) {
     value: function render() {
       return _react2['default'].createElement(
         'div',
-        null,
-        'Hawk!',
-        _react2['default'].createElement(_componentsFileList2['default'], null)
+        { onTouchStart: this.touchStart.bind(this) },
+        _react2['default'].createElement(_componentsHeader2['default'], null),
+        _react2['default'].createElement(_componentsBreadcrumb2['default'], null),
+        _react2['default'].createElement(_componentsNavigation2['default'], null),
+        _react2['default'].createElement(_componentsFileList2['default'], null),
+        _react2['default'].createElement(_componentsToolbar2['default'], null),
+        _react2['default'].createElement(FileMenu, null),
+        _react2['default'].createElement(DirectoryMenu, null),
+        _react2['default'].createElement(RenameDialog, null)
       );
+    }
+  }, {
+    key: 'touchStart',
+    value: function touchStart(e) {
+      if (!e.target.closest('.menu')) {
+        _store2['default'].dispatch((0, _actionsMenu.hideAll)());
+      }
     }
   }]);
 
@@ -21195,7 +22138,130 @@ var Root = (function (_Component) {
 exports['default'] = Root;
 module.exports = exports['default'];
 
-},{"actions/changedir":175,"components/file-list":179,"react":165,"store":"store"}],182:[function(require,module,exports){
+},{"actions/changedir":175,"actions/menu":180,"components/breadcrumb":184,"components/dialog":185,"components/file-list":187,"components/header":189,"components/menu":190,"components/navigation":191,"components/toolbar":193,"react":165,"react-redux":5,"store":"store"}],193:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _actionsFile = require('actions/file');
+
+var _actionsFilesView = require('actions/files-view');
+
+var _store = require('store');
+
+var Toolbar = (function (_Component) {
+  _inherits(Toolbar, _Component);
+
+  function Toolbar() {
+    _classCallCheck(this, Toolbar);
+
+    _get(Object.getPrototypeOf(Toolbar.prototype), 'constructor', this).apply(this, arguments);
+  }
+
+  _createClass(Toolbar, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        { className: 'toolbar' },
+        _react2['default'].createElement('button', { className: 'icon-plus', onClick: this.newFile }),
+        _react2['default'].createElement('button', { className: 'icon-view', onClick: (0, _store.bind)((0, _actionsFilesView.toggle)()) }),
+        _react2['default'].createElement('button', { className: 'icon-refresh', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
+        _react2['default'].createElement('button', { className: 'icon-share', onClick: (0, _store.bind)((0, _actionsFile.share)()) }),
+        _react2['default'].createElement('button', { className: 'icon-more', onClick: this.showMore })
+      );
+    }
+  }, {
+    key: 'showMore',
+    value: function showMore() {}
+  }, {
+    key: 'newFile',
+    value: function newFile() {}
+  }]);
+
+  return Toolbar;
+})(_react.Component);
+
+exports['default'] = Toolbar;
+module.exports = exports['default'];
+
+},{"actions/file":177,"actions/files-view":178,"react":165,"store":"store"}],194:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _actionsDialog = require('actions/dialog');
+
+var _actionsFile = require('actions/file');
+
+var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
+
+exports['default'] = {
+  renameDialog: {
+    title: 'Rename',
+    description: 'Enter your desired new name',
+    input: true,
+    buttons: [{
+      text: 'Cancel',
+      action: (0, _store.bind)((0, _actionsDialog.hideAll)())
+    }, {
+      text: 'Rename',
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+
+        var activeFile = _store2['default'].getState().get('activeFile');
+        this.props.dispatch((0, _actionsFile.rename)(activeFile, input.value));
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+      },
+      className: 'success'
+    }]
+  },
+  deleteDialog: {
+    title: 'Delete',
+    description: 'Are you sure you want to remove @activeFile.name?',
+    buttons: [{
+      text: 'No',
+      action: (0, _store.bind)((0, _actionsDialog.hideAll)())
+    }, {
+      text: 'Yes',
+      action: function action() {
+        var activeFile = _store2['default'].getState().get('activeFile');
+        this.props.dispatch((0, _actionsFile.deleteFile)(activeFile));
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+      },
+      className: 'success'
+    }]
+  }
+};
+module.exports = exports['default'];
+
+},{"actions/dialog":176,"actions/file":177,"react":165,"store":"store"}],195:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -21223,7 +22289,67 @@ _react2['default'].render(_react2['default'].createElement(
   }
 ), wrapper);
 
-},{"components/root":181,"react":165,"react-redux":5,"store":"store"}],183:[function(require,module,exports){
+},{"components/root":192,"react":165,"react-redux":5,"store":"store"}],196:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _actionsMenu = require('actions/menu');
+
+var _actionsDialog = require('actions/dialog');
+
+var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
+
+var entryMenu = {
+  items: [{
+    name: 'Rename',
+    action: function action() {
+      _store2['default'].dispatch((0, _actionsMenu.hideAll)());
+      _store2['default'].dispatch((0, _actionsDialog.show)('renameDialog'));
+    }
+  }, {
+    name: 'Delete',
+    action: function action() {
+      _store2['default'].dispatch((0, _actionsMenu.hideAll)());
+      _store2['default'].dispatch((0, _actionsDialog.show)('deleteDialog'));
+    }
+  }]
+};
+
+exports['default'] = {
+  fileMenu: Object.assign({}, entryMenu),
+  directoryMenu: Object.assign({}, entryMenu)
+};
+module.exports = exports['default'];
+
+},{"actions/dialog":176,"actions/menu":180,"store":"store"}],197:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _actionsTypes = require('actions/types');
+
+exports['default'] = function (state, action) {
+  if (state === undefined) state = -1;
+
+  if (action.type === _actionsTypes.ACTIVE_FILE) {
+    return action.file;
+  }
+
+  return state;
+};
+
+module.exports = exports['default'];
+
+},{"actions/types":182}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -21240,22 +22366,50 @@ var _cwd = require('./cwd');
 
 var _cwd2 = _interopRequireDefault(_cwd);
 
+var _lwd = require('./lwd');
+
+var _lwd2 = _interopRequireDefault(_lwd);
+
 var _files = require('./files');
 
 var _files2 = _interopRequireDefault(_files);
 
+var _navigation = require('./navigation');
+
+var _navigation2 = _interopRequireDefault(_navigation);
+
+var _activeFile = require('./active-file');
+
+var _activeFile2 = _interopRequireDefault(_activeFile);
+
+var _menu = require('./menu');
+
+var _menu2 = _interopRequireDefault(_menu);
+
+var _dialog = require('./dialog');
+
+var _dialog2 = _interopRequireDefault(_dialog);
+
 exports['default'] = function (state, action) {
   if (state === undefined) state = new _immutable2['default'].Map();
 
+  console.log('action', action);
   return new _immutable2['default'].Map({
+    lwd: (0, _lwd2['default'])(state, action), // last working directory
     cwd: (0, _cwd2['default'])(state.get('cwd'), action),
-    files: (0, _files2['default'])(state.get('files'), action)
+    files: (0, _files2['default'])(state.get('files'), action),
+    activeFile: (0, _activeFile2['default'])(state.get('activeFile'), action),
+    navigation: (0, _navigation2['default'])(state.get('navigation'), action),
+    fileMenu: (0, _menu2['default'])(state, action, 'fileMenu'),
+    directoryMenu: (0, _menu2['default'])(state, action, 'directoryMenu'),
+    renameDialog: (0, _dialog2['default'])(state, action, 'renameDialog'),
+    deleteDialog: (0, _dialog2['default'])(state, action, 'deleteDialog')
   });
 };
 
 module.exports = exports['default'];
 
-},{"./cwd":184,"./files":185,"immutable":186}],184:[function(require,module,exports){
+},{"./active-file":197,"./cwd":199,"./dialog":200,"./files":201,"./lwd":202,"./menu":203,"./navigation":204,"immutable":205}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -21277,22 +22431,109 @@ var _store = require('store');
 var _store2 = _interopRequireDefault(_store);
 
 exports['default'] = function (state, action) {
-  if (state === undefined) state = '/';
+  if (state === undefined) state = '';
 
-  switch (action.type) {
-    case _actionsTypes.CHANGE_DIRECTORY:
-      (0, _apiFiles.children)(action.dir).then(function (files) {
-        _store2['default'].dispatch((0, _actionsListFiles2['default'])(files));
-      });
-      return action.dir;
-    default:
-      return state;
+  if (action.type === _actionsTypes.CHANGE_DIRECTORY) {
+    (0, _apiFiles.children)(action.dir).then(function (files) {
+      _store2['default'].dispatch((0, _actionsListFiles2['default'])(files));
+    });
+    return action.dir;
+  }
+
+  if (action.type === _actionsTypes.REFRESH) {
+    (0, _apiFiles.children)(state).then(function (files) {
+      _store2['default'].dispatch((0, _actionsListFiles2['default'])(files));
+    });
+    return state;
+  }
+
+  return state;
+};
+
+module.exports = exports['default'];
+
+},{"actions/list-files":179,"actions/types":182,"api/files":183,"store":"store"}],200:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _actionsTypes = require('actions/types');
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+exports['default'] = function (state, action, id) {
+  if (state === undefined) state = new _immutable2['default'].Map({});
+
+  if (action.type === _actionsTypes.DIALOG) {
+    // action applied to all dialogs
+    if (!action.id) {
+      return Object.assign({}, state.get(id), { active: action.active });
+    }
+
+    if (action.id !== id) return state.get(id);
+
+    var target = state.get(action.id);
+    var active = action.active === 'toggle' ? !target.get('active') : action.active;
+
+    var style = Object.assign({}, state.style, { left: action.x, top: action.y });
+
+    return Object.assign({}, target, { style: style, active: active });
+  } else {
+    return state.get(id);
   }
 };
 
 module.exports = exports['default'];
 
-},{"actions/list-files":176,"actions/types":177,"api/files":178,"store":"store"}],185:[function(require,module,exports){
+},{"actions/types":182,"immutable":205}],201:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _actionsTypes = require('actions/types');
+
+var _actionsFilesView = require('actions/files-view');
+
+var _apiFiles = require('api/files');
+
+exports['default'] = function (state, action) {
+  if (state === undefined) state = [];
+
+  if (action.type === _actionsTypes.LIST_FILES) {
+    return action.files;
+  }
+
+  if (action.type === _actionsTypes.RENAME_FILE) {
+    var file = state[action.file];
+
+    (0, _apiFiles.rename)(file, action.name).then(_actionsFilesView.refresh);
+
+    return state;
+  }
+
+  if (action.type === _actionsTypes.DELETE_FILE) {
+    var file = state[action.file];
+
+    (0, _apiFiles.sdcard)()['delete']((file.path || '') + '/' + file.name);
+    var copy = state.slice(0);
+    copy.splice(action.file, 1);
+    return copy;
+  }
+
+  return state;
+};
+
+module.exports = exports['default'];
+
+},{"actions/files-view":178,"actions/types":182,"api/files":183}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -21302,19 +22543,77 @@ Object.defineProperty(exports, '__esModule', {
 var _actionsTypes = require('actions/types');
 
 exports['default'] = function (state, action) {
-  if (state === undefined) state = [];
+  if (state === undefined) state = '';
 
-  switch (action.type) {
-    case _actionsTypes.LIST_FILES:
-      return action.files;
-    default:
-      return state;
+  if (action.type === _actionsTypes.CHANGE_DIRECTORY) {
+    return state.get('cwd');
+  }
+  return state.get('lwd');
+};
+
+module.exports = exports['default'];
+
+},{"actions/types":182}],203:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _actionsTypes = require('actions/types');
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+exports['default'] = function (state, action, id) {
+  if (state === undefined) state = new _immutable2['default'].Map({});
+
+  if (action.type === _actionsTypes.MENU) {
+    // action applied to all menus
+    if (!action.id) {
+      return Object.assign({}, state.get(id), { active: action.active });
+    }
+
+    if (action.id !== id) return state.get(id);
+
+    var target = state.get(action.id);
+    var active = action.active === 'toggle' ? !target.get('active') : action.active;
+
+    var style = Object.assign({}, state.style, { left: action.x, top: action.y });
+
+    return Object.assign({}, target, { style: style, active: active });
+  } else {
+    return state.get(id);
   }
 };
 
 module.exports = exports['default'];
 
-},{"actions/types":177}],186:[function(require,module,exports){
+},{"actions/types":182,"immutable":205}],204:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _actionsTypes = require('actions/types');
+
+exports['default'] = function (state, action) {
+  if (state === undefined) state = false;
+
+  if (action.type === _actionsTypes.NAVIGATION) {
+    return action.active === _actionsTypes.TOGGLE ? !state : action.active;
+  }
+
+  return state;
+};
+
+module.exports = exports['default'];
+
+},{"actions/types":182}],205:[function(require,module,exports){
 /**
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
@@ -26248,6 +27547,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.bind = bind;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -26265,15 +27565,40 @@ var _immutable = require('immutable');
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var DEFAULT = new _immutable2['default'].Map({
-  dir: '/',
+var _menus = require('./menus');
+
+var _menus2 = _interopRequireDefault(_menus);
+
+var _dialogs = require('./dialogs');
+
+var _dialogs2 = _interopRequireDefault(_dialogs);
+
+var DEFAULT = new _immutable2['default'].Map(Object.assign({
+  dir: '',
   files: []
-});
+}, _dialogs2['default'], _menus2['default']));
 
 var store = (0, _redux.createStore)(_reducersAll2['default'], DEFAULT);
-store.dispatch((0, _actionsChangedir2['default'])(DEFAULT.dir));
+store.dispatch((0, _actionsChangedir2['default'])(DEFAULT.get('dir')));
+
+function bind(action) {
+  return function () {
+    return store.dispatch(action);
+  };
+}
 
 exports['default'] = store;
-module.exports = exports['default'];
 
-},{"actions/changedir":175,"immutable":186,"reducers/all":183,"redux":167}]},{},[175,176,177,178,179,180,181,182,183,184,185,"store"]);
+},{"./dialogs":194,"./menus":196,"actions/changedir":175,"immutable":205,"reducers/all":198,"redux":167}],"utils":[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.type = type;
+
+function type(obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1);
+}
+
+},{}]},{},[175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,"store","utils"]);

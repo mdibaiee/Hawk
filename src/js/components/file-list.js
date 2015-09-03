@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import File from './file';
+import Directory from './directory';
 
 @connect(props)
 export default class FileList extends Component {
@@ -9,14 +10,18 @@ export default class FileList extends Component {
   }
 
   render() {
-    let { cwd, files } = this.props;
+    let { files } = this.props;
 
     let els = files.map((file, index) => {
-      return <File key={index} index={index} name={file.name} />;
+      if (fileType(file) === 'File') {
+        return <File key={index} index={index} name={file.name} />;
+      } else {
+        return <Directory key={index} index={index} name={file.name} />
+      }
     });
 
     return (
-      <div><strong>cwd: {cwd}</strong>
+      <div className='file-list'>
         {els}
       </div>
     );
@@ -25,7 +30,6 @@ export default class FileList extends Component {
 
 function props(state) {
   return {
-    cwd: state.get('cwd'),
     files: state.get('files')
   }
 }
@@ -35,4 +39,8 @@ async function getFiles(dir) {
   let root = await storage.get(dir);
 
   return await root.getFilesAndDirectories();
+}
+
+function fileType(file) {
+  return Object.prototype.toString.call(file).slice(8, -1);
 }

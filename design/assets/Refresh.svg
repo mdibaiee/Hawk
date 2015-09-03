@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="26px" height="28px" viewBox="0 0 26 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>Refresh</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.14 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Components" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Toolbar" sketch:type="MSArtboardGroup" transform="translate(-180.000000, -11.000000)">
+            <g sketch:type="MSLayerGroup">
+                <rect id="Box" stroke="#CDCDCD" fill="#F0F0F0" filter="url(#filter-1)" sketch:type="MSShapeGroup" x="0" y="0" width="360" height="50"></rect>
+                <g id="Buttons" transform="translate(26.000000, 10.000000)" sketch:type="MSShapeGroup">
+                    <g id="Refresh" transform="translate(155.000000, 0.000000)">
+                        <path d="M10.5474605,1.30277122 C11.1919885,0.780842749 12.1334814,0.875157759 12.6584622,1.52345507 L12.6584622,1.52345507 C13.1798083,2.16726386 13.0808307,3.1115672 12.4354217,3.6342091 L9.32944225,6.14938166 C8.68491427,6.67131013 7.74342133,6.57699512 7.21844052,5.92869781 L7.21844052,5.92869781 C6.69709444,5.28488901 6.79607209,4.34058567 7.44148108,3.81794378 L10.5474605,1.30277122 L10.5474605,1.30277122 Z" id="Rectangle-14" fill="#63B0CD"></path>
+                        <path d="M9.26782395,4.9280266 C8.54245587,4.5259485 7.63164396,4.78231919 7.22721443,5.51192937 L7.22721443,5.51192937 C6.82558499,6.23648806 7.0870355,7.14925802 7.81339509,7.55188572 L11.3089429,9.48949949 C12.0343109,9.89157758 12.9451229,9.63520689 13.3495524,8.90559671 L13.3495524,8.90559671 C13.7511818,8.18103802 13.4897313,7.26826806 12.7633717,6.86564036 L9.26782395,4.9280266 L9.26782395,4.9280266 Z" id="Rectangle-14-Copy" fill="#63B0CD"></path>
+                        <path d="M2.19892823,20.9938955 C4.95698056,26.406878 11.580913,28.5591241 16.9938955,25.8010718 C22.406878,23.0430194 24.5591241,16.419087 21.8010718,11.0061045 C19.0430194,5.59312203 12.419087,3.44087591 7.0061045,6.19892823 C1.59312203,8.95698056 -0.559124091,15.580913 2.19892823,20.9938955 L2.19892823,20.9938955 Z" id="Oval-13" stroke="#63B0CD" stroke-width="4" stroke-linecap="round" stroke-dasharray="50,6"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

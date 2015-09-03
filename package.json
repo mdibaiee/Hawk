@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "phantom": "mochify --transform babelify",
+    "wd": "mochify --transform babelify --wd",
+    "cover": "mochify --transform babelify --cover",
+    "test": "npm run phantom && npm run wd && npm run cover"
   },
   "repository": {
     "type": "git",
