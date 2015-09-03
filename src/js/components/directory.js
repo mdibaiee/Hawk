@@ -33,7 +33,7 @@ export default class Directory extends Component {
 
     let left = x + width / 2 - MENU_WIDTH / 2,
         top  = y + height / 2 + MENU_TOP_SPACE;
-    store.dispatch(show('directoryMenu', left, top));
+    store.dispatch(show('directoryMenu', {style: {left, top}}));
     store.dispatch(active(this.props.index));
   }
 }

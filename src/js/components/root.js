@@ -20,6 +20,7 @@ let DirectoryMenu = connect(state => state.get('directoryMenu'))(Menu);
 
 let RenameDialog = connect(state => state.get('renameDialog'))(Dialog);
 let DeleteDialog = connect(state => state.get('deleteDialog'))(Dialog);
+let ErrorDialog = connect(state => state.get('errorDialog'))(Dialog);
 
 export default class Root extends Component {
   render() {
@@ -36,6 +37,7 @@ export default class Root extends Component {
 
         <RenameDialog />
         <DeleteDialog />
+        <ErrorDialog />
       </div>
     );
   }

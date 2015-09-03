@@ -44,6 +44,7 @@
     "grunt-fxos": "^0.1.2",
     "grunt-task-loader": "^0.6.0",
     "less-plugin-clean-css": "^1.5.1",
+    "lodash": "^3.10.1",
     "react": "^0.13.3",
     "react-redux": "^1.0.1",
     "redux": "^1.0.1",

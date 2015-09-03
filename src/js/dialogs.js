@@ -44,5 +44,12 @@ export default {
         className: 'success'
       }
     ]
+  },
+  errorDialog: {
+    title: 'Error',
+    buttons: [{
+      text: 'Continue',
+      action: bind(hideAll())
+    }]
   }
 }

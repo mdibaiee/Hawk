@@ -18,6 +18,7 @@ export default function(state = new Immutable.Map(), action) {
     fileMenu: menu(state, action, 'fileMenu'),
     directoryMenu: menu(state, action, 'directoryMenu'),
     renameDialog: dialog(state, action, 'renameDialog'),
-    deleteDialog: dialog(state, action, 'deleteDialog')
+    deleteDialog: dialog(state, action, 'deleteDialog'),
+    errorDialog: dialog(state, action, 'errorDialog')
   });
 }

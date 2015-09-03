@@ -29,7 +29,7 @@ export default class File extends Component {
 
     let left = x + width / 2 - MENU_WIDTH / 2,
         top  = y + height / 2 + MENU_TOP_SPACE;
-    store.dispatch(show('fileMenu', left, top));
+    store.dispatch(show('fileMenu', {style: {left, top}}));
     store.dispatch(active(this.props.index));
   }
 }

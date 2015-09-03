@@ -1,32 +1,33 @@
 import { DIALOG } from 'actions/types';
 
-export function show(id) {
+export function show(id, props = {}) {
   return {
     type: DIALOG,
     active: true,
-    id
+    id, ...props
   }
 }
 
-export function hide(id) {
+export function hide(id, props = {}) {
   return {
     type: DIALOG,
     active: false,
-    id
+    id, ...props
   }
 }
 
-export function toggle(id) {
+export function toggle(id, props = {}) {
   return {
     type: DIALOG,
     active: 'toggle',
-    id
+    id, ...props
   }
 }
 
-export function hideAll() {
+export function hideAll(props = {}) {
   return {
     type: DIALOG,
-    active: false
+    active: false,
+    ...props
   }
 }

@@ -5,6 +5,7 @@ export function sdcard() {
   if (SD_CACHE) return SD_CACHE;
 
   SD_CACHE = navigator.getDeviceStorage('sdcard');
+  window.sdcard = SD_CACHE;
   return SD_CACHE;
 }
 
@@ -13,13 +14,14 @@ export async function root() {
   if (ROOT_CACHE) return ROOT_CACHE;
 
   ROOT_CACHE = await sdcard().getRoot();
+  window.root = ROOT_CACHE;
   return ROOT_CACHE;
 }
 
 export async function getFile(dir = '/') {
   let parent = await root();
 
-  if (dir === '/' || !dir) return root();
+  if (dir === '/' || !dir) return parent;
 
   return await parent.get(dir);
 }
@@ -53,33 +55,42 @@ export async function createFile(...args) {
 export async function createDirectory(...args) {
   let parent = await root();
 
-  return await parent.createDirectory(...args);
+  return parent.createDirectory(...args);
 }
 
-export async function rename(file, newName) {
-  let path = (file.path || '').slice(1); // remove starting slash
-  let oldPath = (path + file.name);
-  let newPath = path + newName;
+export async function move(file, newPath) {
+  let path = (file.path || '').replace(/^\//, ''); // remove starting slash
+  let oldPath = path + file.name;
+
+  newPath = newPath.replace(/^\//, '');
 
   let target = await getFile(oldPath);
+  let parent = await root();
 
   if (type(target) === 'Directory') {
-    await createDirectory(newPath);
+    await parent.createDirectory(newPath);
     let childs = await target.getFilesAndDirectories();
 
     for (let child of childs) {
-      await rename(child, newPath + '/' + child.name);
+      if (type(child) === 'File') {
+        child.path = oldPath + '/';
+      }
+
+      await move(child, newPath + '/' + child.name);
     }
 
-    target.delete();
+    await parent.remove(oldPath);
     return;
   } else {
-    let content = await readFile(fullpath);
+    let content = await readFile(oldPath);
 
     let blob = new Blob([content], {type: target.type});
 
-    sdcard().delete(fullpath);
-
-    sdcard().addNamed(blob, path + newName);
+    return new Promise((resolve, reject) => {
+      let request = sdcard().addNamed(blob, newPath);
+      request.onsuccess = resolve;
+      request.onerror = reject;
+      request.onabort = reject;
+    }).then(() => sdcard().delete(oldPath));
   }
 }

@@ -1,32 +1,33 @@
 import { MENU } from 'actions/types';
 
-export function show(id, x, y) {
+export function show(id, props = {}) {
   return {
     type: MENU,
     active: true,
-    id, x, y
+    id, ...props
   }
 }
 
-export function hide(id) {
+export function hide(id, props = {}) {
   return {
     type: MENU,
     active: false,
-    id
+    id, ...props
   }
 }
 
-export function toggle(id, x, y) {
+export function toggle(id, props = {}) {
   return {
     type: MENU,
     active: 'toggle',
-    id, x, y
+    id, ...props
   }
 }
 
-export function hideAll() {
+export function hideAll(props = {}) {
   return {
     type: MENU,
-    active: false
+    active: false,
+    ...props
   }
 }

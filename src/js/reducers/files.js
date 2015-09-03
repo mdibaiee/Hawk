@@ -1,6 +1,8 @@
 import { LIST_FILES, RENAME_FILE, DELETE_FILE } from 'actions/types';
 import { refresh } from 'actions/files-view';
-import { rename, sdcard } from 'api/files';
+import { move, sdcard } from 'api/files';
+import { show } from 'actions/dialog';
+import store from 'store';
 
 export default function(state = [], action) {
   if (action.type === LIST_FILES) {
@@ -11,7 +13,10 @@ export default function(state = [], action) {
   if (action.type === RENAME_FILE) {
     let file = state[action.file];
 
-    rename(file, action.name).then(refresh);
+    move(file, (file.path || '') + action.name).then(refresh, err => {
+      let action = show('errorDialog', {description: err.message});
+      store.dispatch(action);
+    });
 
     return state;
   }

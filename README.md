@@ -10,7 +10,8 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Breadcrumb
 - [x] Delete Files
 - [x] Refresh
-- [ ] Rename Files
+- [x] Rename Files
+- [x] Error dialogs
 - [ ] Create new files and directories
 - [ ] Different views (List, Icons, etc)
 - [ ] Share Files
