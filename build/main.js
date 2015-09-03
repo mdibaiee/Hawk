@@ -23379,8 +23379,12 @@ var entryMenu = {
   }, {
     name: 'Delete',
     action: function action() {
+      var files = _store2['default'].getState().get('files');
+      var active = _store2['default'].getState().get('activeFile');
+      var name = files[active].name;
+      var MSG = 'Are you sure you want to remove ' + name + '?';
       _store2['default'].dispatch((0, _actionsMenu.hideAll)());
-      _store2['default'].dispatch((0, _actionsDialog.show)('deleteDialog'));
+      _store2['default'].dispatch((0, _actionsDialog.show)('deleteDialog', { description: MSG }));
     }
   }]
 };
