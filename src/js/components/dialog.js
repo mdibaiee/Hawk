@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { template } from 'utils';
 
 export default class Dialog extends Component {
   render() {
-    let conditionalInput = this.props.input ? <input ref='input' /> : '';
+    let { input, title, description, active } = this.props;
+    let conditionalInput = input ? <input ref='input' /> : '';
+
     let buttons = this.props.buttons.map((button, i) => {
       return <button className={button.className + ' btn'} key={i}
                      onClick={button.action.bind(this)}>
@@ -10,12 +13,12 @@ export default class Dialog extends Component {
             </button>;
     });
 
-    let className = this.props.active ? 'dialog active' : 'dialog';
+    let className = active ? 'dialog active' : 'dialog';
 
     return (
       <div className={className}>
-        <p className='regular-medium'>{this.props.title}</p>
-        <p className='light-medium'>{this.props.description}</p>
+        <p className='regular-medium'>{title}</p>
+        <p className='light-medium'>{description}</p>
 
         {conditionalInput}
 

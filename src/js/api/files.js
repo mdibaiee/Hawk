@@ -57,7 +57,6 @@ export async function createDirectory(...args) {
 }
 
 export async function rename(file, newName) {
-  console.log(file);
   let path = (file.path || '').slice(1); // remove starting slash
   let oldPath = (path + file.name);
   let newPath = path + newName;

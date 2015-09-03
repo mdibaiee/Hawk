@@ -28,7 +28,7 @@ export default {
   },
   deleteDialog: {
     title: 'Delete',
-    description: 'Are you sure you want to remove @activeFile.name?',
+    description: 'Are you sure you want to remove this file?',
     buttons: [
       {
         text: 'No',

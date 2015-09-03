@@ -21251,7 +21251,6 @@ var createDirectory = _asyncToGenerator(function* () {
 exports.createDirectory = createDirectory;
 
 var rename = _asyncToGenerator(function* (file, newName) {
-  console.log(file);
   var path = (file.path || '').slice(1); // remove starting slash
   var oldPath = path + file.name;
   var newPath = path + newName;
@@ -21345,6 +21344,8 @@ var _actionsChangedir = require('actions/changedir');
 var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
 
 var _store = require('store');
+
+// TODO: Fix history not working when clicking on sdcard
 
 var Breadcrumb = (function (_Component) {
   _inherits(Breadcrumb, _Component);
@@ -21443,6 +21444,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _utils = require('utils');
+
 var Dialog = (function (_Component) {
   _inherits(Dialog, _Component);
 
@@ -21457,7 +21460,14 @@ var Dialog = (function (_Component) {
     value: function render() {
       var _this = this;
 
-      var conditionalInput = this.props.input ? _react2['default'].createElement('input', { ref: 'input' }) : '';
+      var _props = this.props;
+      var input = _props.input;
+      var title = _props.title;
+      var description = _props.description;
+      var active = _props.active;
+
+      var conditionalInput = input ? _react2['default'].createElement('input', { ref: 'input' }) : '';
+
       var buttons = this.props.buttons.map(function (button, i) {
         return _react2['default'].createElement(
           'button',
@@ -21467,7 +21477,7 @@ var Dialog = (function (_Component) {
         );
       });
 
-      var className = this.props.active ? 'dialog active' : 'dialog';
+      var className = active ? 'dialog active' : 'dialog';
 
       return _react2['default'].createElement(
         'div',
@@ -21475,12 +21485,12 @@ var Dialog = (function (_Component) {
         _react2['default'].createElement(
           'p',
           { className: 'regular-medium' },
-          this.props.title
+          title
         ),
         _react2['default'].createElement(
           'p',
           { className: 'light-medium' },
-          this.props.description
+          description
         ),
         conditionalInput,
         _react2['default'].createElement(
@@ -21498,7 +21508,7 @@ var Dialog = (function (_Component) {
 exports['default'] = Dialog;
 module.exports = exports['default'];
 
-},{"react":165}],186:[function(require,module,exports){
+},{"react":165,"utils":"utils"}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -22097,6 +22107,9 @@ var DirectoryMenu = (0, _reactRedux.connect)(function (state) {
 var RenameDialog = (0, _reactRedux.connect)(function (state) {
   return state.get('renameDialog');
 })(_componentsDialog2['default']);
+var DeleteDialog = (0, _reactRedux.connect)(function (state) {
+  return state.get('deleteDialog');
+})(_componentsDialog2['default']);
 
 var Root = (function (_Component) {
   _inherits(Root, _Component);
@@ -22120,7 +22133,8 @@ var Root = (function (_Component) {
         _react2['default'].createElement(_componentsToolbar2['default'], null),
         _react2['default'].createElement(FileMenu, null),
         _react2['default'].createElement(DirectoryMenu, null),
-        _react2['default'].createElement(RenameDialog, null)
+        _react2['default'].createElement(RenameDialog, null),
+        _react2['default'].createElement(DeleteDialog, null)
       );
     }
   }, {
@@ -22244,7 +22258,7 @@ exports['default'] = {
   },
   deleteDialog: {
     title: 'Delete',
-    description: 'Are you sure you want to remove @activeFile.name?',
+    description: 'Are you sure you want to remove this file?',
     buttons: [{
       text: 'No',
       action: (0, _store.bind)((0, _actionsDialog.hideAll)())
@@ -27590,15 +27604,45 @@ function bind(action) {
 exports['default'] = store;
 
 },{"./dialogs":194,"./menus":196,"actions/changedir":175,"immutable":205,"reducers/all":198,"redux":167}],"utils":[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.type = type;
+exports.template = template;
+exports.getKey = getKey;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
 
 function type(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1);
 }
 
-},{}]},{},[175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,"store","utils"]);
+function template(string, props) {
+  return string.replace(/@(\S+)/g, function (all, match) {
+    return getKey(props, match);
+  });
+}
+
+function getKey(object, key) {
+  if (object === undefined) object = _store2['default'].getState().toJS();
+
+  var parent = object;
+
+  do {
+    var dot = key.indexOf('.');
+    if (dot === -1) dot = key.length;
+    parent = parent[key.slice(0, dot)];
+
+    key = key.slice(dot + 1);
+  } while (key);
+
+  return parent;
+}
+
+},{"store":"store"}]},{},[175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,"store","utils"]);

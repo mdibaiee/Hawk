@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import changedir from 'actions/changedir';
 import { bind } from 'store';
 
+// TODO: Fix history not working when clicking on sdcard
 @connect(props)
 export default class Breadcrumb extends Component {
   render() {
