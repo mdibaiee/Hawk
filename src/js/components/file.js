@@ -3,6 +3,7 @@ import { show } from 'actions/menu';
 import { active } from 'actions/file';
 import { MENU_WIDTH } from './menu';
 import store from 'store';
+import { humanSize } from 'utils';
 
 const MENU_TOP_SPACE = 20;
 
@@ -17,6 +18,7 @@ export default class File extends Component {
            onContextMenu={this.contextMenu.bind(this)}>
         <i></i>
         <p>{this.props.name}</p>
+        <span>{humanSize(this.props.size)}</span>
       </div>
     );
   }

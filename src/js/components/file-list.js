@@ -32,9 +32,9 @@ export default class FileList extends Component {
 
     let els = files.map((file, index) => {
       if (type(file) === 'File') {
-        return <File key={index} index={index} name={file.name} />;
+        return <File key={index} index={index} name={file.name} size={file.size} />;
       } else {
-        return <Directory key={index} index={index} name={file.name} />
+        return <Directory key={index} index={index} name={file.name} children={file.children} />
       }
     });
 

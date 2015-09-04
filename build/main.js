@@ -22462,9 +22462,47 @@ var getFile = _asyncToGenerator(function* () {
 
 exports.getFile = getFile;
 
-var children = _asyncToGenerator(function* (dir) {
+var children = _asyncToGenerator(function* (dir, gatherInfo) {
   var parent = yield getFile(dir);
-  return yield parent.getFilesAndDirectories();
+  var childs = yield parent.getFilesAndDirectories();
+
+  if (gatherInfo) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = childs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var child = _step.value;
+
+        if ((0, _utils.type)(child) !== 'Directory') continue;
+
+        var subchildren = undefined;
+        try {
+          subchildren = yield child.getFilesAndDirectories();
+        } catch (e) {
+          subchildren = [];
+        }
+
+        child.children = subchildren.length;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator['return']) {
+          _iterator['return']();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+  }
+
+  return childs;
 });
 
 exports.children = children;
@@ -22515,13 +22553,13 @@ var move = _asyncToGenerator(function* (file, newPath) {
     yield parent.createDirectory(newPath);
     var childs = yield target.getFilesAndDirectories();
 
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
 
     try {
-      for (var _iterator = childs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var child = _step.value;
+      for (var _iterator2 = childs[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var child = _step2.value;
 
         if ((0, _utils.type)(child) === 'File') {
           child.path = oldPath + '/';
@@ -22530,16 +22568,16 @@ var move = _asyncToGenerator(function* (file, newPath) {
         yield move(child, newPath + '/' + child.name);
       }
     } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator['return']) {
-          _iterator['return']();
+        if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+          _iterator2['return']();
         }
       } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
+        if (_didIteratorError2) {
+          throw _iteratorError2;
         }
       }
     }
@@ -22837,6 +22875,12 @@ var Directory = (function (_Component) {
           'p',
           null,
           this.props.name
+        ),
+        _react2['default'].createElement(
+          'span',
+          null,
+          this.props.children,
+          ' items'
         )
       );
     }
@@ -22949,9 +22993,9 @@ var FileList = (function (_Component) {
 
       var els = files.map(function (file, index) {
         if ((0, _utils.type)(file) === 'File') {
-          return _react2['default'].createElement(_file2['default'], { key: index, index: index, name: file.name });
+          return _react2['default'].createElement(_file2['default'], { key: index, index: index, name: file.name, size: file.size });
         } else {
-          return _react2['default'].createElement(_directory2['default'], { key: index, index: index, name: file.name });
+          return _react2['default'].createElement(_directory2['default'], { key: index, index: index, name: file.name, children: file.children });
         }
       });
 
@@ -23009,6 +23053,8 @@ var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var _utils = require('utils');
+
 var MENU_TOP_SPACE = 20;
 
 var File = (function (_Component) {
@@ -23032,6 +23078,11 @@ var File = (function (_Component) {
           'p',
           null,
           this.props.name
+        ),
+        _react2['default'].createElement(
+          'span',
+          null,
+          (0, _utils.humanSize)(this.props.size)
         )
       );
     }
@@ -23059,7 +23110,7 @@ var File = (function (_Component) {
 exports['default'] = File;
 module.exports = exports['default'];
 
-},{"./menu":231,"actions/file":217,"actions/menu":220,"react":205,"store":"store"}],230:[function(require,module,exports){
+},{"./menu":231,"actions/file":217,"actions/menu":220,"react":205,"store":"store","utils":"utils"}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -23838,29 +23889,34 @@ var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var _utils = require('utils');
+
 exports['default'] = function (state, action) {
   if (state === undefined) state = '';
 
   if (action.type === _actionsTypes.CHANGE_DIRECTORY) {
-    (0, _apiFiles.children)(action.dir).then(function (files) {
-      _store2['default'].dispatch((0, _actionsListFiles2['default'])(files));
-    });
+    changeTo(action.dir);
+
     return action.dir;
   }
 
   if (action.type === _actionsTypes.REFRESH || action.type === _actionsTypes.SETTINGS) {
-    (0, _apiFiles.children)(state).then(function (files) {
-      _store2['default'].dispatch((0, _actionsListFiles2['default'])(files));
-    });
+    changeTo(state);
+
     return state;
   }
 
   return state;
 };
 
+function changeTo(dir) {
+  (0, _apiFiles.children)(dir, true).then(function (files) {
+    _store2['default'].dispatch((0, _actionsListFiles2['default'])(files));
+  }, _utils.reportError);
+}
 module.exports = exports['default'];
 
-},{"actions/list-files":219,"actions/types":223,"api/files":224,"store":"store"}],241:[function(require,module,exports){
+},{"actions/list-files":219,"actions/types":223,"api/files":224,"store":"store","utils":"utils"}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29063,6 +29119,7 @@ exports.type = type;
 exports.template = template;
 exports.getKey = getKey;
 exports.reportError = reportError;
+exports.humanSize = humanSize;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -29101,6 +29158,25 @@ function getKey(object, key) {
 function reportError(err) {
   var action = (0, _actionsDialog.show)('errorDialog', { description: err.message });
   _store2['default'].dispatch(action);
+}
+
+var sizes = {
+  'GB': Math.pow(2, 30),
+  'MB': Math.pow(2, 20),
+  'KB': Math.pow(2, 10),
+  'B': -1
+};
+
+function humanSize(size) {
+  console.log(size);
+  for (var key in sizes) {
+    var value = sizes[key];
+
+    console.log(value);
+    if (size > value) {
+      return Math.round(size / value) + key;
+    }
+  }
 }
 
 },{"actions/dialog":216,"store":"store"}]},{},[215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,"store","utils"]);

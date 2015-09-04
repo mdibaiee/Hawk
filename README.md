@@ -15,8 +15,8 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Show / Hide hidden files
 - [x] Show directories first
 - [x] Create new files and directories
-- [ ] File Size
-- [ ] Directory Child Count
+- [x] File Size
+- [x] Directory Child Count
 - [ ] File Preview
 - [ ] Filter Files
 - [ ] Different views (List, Icons, etc)

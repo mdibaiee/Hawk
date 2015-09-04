@@ -26,9 +26,26 @@ export async function getFile(dir = '/') {
   return await parent.get(dir);
 }
 
-export async function children(dir) {
+export async function children(dir, gatherInfo) {
   let parent = await getFile(dir);
-  return await parent.getFilesAndDirectories();
+  let childs = await parent.getFilesAndDirectories();
+
+  if (gatherInfo) {
+    for (let child of childs) {
+      if (type(child) !== 'Directory') continue;
+
+      let subchildren;
+      try {
+        subchildren = await child.getFilesAndDirectories();
+      } catch(e) {
+        subchildren = [];
+      }
+
+      child.children = subchildren.length;
+    }
+  }
+
+  return childs;
 }
 
 export async function readFile(path) {

@@ -15,6 +15,7 @@ export default class Directory extends Component {
            onContextMenu={this.contextMenu.bind(this)}>
         <i></i>
         <p>{this.props.name}</p>
+        <span>{this.props.children} items</span>
       </div>
     );
   }
