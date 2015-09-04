@@ -9,7 +9,6 @@ export default function(state = [], action) {
     return action.files;
   }
 
-
   if (action.type === RENAME_FILE) {
     let file = state[action.file];
 

@@ -6,6 +6,7 @@ import navigation from './navigation';
 import activeFile from './active-file';
 import menu from './menu';
 import dialog from './dialog';
+import settings from './settings';
 
 export default function(state = new Immutable.Map(), action) {
   console.log('action', action);
@@ -15,6 +16,7 @@ export default function(state = new Immutable.Map(), action) {
     files: files(state.get('files'), action),
     activeFile: activeFile(state.get('activeFile'), action),
     navigation: navigation(state.get('navigation'), action),
+    settings: settings(state.get('settings'), action),
     fileMenu: menu(state, action, 'fileMenu'),
     directoryMenu: menu(state, action, 'directoryMenu'),
     renameDialog: dialog(state, action, 'renameDialog'),

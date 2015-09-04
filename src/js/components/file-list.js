@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import File from './file';
 import Directory from './directory';
+import store from 'store';
+import { type } from 'utils';
 
 @connect(props)
 export default class FileList extends Component {
@@ -12,8 +14,24 @@ export default class FileList extends Component {
   render() {
     let { files } = this.props;
 
+    let settings = store.getState().get('settings');
+
+    if (settings.showDirectoriesFirst) {
+      files = files.sort((a, b) => {
+        if (type(a) === 'Directory') return -1;
+        if (type(b) === 'Directory') return 1;
+        return 0;
+      })
+    }
+
+    if (!settings.showHiddenFiles) {
+      files = files.filter(file => {
+        return file.name[0] !== '.';
+      })
+    }
+
     let els = files.map((file, index) => {
-      if (fileType(file) === 'File') {
+      if (type(file) === 'File') {
         return <File key={index} index={index} name={file.name} />;
       } else {
         return <Directory key={index} index={index} name={file.name} />
@@ -39,8 +57,4 @@ async function getFiles(dir) {
   let root = await storage.get(dir);
 
   return await root.getFilesAndDirectories();
-}
-
-function fileType(file) {
-  return Object.prototype.toString.call(file).slice(8, -1);
 }

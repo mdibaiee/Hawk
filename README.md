@@ -12,11 +12,11 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Refresh
 - [x] Rename Files
 - [x] Error dialogs
+- [x] Show / Hide hidden files
+- [x] Show directories first
 - [ ] Create new files and directories
 - [ ] File Size
 - [ ] Directory Child Count
-- [ ] Show / Hide hidden files
-- [ ] Show directories first
 - [ ] File Preview
 - [ ] Filter Files
 - [ ] Different views (List, Icons, etc)

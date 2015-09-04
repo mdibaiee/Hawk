@@ -7,7 +7,6 @@ import dialogs from './dialogs';
 
 const DEFAULT = new Immutable.Map(Object.assign({
   dir: '',
-  files: []
 }, dialogs, menus));
 
 let store = createStore(reducers, DEFAULT);

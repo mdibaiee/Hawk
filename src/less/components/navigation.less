@@ -52,6 +52,39 @@ nav {
       padding-bottom: 0;
       border-bottom: none;
     }
+
+    label {
+      clear: left;
+
+      &::after {
+        content: '';
+        display: block;
+
+        float: right;
+
+        margin-right: 13px;
+
+        border-radius: 50%;
+
+        width: 10px;
+        height: 10px;
+
+        background: transparent;
+
+        border: 1px solid @overlay;
+      }
+    }
+
+    input {
+      clear: right;
+      float: right;
+
+      display: none;
+    }
+
+    input:checked + label::after {
+      background: @blue;
+    }
   }
 
   i {

@@ -20,6 +20,8 @@ const TYPES = {
 
   DIALOG: Symbol('DEBUG'),
 
+  SETTINGS: Symbol('SETTINGS'),
+
   SEARCH: Symbol('SEARCH')
 };
 

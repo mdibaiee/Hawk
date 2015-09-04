@@ -101,6 +101,23 @@ input {
   font-weight: 200;
   font-size: 1.6rem;
 }
+input[type="checkbox"] {
+  width: 0;
+  height: 0;
+}
+input[type="checkbox"]::before {
+  content: '';
+  display: block;
+  border: 1px solid #f0f0f0;
+  background: transparent;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+}
+input[type="checkbox"]::before:checked {
+  background: #63b0cd;
+}
 .file,
 .directory {
   display: flex;
@@ -229,6 +246,28 @@ nav li:first-of-type {
 nav li:last-of-type {
   padding-bottom: 0;
   border-bottom: none;
+}
+nav li label {
+  clear: left;
+}
+nav li label::after {
+  content: '';
+  display: block;
+  float: right;
+  margin-right: 13px;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background: transparent;
+  border: 1px solid #9b9b93;
+}
+nav li input {
+  clear: right;
+  float: right;
+  display: none;
+}
+nav li input:checked + label::after {
+  background: #63b0cd;
 }
 nav i {
   display: block;
