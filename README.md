@@ -14,7 +14,7 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Error dialogs
 - [x] Show / Hide hidden files
 - [x] Show directories first
-- [ ] Create new files and directories
+- [x] Create new files and directories
 - [ ] File Size
 - [ ] Directory Child Count
 - [ ] File Preview

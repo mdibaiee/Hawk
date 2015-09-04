@@ -1,21 +1,28 @@
-import { LIST_FILES, RENAME_FILE, DELETE_FILE } from 'actions/types';
+import { LIST_FILES, RENAME_FILE, DELETE_FILE, CREATE_FILE } from 'actions/types';
 import { refresh } from 'actions/files-view';
-import { move, sdcard } from 'api/files';
+import { move, sdcard, createFile, createDirectory } from 'api/files';
 import { show } from 'actions/dialog';
-import store from 'store';
+import store, { bind } from 'store';
+import { reportError } from 'utils';
+
+let boundRefresh = bind(refresh());
 
 export default function(state = [], action) {
   if (action.type === LIST_FILES) {
     return action.files;
   }
 
+  if (action.type === CREATE_FILE) {
+    let fn = action.directory ? createDirectory : createFile;
+    fn(action.path).then(boundRefresh, reportError);
+
+    return state;
+  }
+
   if (action.type === RENAME_FILE) {
     let file = state[action.file];
 
-    move(file, (file.path || '') + action.name).then(refresh, err => {
-      let action = show('errorDialog', {description: err.message});
-      store.dispatch(action);
-    });
+    move(file, (file.path || '') + action.name).then(boundRefresh, reportError);
 
     return state;
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { create, share } from 'actions/file';
 import { toggle as toggleView, refresh } from 'actions/files-view';
-import { bind } from 'store';
+import { show as showDialog } from 'actions/dialog';
+import store, { bind } from 'store';
 
 export default class Toolbar extends Component {
   render() {
@@ -10,7 +10,7 @@ export default class Toolbar extends Component {
         <button className='icon-plus' onClick={this.newFile} />
         <button className='icon-view' onClick={bind(toggleView())} />
         <button className='icon-refresh' onClick={bind(refresh())} />
-        <button className='icon-share' onClick={bind(share())} />
+        <button className='icon-share' onClick={this.share} />
         <button className='icon-more' onClick={this.showMore} />
       </div>
     );
@@ -21,6 +21,10 @@ export default class Toolbar extends Component {
   }
 
   newFile() {
-    
+    let cwd = store.getState().get('cwd');
+    let action = showDialog('createDialog', {
+      description: `Enter a name for the new file to be created in ${cwd}`
+    });
+    store.dispatch(action);
   }
 }

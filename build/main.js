@@ -22190,16 +22190,19 @@ exports.deleteFile = deleteFile;
 
 var _actionsTypes = require('actions/types');
 
-function create(path, name) {
+function create(path) {
+  var directory = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
   return {
     type: _actionsTypes.CREATE_FILE,
-    path: path, name: name
+    path: path, directory: directory
   };
 }
 
-function share() {
+function share(path) {
   return {
-    type: _actionsTypes.SHARE_FILE
+    type: _actionsTypes.SHARE_FILE,
+    path: path
   };
 }
 
@@ -23409,6 +23412,8 @@ var _reactRedux = require('react-redux');
 
 var _actionsMenu = require('actions/menu');
 
+var _actionsDialog = require('actions/dialog');
+
 var _actionsChangedir = require('actions/changedir');
 
 var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
@@ -23436,6 +23441,9 @@ var DeleteDialog = (0, _reactRedux.connect)(function (state) {
 var ErrorDialog = (0, _reactRedux.connect)(function (state) {
   return state.get('errorDialog');
 })(_componentsDialog2['default']);
+var CreateDialog = (0, _reactRedux.connect)(function (state) {
+  return state.get('createDialog');
+})(_componentsDialog2['default']);
 
 var Root = (function (_Component) {
   _inherits(Root, _Component);
@@ -23461,7 +23469,8 @@ var Root = (function (_Component) {
         _react2['default'].createElement(DirectoryMenu, null),
         _react2['default'].createElement(RenameDialog, null),
         _react2['default'].createElement(DeleteDialog, null),
-        _react2['default'].createElement(ErrorDialog, null)
+        _react2['default'].createElement(ErrorDialog, null),
+        _react2['default'].createElement(CreateDialog, null)
       );
     }
   }, {
@@ -23469,6 +23478,7 @@ var Root = (function (_Component) {
     value: function touchStart(e) {
       if (!e.target.closest('.menu')) {
         _store2['default'].dispatch((0, _actionsMenu.hideAll)());
+        _store2['default'].dispatch((0, _actionsDialog.hideAll)());
       }
     }
   }]);
@@ -23479,7 +23489,7 @@ var Root = (function (_Component) {
 exports['default'] = Root;
 module.exports = exports['default'];
 
-},{"actions/changedir":215,"actions/menu":220,"components/breadcrumb":225,"components/dialog":226,"components/file-list":228,"components/header":230,"components/menu":231,"components/navigation":232,"components/toolbar":234,"react":205,"react-redux":45,"store":"store"}],234:[function(require,module,exports){
+},{"actions/changedir":215,"actions/dialog":216,"actions/menu":220,"components/breadcrumb":225,"components/dialog":226,"components/file-list":228,"components/header":230,"components/menu":231,"components/navigation":232,"components/toolbar":234,"react":205,"react-redux":45,"store":"store"}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -23500,11 +23510,13 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _actionsFile = require('actions/file');
-
 var _actionsFilesView = require('actions/files-view');
 
+var _actionsDialog = require('actions/dialog');
+
 var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
 
 var Toolbar = (function (_Component) {
   _inherits(Toolbar, _Component);
@@ -23524,7 +23536,7 @@ var Toolbar = (function (_Component) {
         _react2['default'].createElement('button', { className: 'icon-plus', onClick: this.newFile }),
         _react2['default'].createElement('button', { className: 'icon-view', onClick: (0, _store.bind)((0, _actionsFilesView.toggle)()) }),
         _react2['default'].createElement('button', { className: 'icon-refresh', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
-        _react2['default'].createElement('button', { className: 'icon-share', onClick: (0, _store.bind)((0, _actionsFile.share)()) }),
+        _react2['default'].createElement('button', { className: 'icon-share', onClick: this.share }),
         _react2['default'].createElement('button', { className: 'icon-more', onClick: this.showMore })
       );
     }
@@ -23533,7 +23545,13 @@ var Toolbar = (function (_Component) {
     value: function showMore() {}
   }, {
     key: 'newFile',
-    value: function newFile() {}
+    value: function newFile() {
+      var cwd = _store2['default'].getState().get('cwd');
+      var action = (0, _actionsDialog.show)('createDialog', {
+        description: 'Enter a name for the new file to be created in ' + cwd
+      });
+      _store2['default'].dispatch(action);
+    }
   }]);
 
   return Toolbar;
@@ -23542,7 +23560,7 @@ var Toolbar = (function (_Component) {
 exports['default'] = Toolbar;
 module.exports = exports['default'];
 
-},{"actions/file":217,"actions/files-view":218,"react":205,"store":"store"}],235:[function(require,module,exports){
+},{"actions/dialog":216,"actions/files-view":218,"react":205,"store":"store"}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -23564,9 +23582,35 @@ var _store = require('store');
 var _store2 = _interopRequireDefault(_store);
 
 exports['default'] = {
+  createDialog: {
+    title: 'Create',
+    description: 'Enter a name for the new file',
+    input: true,
+    buttons: [{
+      text: 'File',
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+
+        var cwd = _store2['default'].getState().get('cwd');
+        var action = (0, _actionsFile.create)(cwd + input.value);
+        this.props.dispatch(action);
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+      }
+    }, {
+      text: 'Directory',
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+
+        var cwd = _store2['default'].getState().get('cwd');
+        var action = (0, _actionsFile.create)(cwd + input.value, true);
+        this.props.dispatch(action);
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+      }
+    }]
+  },
   renameDialog: {
     title: 'Rename',
-    description: 'Enter your desired new name',
+    description: 'Enter the new name',
     input: true,
     buttons: [{
       text: 'Cancel',
@@ -23658,8 +23702,13 @@ var entryMenu = {
   items: [{
     name: 'Rename',
     action: function action() {
+      var files = _store2['default'].getState().get('files');
+      var active = _store2['default'].getState().get('activeFile');
+      var name = files[active].name;
+      var description = 'Are you sure you want to remove ' + name + '?';
+
       _store2['default'].dispatch((0, _actionsMenu.hideAll)());
-      _store2['default'].dispatch((0, _actionsDialog.show)('renameDialog'));
+      _store2['default'].dispatch((0, _actionsDialog.show)('renameDialog', { description: description }));
     }
   }, {
     name: 'Delete',
@@ -23667,9 +23716,9 @@ var entryMenu = {
       var files = _store2['default'].getState().get('files');
       var active = _store2['default'].getState().get('activeFile');
       var name = files[active].name;
-      var MSG = 'Are you sure you want to remove ' + name + '?';
+      var description = 'Are you sure you want to remove ' + name + '?';
       _store2['default'].dispatch((0, _actionsMenu.hideAll)());
-      _store2['default'].dispatch((0, _actionsDialog.show)('deleteDialog', { description: MSG }));
+      _store2['default'].dispatch((0, _actionsDialog.show)('deleteDialog', { description: description }));
     }
   }]
 };
@@ -23761,7 +23810,8 @@ exports['default'] = function (state, action) {
     directoryMenu: (0, _menu2['default'])(state, action, 'directoryMenu'),
     renameDialog: (0, _dialog2['default'])(state, action, 'renameDialog'),
     deleteDialog: (0, _dialog2['default'])(state, action, 'deleteDialog'),
-    errorDialog: (0, _dialog2['default'])(state, action, 'errorDialog')
+    errorDialog: (0, _dialog2['default'])(state, action, 'errorDialog'),
+    createDialog: (0, _dialog2['default'])(state, action, 'createDialog')
   });
 };
 
@@ -23873,6 +23923,10 @@ var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var _utils = require('utils');
+
+var boundRefresh = (0, _store.bind)((0, _actionsFilesView.refresh)());
+
 exports['default'] = function (state, action) {
   if (state === undefined) state = [];
 
@@ -23880,13 +23934,17 @@ exports['default'] = function (state, action) {
     return action.files;
   }
 
+  if (action.type === _actionsTypes.CREATE_FILE) {
+    var fn = action.directory ? _apiFiles.createDirectory : _apiFiles.createFile;
+    fn(action.path).then(boundRefresh, _utils.reportError);
+
+    return state;
+  }
+
   if (action.type === _actionsTypes.RENAME_FILE) {
     var file = state[action.file];
 
-    (0, _apiFiles.move)(file, (file.path || '') + action.name).then(_actionsFilesView.refresh, function (err) {
-      var action = (0, _actionsDialog.show)('errorDialog', { description: err.message });
-      _store2['default'].dispatch(action);
-    });
+    (0, _apiFiles.move)(file, (file.path || '') + action.name).then(boundRefresh, _utils.reportError);
 
     return state;
   }
@@ -23905,7 +23963,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/dialog":216,"actions/files-view":218,"actions/types":223,"api/files":224,"store":"store"}],243:[function(require,module,exports){
+},{"actions/dialog":216,"actions/files-view":218,"actions/types":223,"api/files":224,"store":"store","utils":"utils"}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29004,12 +29062,15 @@ Object.defineProperty(exports, '__esModule', {
 exports.type = type;
 exports.template = template;
 exports.getKey = getKey;
+exports.reportError = reportError;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
+
+var _actionsDialog = require('actions/dialog');
 
 function type(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1);
@@ -29037,4 +29098,9 @@ function getKey(object, key) {
   return parent;
 }
 
-},{"store":"store"}]},{},[215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,"store","utils"]);
+function reportError(err) {
+  var action = (0, _actionsDialog.show)('errorDialog', { description: err.message });
+  _store2['default'].dispatch(action);
+}
+
+},{"actions/dialog":216,"store":"store"}]},{},[215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,"store","utils"]);

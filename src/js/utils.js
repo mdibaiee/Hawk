@@ -1,4 +1,5 @@
 import store from 'store';
+import { show } from 'actions/dialog';
 
 export function type(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1);
@@ -22,4 +23,9 @@ export function getKey(object = store.getState().toJS(), key) {
   } while (key)
 
   return parent;
+}
+
+export function reportError(err) {
+  let action = show('errorDialog', {description: err.message});
+  store.dispatch(action);
 }

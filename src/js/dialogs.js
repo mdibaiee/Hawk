@@ -1,12 +1,41 @@
 import React from 'react';
 import { hide, hideAll } from 'actions/dialog';
-import { rename, deleteFile } from 'actions/file';
+import { rename, deleteFile, create } from 'actions/file';
 import store, { bind } from 'store';
 
 export default {
+  createDialog: {
+    title: 'Create',
+    description: 'Enter a name for the new file',
+    input: true,
+    buttons: [
+      {
+        text: 'File',
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+
+          let cwd = store.getState().get('cwd');
+          let action = create(cwd + input.value);
+          this.props.dispatch(action);
+          this.props.dispatch(hideAll());
+        }
+      },
+      {
+        text: 'Directory',
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+
+          let cwd = store.getState().get('cwd');
+          let action = create(cwd + input.value, true);
+          this.props.dispatch(action);
+          this.props.dispatch(hideAll());
+        }
+      }
+    ]
+  },
   renameDialog: {
     title: 'Rename',
-    description: 'Enter your desired new name',
+    description: 'Enter the new name',
     input: true,
     buttons: [
       {

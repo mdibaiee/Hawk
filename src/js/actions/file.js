@@ -1,15 +1,16 @@
 import { CREATE_FILE, SHARE_FILE, RENAME_FILE, ACTIVE_FILE, DELETE_FILE } from 'actions/types';
 
-export function create(path, name) {
+export function create(path, directory = false) {
   return {
     type: CREATE_FILE,
-    path, name
+    path, directory
   }
 }
 
-export function share() {
+export function share(path) {
   return {
-    type: SHARE_FILE
+    type: SHARE_FILE,
+    path
   }
 }
 

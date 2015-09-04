@@ -7,8 +7,13 @@ const entryMenu = {
     {
       name: 'Rename',
       action() {
+        let files = store.getState().get('files');
+        let active = store.getState().get('activeFile');
+        const name = files[active].name;
+        const description = `Are you sure you want to remove ${name}?`;
+
         store.dispatch(hideAll());
-        store.dispatch(show('renameDialog'));
+        store.dispatch(show('renameDialog', {description}));
       }
     },
     {
@@ -17,9 +22,9 @@ const entryMenu = {
         let files = store.getState().get('files');
         let active = store.getState().get('activeFile');
         const name = files[active].name;
-        const MSG = `Are you sure you want to remove ${name}?`;
+        const description = `Are you sure you want to remove ${name}?`;
         store.dispatch(hideAll());
-        store.dispatch(show('deleteDialog', {description: MSG}));
+        store.dispatch(show('deleteDialog', {description}));
       }
     }
   ]
