@@ -19,12 +19,11 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Directory Child Count
 - [ ] File Preview
 - [ ] Filter Files
+- [ ] Search
 - [ ] Different views (List, Icons, etc)
 - [ ] Share Files
-- [ ] Search
+- [ ] Preferences
 - [ ] FTP Browser
 - [ ] File Type Icons
-- [ ] Share files
-- [ ] Wi-Fi File Transfer (is this possible?)
-- [ ] Preferences
 - [ ] Swipe Gestures
+- [ ] Wi-Fi File Transfer (is this possible?)
