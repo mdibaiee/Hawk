@@ -1,4 +1,4 @@
-import { LIST_FILES, FILES_VIEW, REFRESH } from 'actions/types';
+import { LIST_FILES, FILES_VIEW, SELECT_VIEW, REFRESH } from 'actions/types';
 import store from 'store';
 
 export function refresh() {
@@ -7,23 +7,30 @@ export function refresh() {
   }
 }
 
-export function toggle(state) {
+export function toggle() {
   return {
     type: FILES_VIEW,
     view: 'toggle'
   }
 }
 
-export function details(state) {
+export function details() {
   return {
     type: FILES_VIEW,
     view: 'details'
   }
 }
 
-export function list(state) {
+export function list() {
   return {
     type: FILES_VIEW,
     view: 'list'
+  }
+}
+
+export function selectView(active = true) {
+  return {
+    type: SELECT_VIEW,
+    active
   }
 }

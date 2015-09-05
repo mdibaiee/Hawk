@@ -1,6 +1,6 @@
 import React from 'react';
 import { hide, hideAll } from 'actions/dialog';
-import { rename, deleteFile, create } from 'actions/file';
+import { rename, deleteFile, create, active } from 'actions/file';
 import store, { bind } from 'store';
 
 export default {
@@ -18,6 +18,7 @@ export default {
           let action = create(cwd + input.value);
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
+          this.props.dispatch(active());
         }
       },
       {
@@ -29,6 +30,7 @@ export default {
           let action = create(cwd + input.value, true);
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
+          this.props.dispatch(active());
         }
       }
     ]
@@ -50,6 +52,7 @@ export default {
           let activeFile = store.getState().get('activeFile');
           this.props.dispatch(rename(activeFile, input.value))
           this.props.dispatch(hideAll());
+          this.props.dispatch(active());
         },
         className: 'success'
       }
@@ -69,6 +72,7 @@ export default {
           let activeFile = store.getState().get('activeFile');
           this.props.dispatch(deleteFile(activeFile));
           this.props.dispatch(hideAll());
+          this.props.dispatch(active());
         },
         className: 'success'
       }

@@ -3,6 +3,7 @@ const TYPES = {
 
   LIST_FILES: Symbol('LIST_FILES'),
   FILES_VIEW: Symbol('FILES_VIEW'),
+  SELECT_VIEW: Symbol('SELECT_VIEW'),
 
   NAVIGATION: Symbol('NAVIGATION'),
   TOGGLE: Symbol('TOGGLE'),
@@ -18,7 +19,7 @@ const TYPES = {
 
   MENU: Symbol('MENU'),
 
-  DIALOG: Symbol('DEBUG'),
+  DIALOG: Symbol('DIALOG'),
 
   SETTINGS: Symbol('SETTINGS'),
 

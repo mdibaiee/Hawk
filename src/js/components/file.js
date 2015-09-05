@@ -13,9 +13,25 @@ export default class File extends Component {
   }
 
   render() {
+    let checkId = `file-${this.props.index}`;
+
+    let input, label;
+    if (this.props.selectView) {
+      input = <input type='checkbox' id={checkId} defaultChecked={this.props.selected} readOnly />;
+      label = <label htmlFor={checkId}></label>;
+    }
+
+    let clickHandler = this.props.selectView ? this.select.bind(this)
+                                             : null;
+
     return (
       <div className='file' ref='container'
+           onClick={clickHandler}
            onContextMenu={this.contextMenu.bind(this)}>
+
+        {input}
+        {label}
+
         <i></i>
         <p>{this.props.name}</p>
         <span>{humanSize(this.props.size)}</span>
@@ -33,5 +49,17 @@ export default class File extends Component {
         top  = y + height / 2 + MENU_TOP_SPACE;
     store.dispatch(show('fileMenu', {style: {left, top}}));
     store.dispatch(active(this.props.index));
+  }
+
+  select() {
+    let current = (store.getState().get('activeFile') || []).slice(0);
+    let index = this.props.index;
+
+    if (current.indexOf(index) > -1) {
+      current.splice(current.indexOf(index), 1);
+    } else {
+      current.push(index)
+    }
+    store.dispatch(active(current));
   }
 }

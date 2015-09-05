@@ -31,11 +31,11 @@
   width: 26px;
   height: 28px;
 }
-.icon-share {
+.icon-select {
   display: block;
-  background: url(/img/Share.svg) no-repeat;
-  width: 25px;
-  height: 27px;
+  background: url(/img/Select.svg) no-repeat;
+  width: 32px;
+  height: 34px;
 }
 .icon-more {
   display: block;
@@ -104,21 +104,26 @@ input {
   font-weight: 200;
   font-size: 1.6rem;
 }
-input[type="checkbox"] {
-  width: 0;
-  height: 0;
+label {
+  clear: left;
 }
-input[type="checkbox"]::before {
+label::after {
   content: '';
   display: block;
-  border: 1px solid #f0f0f0;
-  background: transparent;
+  float: right;
+  margin-right: 13px;
   border-radius: 50%;
   width: 10px;
   height: 10px;
-  box-sizing: border-box;
+  background: transparent;
+  border: 1px solid #9b9b93;
 }
-input[type="checkbox"]::before:checked {
+input[type='checkbox'] {
+  clear: right;
+  float: right;
+  display: none;
+}
+input:checked + label::after {
   background: #63b0cd;
 }
 .file,
@@ -258,28 +263,6 @@ nav li:first-of-type {
 nav li:last-of-type {
   padding-bottom: 0;
   border-bottom: none;
-}
-nav li label {
-  clear: left;
-}
-nav li label::after {
-  content: '';
-  display: block;
-  float: right;
-  margin-right: 13px;
-  border-radius: 50%;
-  width: 10px;
-  height: 10px;
-  background: transparent;
-  border: 1px solid #9b9b93;
-}
-nav li input {
-  clear: right;
-  float: right;
-  display: none;
-}
-nav li input:checked + label::after {
-  background: #63b0cd;
 }
 nav i {
   display: block;

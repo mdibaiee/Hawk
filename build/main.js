@@ -22213,7 +22213,9 @@ function rename(file, name) {
   };
 }
 
-function active(file) {
+function active() {
+  var file = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
   return {
     type: _actionsTypes.ACTIVE_FILE,
     file: file
@@ -22221,6 +22223,7 @@ function active(file) {
 }
 
 function deleteFile(file) {
+  console.log('constructing deleteFile action', file);
   return {
     type: _actionsTypes.DELETE_FILE,
     file: file
@@ -22237,6 +22240,7 @@ exports.refresh = refresh;
 exports.toggle = toggle;
 exports.details = details;
 exports.list = list;
+exports.selectView = selectView;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -22252,24 +22256,33 @@ function refresh() {
   };
 }
 
-function toggle(state) {
+function toggle() {
   return {
     type: _actionsTypes.FILES_VIEW,
     view: 'toggle'
   };
 }
 
-function details(state) {
+function details() {
   return {
     type: _actionsTypes.FILES_VIEW,
     view: 'details'
   };
 }
 
-function list(state) {
+function list() {
   return {
     type: _actionsTypes.FILES_VIEW,
     view: 'list'
+  };
+}
+
+function selectView() {
+  var active = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+  return {
+    type: _actionsTypes.SELECT_VIEW,
+    active: active
   };
 }
 
@@ -22407,6 +22420,7 @@ var TYPES = {
 
   LIST_FILES: Symbol('LIST_FILES'),
   FILES_VIEW: Symbol('FILES_VIEW'),
+  SELECT_VIEW: Symbol('SELECT_VIEW'),
 
   NAVIGATION: Symbol('NAVIGATION'),
   TOGGLE: Symbol('TOGGLE'),
@@ -22422,7 +22436,7 @@ var TYPES = {
 
   MENU: Symbol('MENU'),
 
-  DIALOG: Symbol('DEBUG'),
+  DIALOG: Symbol('DIALOG'),
 
   SETTINGS: Symbol('SETTINGS'),
 
@@ -22539,6 +22553,14 @@ var createDirectory = _asyncToGenerator(function* () {
 });
 
 exports.createDirectory = createDirectory;
+
+var remove = _asyncToGenerator(function* (file) {
+  var parent = yield root();
+
+  return parent.remove(file);
+});
+
+exports.remove = remove;
 
 var move = _asyncToGenerator(function* (file, newPath) {
   var path = (file.path || '').replace(/^\//, ''); // remove starting slash
@@ -22667,12 +22689,13 @@ var Breadcrumb = (function (_Component) {
   _createClass(Breadcrumb, [{
     key: 'render',
     value: function render() {
-      var directories = this.props.cwd.split('/');
+      var directories = this.props.cwd.split('/').filter(function (a) {
+        return a;
+      });
       directories.unshift('sdcard');
 
       var els = directories.map(function (dir, index, arr) {
         var path = arr.slice(1, index + 1).join('/');
-        var slash = index > 0 ? '/' : '';
 
         return _react2['default'].createElement(
           'span',
@@ -22680,18 +22703,21 @@ var Breadcrumb = (function (_Component) {
           _react2['default'].createElement(
             'i',
             null,
-            slash
+            '/'
           ),
           dir
         );
       });
 
-      var lastDirectories = this.props.lwd.split('/');
+      var lastDirectories = this.props.lwd.split('/').filter(function (a) {
+        return a;
+      });
       if (lastDirectories.length > directories.length - 1) {
         lastDirectories.splice(0, directories.length - 1);
+
         var _history = lastDirectories.map(function (dir, index, arr) {
           var current = directories.slice(1).concat(arr.slice(0, index + 1));
-          var path = current.join('/');
+          var path = current.join('/').replace(/^\//, ''); // remove starting slash
 
           return _react2['default'].createElement(
             'span',
@@ -22865,11 +22891,24 @@ var Directory = (function (_Component) {
   _createClass(Directory, [{
     key: 'render',
     value: function render() {
+      var checkId = 'file-' + this.props.index;
+
+      var input = undefined,
+          label = undefined;
+      if (this.props.selectView) {
+        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, checked: this.props.selected, readOnly: true });
+        label = _react2['default'].createElement('label', { htmlFor: checkId });
+      }
+
+      var clickHandler = this.props.selectView ? this.select.bind(this) : this.peek.bind(this);
+
       return _react2['default'].createElement(
         'div',
         { className: 'directory', ref: 'container',
-          onClick: this.peek.bind(this),
+          onClick: clickHandler,
           onContextMenu: this.contextMenu.bind(this) },
+        input,
+        label,
         _react2['default'].createElement('i', null),
         _react2['default'].createElement(
           'p',
@@ -22906,6 +22945,19 @@ var Directory = (function (_Component) {
           top = y + height / 2 + MENU_TOP_SPACE;
       _store2['default'].dispatch((0, _actionsMenu.show)('directoryMenu', { style: { left: left, top: top } }));
       _store2['default'].dispatch((0, _actionsFile.active)(this.props.index));
+    }
+  }, {
+    key: 'select',
+    value: function select() {
+      var current = (_store2['default'].getState().get('activeFile') || []).slice(0);
+      var index = this.props.index;
+
+      if (current.indexOf(index) > -1) {
+        current.splice(current.indexOf(index), 1);
+      } else {
+        current.push(index);
+      }
+      _store2['default'].dispatch((0, _actionsFile.active)(current));
     }
   }]);
 
@@ -22973,29 +23025,20 @@ var FileList = (function (_Component) {
   _createClass(FileList, [{
     key: 'render',
     value: function render() {
-      var files = this.props.files;
+      var _props = this.props;
+      var files = _props.files;
+      var selectView = _props.selectView;
+      var activeFile = _props.activeFile;
 
+      activeFile = activeFile || [];
       var settings = _store2['default'].getState().get('settings');
 
-      if (settings.showDirectoriesFirst) {
-        files = files.sort(function (a, b) {
-          if ((0, _utils.type)(a) === 'Directory') return -1;
-          if ((0, _utils.type)(b) === 'Directory') return 1;
-          return 0;
-        });
-      }
-
-      if (!settings.showHiddenFiles) {
-        files = files.filter(function (file) {
-          return file.name[0] !== '.';
-        });
-      }
-
       var els = files.map(function (file, index) {
+        var selected = activeFile.indexOf(index) > -1;
         if ((0, _utils.type)(file) === 'File') {
-          return _react2['default'].createElement(_file2['default'], { key: index, index: index, name: file.name, size: file.size });
+          return _react2['default'].createElement(_file2['default'], { selectView: selectView, selected: selected, key: index, index: index, name: file.name, size: file.size });
         } else {
-          return _react2['default'].createElement(_directory2['default'], { key: index, index: index, name: file.name, children: file.children });
+          return _react2['default'].createElement(_directory2['default'], { selectView: selectView, selected: selected, key: index, index: index, name: file.name, children: file.children });
         }
       });
 
@@ -23016,7 +23059,9 @@ exports['default'] = FileList;
 
 function props(state) {
   return {
-    files: state.get('files')
+    files: state.get('files'),
+    selectView: state.get('selectView'),
+    activeFile: state.get('activeFile')
   };
 }
 
@@ -23069,10 +23114,24 @@ var File = (function (_Component) {
   _createClass(File, [{
     key: 'render',
     value: function render() {
+      var checkId = 'file-' + this.props.index;
+
+      var input = undefined,
+          label = undefined;
+      if (this.props.selectView) {
+        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, defaultChecked: this.props.selected, readOnly: true });
+        label = _react2['default'].createElement('label', { htmlFor: checkId });
+      }
+
+      var clickHandler = this.props.selectView ? this.select.bind(this) : null;
+
       return _react2['default'].createElement(
         'div',
         { className: 'file', ref: 'container',
+          onClick: clickHandler,
           onContextMenu: this.contextMenu.bind(this) },
+        input,
+        label,
         _react2['default'].createElement('i', null),
         _react2['default'].createElement(
           'p',
@@ -23101,6 +23160,19 @@ var File = (function (_Component) {
           top = y + height / 2 + MENU_TOP_SPACE;
       _store2['default'].dispatch((0, _actionsMenu.show)('fileMenu', { style: { left: left, top: top } }));
       _store2['default'].dispatch((0, _actionsFile.active)(this.props.index));
+    }
+  }, {
+    key: 'select',
+    value: function select() {
+      var current = (_store2['default'].getState().get('activeFile') || []).slice(0);
+      var index = this.props.index;
+
+      if (current.indexOf(index) > -1) {
+        current.splice(current.indexOf(index), 1);
+      } else {
+        current.push(index);
+      }
+      _store2['default'].dispatch((0, _actionsFile.active)(current));
     }
   }]);
 
@@ -23482,6 +23554,9 @@ var FileMenu = (0, _reactRedux.connect)(function (state) {
 var DirectoryMenu = (0, _reactRedux.connect)(function (state) {
   return state.get('directoryMenu');
 })(_componentsMenu2['default']);
+var MoreMenu = (0, _reactRedux.connect)(function (state) {
+  return state.get('moreMenu');
+})(_componentsMenu2['default']);
 
 var RenameDialog = (0, _reactRedux.connect)(function (state) {
   return state.get('renameDialog');
@@ -23518,6 +23593,7 @@ var Root = (function (_Component) {
         _react2['default'].createElement(_componentsToolbar2['default'], null),
         _react2['default'].createElement(FileMenu, null),
         _react2['default'].createElement(DirectoryMenu, null),
+        _react2['default'].createElement(MoreMenu, null),
         _react2['default'].createElement(RenameDialog, null),
         _react2['default'].createElement(DeleteDialog, null),
         _react2['default'].createElement(ErrorDialog, null),
@@ -23527,7 +23603,12 @@ var Root = (function (_Component) {
   }, {
     key: 'touchStart',
     value: function touchStart(e) {
-      if (!e.target.closest('.menu')) {
+      var active = document.querySelector('.active');
+      var inside = e.target.closest('.menu') || e.target.closest('.dialog');
+      if (!inside && active) {
+        e.preventDefault();
+        e.stopPropagation();
+
         _store2['default'].dispatch((0, _actionsMenu.hideAll)());
         _store2['default'].dispatch((0, _actionsDialog.hideAll)());
       }
@@ -23565,9 +23646,13 @@ var _actionsFilesView = require('actions/files-view');
 
 var _actionsDialog = require('actions/dialog');
 
+var _actionsMenu = require('actions/menu');
+
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
+
+var _menu = require('./menu');
 
 var Toolbar = (function (_Component) {
   _inherits(Toolbar, _Component);
@@ -23587,13 +23672,25 @@ var Toolbar = (function (_Component) {
         _react2['default'].createElement('button', { className: 'icon-plus', onClick: this.newFile }),
         _react2['default'].createElement('button', { className: 'icon-view', onClick: (0, _store.bind)((0, _actionsFilesView.toggle)()) }),
         _react2['default'].createElement('button', { className: 'icon-refresh', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
-        _react2['default'].createElement('button', { className: 'icon-share', onClick: this.share }),
-        _react2['default'].createElement('button', { className: 'icon-more', onClick: this.showMore })
+        _react2['default'].createElement('button', { className: 'icon-select', onClick: (0, _store.bind)((0, _actionsFilesView.selectView)('toggle')) }),
+        _react2['default'].createElement('button', { className: 'icon-more', onClick: this.showMore.bind(this), ref: 'more' })
       );
     }
   }, {
     key: 'showMore',
-    value: function showMore() {}
+    value: function showMore() {
+      var rect = _react2['default'].findDOMNode(this.refs.more).getBoundingClientRect();
+      var x = rect.x;
+      var y = rect.y;
+      var width = rect.width;
+      var height = rect.height;
+
+      var left = x + width - _menu.MENU_WIDTH,
+          top = y + height;
+
+      var transform = 'translate(0, -100%)';
+      _store2['default'].dispatch((0, _actionsMenu.show)('moreMenu', { style: { left: left, top: top, transform: transform } }));
+    }
   }, {
     key: 'newFile',
     value: function newFile() {
@@ -23611,7 +23708,7 @@ var Toolbar = (function (_Component) {
 exports['default'] = Toolbar;
 module.exports = exports['default'];
 
-},{"actions/dialog":216,"actions/files-view":218,"react":205,"store":"store"}],235:[function(require,module,exports){
+},{"./menu":231,"actions/dialog":216,"actions/files-view":218,"actions/menu":220,"react":205,"store":"store"}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -23646,6 +23743,7 @@ exports['default'] = {
         var action = (0, _actionsFile.create)(cwd + input.value);
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
+        this.props.dispatch((0, _actionsFile.active)());
       }
     }, {
       text: 'Directory',
@@ -23656,6 +23754,7 @@ exports['default'] = {
         var action = (0, _actionsFile.create)(cwd + input.value, true);
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
+        this.props.dispatch((0, _actionsFile.active)());
       }
     }]
   },
@@ -23674,6 +23773,7 @@ exports['default'] = {
         var activeFile = _store2['default'].getState().get('activeFile');
         this.props.dispatch((0, _actionsFile.rename)(activeFile, input.value));
         this.props.dispatch((0, _actionsDialog.hideAll)());
+        this.props.dispatch((0, _actionsFile.active)());
       },
       className: 'success'
     }]
@@ -23690,6 +23790,7 @@ exports['default'] = {
         var activeFile = _store2['default'].getState().get('activeFile');
         this.props.dispatch((0, _actionsFile.deleteFile)(activeFile));
         this.props.dispatch((0, _actionsDialog.hideAll)());
+        this.props.dispatch((0, _actionsFile.active)());
       },
       className: 'success'
     }]
@@ -23774,9 +23875,32 @@ var entryMenu = {
   }]
 };
 
+var moreMenu = {
+  items: [{
+    name: 'Delete',
+    action: function action() {
+      var files = _store2['default'].getState().get('files');
+      var active = _store2['default'].getState().get('activeFile');
+
+      var description = undefined;
+      if (active.length) {
+        var count = active.length;
+        description = 'Are you sure you want to remove ' + count + ' files?';
+      } else {
+        var _name = files[active].name;
+        description = 'Are you sure you want to remove ' + _name + '?';
+      }
+
+      _store2['default'].dispatch((0, _actionsMenu.hideAll)());
+      _store2['default'].dispatch((0, _actionsDialog.show)('deleteDialog', { description: description }));
+    }
+  }]
+};
+
 exports['default'] = {
   fileMenu: Object.assign({}, entryMenu),
-  directoryMenu: Object.assign({}, entryMenu)
+  directoryMenu: Object.assign({}, entryMenu),
+  moreMenu: moreMenu
 };
 module.exports = exports['default'];
 
@@ -23790,7 +23914,7 @@ Object.defineProperty(exports, '__esModule', {
 var _actionsTypes = require('actions/types');
 
 exports['default'] = function (state, action) {
-  if (state === undefined) state = -1;
+  if (state === undefined) state = null;
 
   if (action.type === _actionsTypes.ACTIVE_FILE) {
     return action.file;
@@ -23846,6 +23970,10 @@ var _settings = require('./settings');
 
 var _settings2 = _interopRequireDefault(_settings);
 
+var _selectView = require('./select-view');
+
+var _selectView2 = _interopRequireDefault(_selectView);
+
 exports['default'] = function (state, action) {
   if (state === undefined) state = new _immutable2['default'].Map();
 
@@ -23854,11 +23982,13 @@ exports['default'] = function (state, action) {
     lwd: (0, _lwd2['default'])(state, action), // last working directory
     cwd: (0, _cwd2['default'])(state.get('cwd'), action),
     files: (0, _files2['default'])(state.get('files'), action),
+    selectView: (0, _selectView2['default'])(state.get('selectView'), action),
     activeFile: (0, _activeFile2['default'])(state.get('activeFile'), action),
     navigation: (0, _navigation2['default'])(state.get('navigation'), action),
     settings: (0, _settings2['default'])(state.get('settings'), action),
     fileMenu: (0, _menu2['default'])(state, action, 'fileMenu'),
     directoryMenu: (0, _menu2['default'])(state, action, 'directoryMenu'),
+    moreMenu: (0, _menu2['default'])(state, action, 'moreMenu'),
     renameDialog: (0, _dialog2['default'])(state, action, 'renameDialog'),
     deleteDialog: (0, _dialog2['default'])(state, action, 'deleteDialog'),
     errorDialog: (0, _dialog2['default'])(state, action, 'errorDialog'),
@@ -23868,7 +23998,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"./active-file":238,"./cwd":240,"./dialog":241,"./files":242,"./lwd":243,"./menu":244,"./navigation":245,"./settings":246,"immutable":247}],240:[function(require,module,exports){
+},{"./active-file":238,"./cwd":240,"./dialog":241,"./files":242,"./lwd":243,"./menu":244,"./navigation":245,"./select-view":246,"./settings":247,"immutable":248}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -23958,7 +24088,7 @@ exports['default'] = function (state, action, id) {
 
 module.exports = exports['default'];
 
-},{"actions/types":223,"immutable":247,"lodash/object/omit":37}],242:[function(require,module,exports){
+},{"actions/types":223,"immutable":248,"lodash/object/omit":37}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -23987,6 +24117,22 @@ exports['default'] = function (state, action) {
   if (state === undefined) state = [];
 
   if (action.type === _actionsTypes.LIST_FILES) {
+
+    var settings = _store2['default'].getState().get('settings');
+
+    if (settings.showDirectoriesFirst) {
+      action.files = action.files.sort(function (a, b) {
+        if ((0, _utils.type)(a) === 'Directory') return -1;
+        if ((0, _utils.type)(a) === 'File') return 1;
+      });
+    }
+
+    if (!settings.showHiddenFiles) {
+      action.files = action.files.filter(function (file) {
+        return file.name[0] !== '.';
+      });
+    }
+
     return action.files;
   }
 
@@ -24006,17 +24152,52 @@ exports['default'] = function (state, action) {
   }
 
   if (action.type === _actionsTypes.DELETE_FILE) {
-    var file = state[action.file];
-
-    (0, _apiFiles.sdcard)()['delete']((file.path || '') + '/' + file.name);
     var copy = state.slice(0);
-    copy.splice(action.file, 1);
+
+    if (action.file.length) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = action.file[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var index = _step.value;
+
+          del(state, index);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator['return']) {
+            _iterator['return']();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      copy = copy.filter(function (a, i) {
+        return action.file.indexOf(i) === -1;
+      });
+    } else {
+      del(state, action.file);
+      copy.splice(action.file, 1);
+    }
+
     return copy;
   }
 
   return state;
 };
 
+function del(state, index) {
+  var file = state[index];
+  return (0, _apiFiles.remove)((file.path || '') + '/' + file.name)['catch'](_utils.reportError);
+}
 module.exports = exports['default'];
 
 },{"actions/dialog":216,"actions/files-view":218,"actions/types":223,"api/files":224,"store":"store","utils":"utils"}],243:[function(require,module,exports){
@@ -24081,7 +24262,7 @@ exports['default'] = function (state, action, id) {
 
 module.exports = exports['default'];
 
-},{"actions/types":223,"immutable":247,"lodash/object/omit":37}],245:[function(require,module,exports){
+},{"actions/types":223,"immutable":248,"lodash/object/omit":37}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24103,6 +24284,27 @@ exports['default'] = function (state, action) {
 module.exports = exports['default'];
 
 },{"actions/types":223}],246:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _actionsTypes = require('actions/types');
+
+exports['default'] = function (state, action) {
+  if (state === undefined) state = false;
+
+  if (action.type === _actionsTypes.SELECT_VIEW) {
+    return action.active === 'toggle' ? !state : action.active;
+  }
+
+  return state;
+};
+
+module.exports = exports['default'];
+
+},{"actions/types":223}],247:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24134,7 +24336,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/types":223,"lodash/object/omit":37}],247:[function(require,module,exports){
+},{"actions/types":223,"lodash/object/omit":37}],248:[function(require,module,exports){
 /**
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
@@ -29109,7 +29311,7 @@ function bind(action) {
 
 exports['default'] = store;
 
-},{"./dialogs":235,"./menus":237,"actions/changedir":215,"immutable":247,"reducers/all":239,"redux":207}],"utils":[function(require,module,exports){
+},{"./dialogs":235,"./menus":237,"actions/changedir":215,"immutable":248,"reducers/all":239,"redux":207}],"utils":[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29168,15 +29370,13 @@ var sizes = {
 };
 
 function humanSize(size) {
-  console.log(size);
   for (var key in sizes) {
     var value = sizes[key];
 
-    console.log(value);
     if (size > value) {
       return Math.round(size / value) + key;
     }
   }
 }
 
-},{"actions/dialog":216,"store":"store"}]},{},[215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,"store","utils"]);
+},{"actions/dialog":216,"store":"store"}]},{},[215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,"store","utils"]);

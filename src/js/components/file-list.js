@@ -12,29 +12,16 @@ export default class FileList extends Component {
   }
 
   render() {
-    let { files } = this.props;
-
+    let { files, selectView, activeFile } = this.props;
+    activeFile = activeFile || [];
     let settings = store.getState().get('settings');
 
-    if (settings.showDirectoriesFirst) {
-      files = files.sort((a, b) => {
-        if (type(a) === 'Directory') return -1;
-        if (type(b) === 'Directory') return 1;
-        return 0;
-      })
-    }
-
-    if (!settings.showHiddenFiles) {
-      files = files.filter(file => {
-        return file.name[0] !== '.';
-      })
-    }
-
     let els = files.map((file, index) => {
+      let selected = activeFile.indexOf(index) > -1;
       if (type(file) === 'File') {
-        return <File key={index} index={index} name={file.name} size={file.size} />;
+        return <File selectView={selectView} selected={selected} key={index} index={index} name={file.name} size={file.size} />;
       } else {
-        return <Directory key={index} index={index} name={file.name} children={file.children} />
+        return <Directory selectView={selectView} selected={selected} key={index} index={index} name={file.name} children={file.children} />
       }
     });
 
@@ -48,7 +35,9 @@ export default class FileList extends Component {
 
 function props(state) {
   return {
-    files: state.get('files')
+    files: state.get('files'),
+    selectView: state.get('selectView'),
+    activeFile: state.get('activeFile')
   }
 }
 

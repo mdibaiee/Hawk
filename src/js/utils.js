@@ -37,11 +37,9 @@ const sizes = {
   'B': -1
 }
 export function humanSize(size) {
-  console.log(size);
   for (let key in sizes) {
     let value = sizes[key];
 
-    console.log(value);
     if (size > value) {
       return Math.round(size / value) + key;
     }

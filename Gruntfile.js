@@ -85,7 +85,7 @@ module.exports = function(grunt) {
           cwd: 'src',
           dest: 'build',
           src: ['index.html', 'manifest.webapp',
-                'fonts/**', 'img/**', 'js/libs/**']
+                'fonts/**', 'img/**', 'js/libs/**', 'icon/**']
         }]
       }
     },

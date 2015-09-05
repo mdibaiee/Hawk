@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { toggle as toggleView, refresh } from 'actions/files-view';
+import { toggle as toggleView, refresh, selectView } from 'actions/files-view';
 import { show as showDialog } from 'actions/dialog';
+import { show as showMenu } from 'actions/menu';
 import store, { bind } from 'store';
+import { MENU_WIDTH } from './menu';
 
 export default class Toolbar extends Component {
   render() {
@@ -10,14 +12,21 @@ export default class Toolbar extends Component {
         <button className='icon-plus' onClick={this.newFile} />
         <button className='icon-view' onClick={bind(toggleView())} />
         <button className='icon-refresh' onClick={bind(refresh())} />
-        <button className='icon-share' onClick={this.share} />
-        <button className='icon-more' onClick={this.showMore} />
+        <button className='icon-select' onClick={bind(selectView('toggle'))} />
+        <button className='icon-more' onClick={this.showMore.bind(this)} ref='more' />
       </div>
     );
   }
 
   showMore() {
+    let rect = React.findDOMNode(this.refs.more).getBoundingClientRect();
+    let {x, y, width, height} = rect;
 
+    let left = x + width - MENU_WIDTH,
+        top  = y + height;
+
+    let transform = 'translate(0, -100%)';
+    store.dispatch(showMenu('moreMenu', {style: {left, top, transform}}));
   }
 
   newFile() {

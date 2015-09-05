@@ -1,6 +1,6 @@
 import { ACTIVE_FILE } from 'actions/types';
 
-export default function(state = -1, action) {
+export default function(state = null, action) {
   if (action.type === ACTIVE_FILE) {
     return action.file;
   }

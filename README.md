@@ -17,6 +17,8 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Create new files and directories
 - [x] File Size
 - [x] Directory Child Count
+- [x] Actions on multiple files (selection)
+- [ ] Copy/Cut and Paste files
 - [ ] File Preview
 - [ ] Filter Files
 - [ ] Search

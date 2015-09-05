@@ -14,27 +14,35 @@ input {
   .light-medium;
 }
 
-input[type="checkbox"] {
-  width: 0;
-  height: 0;
+label {
+  clear: left;
+
+  &::after {
+    content: '';
+    display: block;
+
+    float: right;
+
+    margin-right: 13px;
+
+    border-radius: 50%;
+
+    width: 10px;
+    height: 10px;
+
+    background: transparent;
+
+    border: 1px solid @overlay;
+  }
 }
 
-input[type="checkbox"]::before {
-  content: '';
-  display: block;
+input[type='checkbox'] {
+  clear: right;
+  float: right;
 
-  border: 1px solid @gray;
+  display: none;
+}
 
-  background: transparent;
-
-  border-radius: 50%;
-
-  width: 10px;
-  height: 10px;
-
-  box-sizing: border-box;
-
-  &:checked {
-    background: @blue;
-  }
+input:checked + label::after {
+  background: @blue;
 }

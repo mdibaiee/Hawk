@@ -7,26 +7,26 @@ import { bind } from 'store';
 @connect(props)
 export default class Breadcrumb extends Component {
   render() {
-    let directories = this.props.cwd.split('/');
+    let directories = this.props.cwd.split('/').filter(a => a);
     directories.unshift('sdcard');
 
     let els = directories.map((dir, index, arr) => {
       let path = arr.slice(1, index + 1).join('/');
-      let slash = index > 0 ? '/' : '';
 
       return (
         <span key={index} onClick={bind(changedir(path))}>
-          <i>{slash}</i>{dir}
+          <i>/</i>{dir}
         </span>
       );
     });
 
-    let lastDirectories = this.props.lwd.split('/');
+    let lastDirectories = this.props.lwd.split('/').filter(a => a);
     if (lastDirectories.length > directories.length - 1) {
       lastDirectories.splice(0, directories.length - 1);
+
       let history = lastDirectories.map((dir, index, arr) => {
         let current = directories.slice(1).concat(arr.slice(0, index + 1));
-        let path = current.join('/');
+        let path = current.join('/').replace(/^\//, ''); // remove starting slash
 
         return (
           <span key={directories.length + index} className='history' onClick={bind(changedir(path))}>

@@ -75,6 +75,12 @@ export async function createDirectory(...args) {
   return parent.createDirectory(...args);
 }
 
+export async function remove(file) {
+  let parent = await root();
+
+  return parent.remove(file);
+}
+
 export async function move(file, newPath) {
   let path = (file.path || '').replace(/^\//, ''); // remove starting slash
   let oldPath = path + file.name;

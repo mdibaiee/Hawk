@@ -21,7 +21,7 @@ export function rename(file, name) {
   }
 }
 
-export function active(file) {
+export function active(file = null) {
   return {
     type: ACTIVE_FILE,
     file
@@ -29,6 +29,7 @@ export function active(file) {
 }
 
 export function deleteFile(file) {
+  console.log('constructing deleteFile action', file);
   return {
     type: DELETE_FILE,
     file
