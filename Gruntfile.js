@@ -11,7 +11,8 @@ module.exports = function(grunt) {
         options: {
           alias: {
             store: './src/js/store.js',
-            utils: './src/js/utils.js'
+            utils: './src/js/utils.js',
+            tour: './src/js/tour.js'
           },
           transform: [['babelify', {
             optional: ['es7.asyncFunctions', 'asyncToGenerator',

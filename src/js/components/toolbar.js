@@ -9,11 +9,11 @@ export default class Toolbar extends Component {
   render() {
     return (
       <div className='toolbar'>
-        <button className='icon-plus' onClick={this.newFile} />
+        <button className='icon-plus tour-item' onClick={this.newFile} />
         <button className='icon-view coming-soon' onClick={bind(toggleView())} />
-        <button className='icon-refresh' onClick={bind(refresh())} />
-        <button className='icon-select' onClick={bind(selectView('toggle'))} />
-        <button className='icon-more' onClick={this.showMore.bind(this)} ref='more' />
+        <button className='icon-refresh tour-item' onClick={bind(refresh())} />
+        <button className='icon-select tour-item' onClick={bind(selectView('toggle'))} />
+        <button className='icon-more tour-item' onClick={this.showMore.bind(this)} ref='more' />
       </div>
     );
   }

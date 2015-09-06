@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { hideAll as hideAllMenus } from 'actions/menu';
 import { hideAll as hideAllDialogs} from 'actions/dialog';
 
+import tour from 'tour';
 import changedir from 'actions/changedir';
 import store from 'store';
 
@@ -48,8 +49,16 @@ export default class Root extends Component {
         <SearchDialog />
 
         <Spinner />
+
+        <div className='tour-dialog'>
+          Hello! Tap each highlighted button to get an understanding of how they work.
+        </div>
       </div>
     );
+  }
+
+  componentDidMount() {
+    tour();
   }
 
   touchStart(e) {

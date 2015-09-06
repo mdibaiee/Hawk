@@ -19,11 +19,11 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Directory Child Count
 - [x] Actions on multiple files (selection)
 - [x] Copy and Paste/Move files
-- [x] File Preview
+- [x] File Preview (Supports PDF files!)
 - [x] Filter Files
 - [x] Swipe Gestures (Up directory by swiping right)
 - [x] Search
-- [ ] Intro
+- [x] Intro
 - [ ] Different views (List, Icons, etc)
 - [ ] Share Files
 - [ ] Preferences

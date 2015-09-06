@@ -13,12 +13,12 @@ export default class Header extends Component {
     if (this.props.search) {
       i = <i className='icon-cross' onClick={bind(search())} />
     } else {
-      i = <i className='icon-search' onClick={bind(show('searchDialog'))} />
+      i = <i className='icon-search tour-item' onClick={bind(show('searchDialog'))} />
     }
 
     return (
       <header>
-        <button className='drawer' onTouchStart={bind(toggle())} />
+        <button className='drawer tour-item' onTouchStart={bind(toggle())} />
         <h1 className='regular-medium'>Hawk</h1>
 
         {i}

@@ -139,6 +139,63 @@ input[type='radio'] {
 input:checked + label::after {
   background: #63b0cd;
 }
+#wrapper::after {
+  content: '';
+  background: rgba(0, 0, 0, 0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  transition: background 0.5s ease;
+}
+.tour::after {
+  background: rgba(0, 0, 0, 0.55) !important;
+}
+.tour .tour-item {
+  position: relative;
+  z-index: 1;
+}
+.tour .tour-item::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.5rem;
+  margin-left: -0.5rem;
+  border-radius: 50%;
+  background: #50E3C2;
+  opacity: 1;
+  transform: scale(0);
+  animation: pulse 2s ease-out infinite;
+}
+.tour .tour-dialog {
+  display: block;
+  box-sizing: border-box;
+  width: 90vw;
+  text-align: center;
+  padding: 1rem 2rem;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  background: #f8f8f8;
+  border-radius: 2rem;
+  box-shadow: 0 15px 24px 6px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+.tour-dialog {
+  display: none;
+}
+@keyframes pulse {
+  100% {
+    opacity: 0;
+    transform: scale(5);
+  }
+}
 .coming-soon::after {
   content: 'soon...';
   background: #f7c59f;
@@ -223,7 +280,7 @@ header button {
   background: none;
   border: none;
   width: 8rem;
-  height: 2rem;
+  height: 4rem;
 }
 header button::before {
   content: '';

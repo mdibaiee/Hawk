@@ -30706,13 +30706,13 @@ var Header = (function (_Component) {
       if (this.props.search) {
         i = _react2['default'].createElement('i', { className: 'icon-cross', onClick: (0, _store.bind)((0, _actionsFilesView.search)()) });
       } else {
-        i = _react2['default'].createElement('i', { className: 'icon-search', onClick: (0, _store.bind)((0, _actionsDialog.show)('searchDialog')) });
+        i = _react2['default'].createElement('i', { className: 'icon-search tour-item', onClick: (0, _store.bind)((0, _actionsDialog.show)('searchDialog')) });
       }
 
       return _react2['default'].createElement(
         'header',
         null,
-        _react2['default'].createElement('button', { className: 'drawer', onTouchStart: (0, _store.bind)((0, _actionsNavigation.toggle)()) }),
+        _react2['default'].createElement('button', { className: 'drawer tour-item', onTouchStart: (0, _store.bind)((0, _actionsNavigation.toggle)()) }),
         _react2['default'].createElement(
           'h1',
           { className: 'regular-medium' },
@@ -31168,6 +31168,10 @@ var _actionsMenu = require('actions/menu');
 
 var _actionsDialog = require('actions/dialog');
 
+var _tour = require('tour');
+
+var _tour2 = _interopRequireDefault(_tour);
+
 var _actionsChangedir = require('actions/changedir');
 
 var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
@@ -31233,8 +31237,18 @@ var Root = (function (_Component) {
         _react2['default'].createElement(ErrorDialog, null),
         _react2['default'].createElement(CreateDialog, null),
         _react2['default'].createElement(SearchDialog, null),
-        _react2['default'].createElement(_componentsSpinner2['default'], null)
+        _react2['default'].createElement(_componentsSpinner2['default'], null),
+        _react2['default'].createElement(
+          'div',
+          { className: 'tour-dialog' },
+          'Hello! Tap each highlighted button to get an understanding of how they work.'
+        )
       );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      (0, _tour2['default'])();
     }
   }, {
     key: 'touchStart',
@@ -31282,7 +31296,7 @@ var Root = (function (_Component) {
 exports['default'] = Root;
 module.exports = exports['default'];
 
-},{"actions/changedir":217,"actions/dialog":218,"actions/menu":221,"components/breadcrumb":227,"components/dialog":228,"components/file-list":230,"components/header":232,"components/menu":233,"components/navigation":235,"components/spinner":237,"components/toolbar":238,"react":207,"react-redux":47,"store":"store"}],237:[function(require,module,exports){
+},{"actions/changedir":217,"actions/dialog":218,"actions/menu":221,"components/breadcrumb":227,"components/dialog":228,"components/file-list":230,"components/header":232,"components/menu":233,"components/navigation":235,"components/spinner":237,"components/toolbar":238,"react":207,"react-redux":47,"store":"store","tour":"tour"}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31396,11 +31410,11 @@ var Toolbar = (function (_Component) {
       return _react2['default'].createElement(
         'div',
         { className: 'toolbar' },
-        _react2['default'].createElement('button', { className: 'icon-plus', onClick: this.newFile }),
+        _react2['default'].createElement('button', { className: 'icon-plus tour-item', onClick: this.newFile }),
         _react2['default'].createElement('button', { className: 'icon-view coming-soon', onClick: (0, _store.bind)((0, _actionsFilesView.toggle)()) }),
-        _react2['default'].createElement('button', { className: 'icon-refresh', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
-        _react2['default'].createElement('button', { className: 'icon-select', onClick: (0, _store.bind)((0, _actionsFilesView.selectView)('toggle')) }),
-        _react2['default'].createElement('button', { className: 'icon-more', onClick: this.showMore.bind(this), ref: 'more' })
+        _react2['default'].createElement('button', { className: 'icon-refresh tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
+        _react2['default'].createElement('button', { className: 'icon-select tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.selectView)('toggle')) }),
+        _react2['default'].createElement('button', { className: 'icon-more tour-item', onClick: this.showMore.bind(this), ref: 'more' })
       );
     }
   }, {
@@ -32287,7 +32301,133 @@ exports['default'] = store;
 
 store.dispatch((0, _actionsChangedir2['default'])(DEFAULT.get('dir')));
 
-},{"./dialogs":239,"./menus":241,"actions/changedir":217,"immutable":3,"reducers/all":243,"redux":209}],"utils":[function(require,module,exports){
+},{"./dialogs":239,"./menus":241,"actions/changedir":217,"immutable":3,"reducers/all":243,"redux":209}],"tour":[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+var MESSAGES = {
+  'icon-plus': 'Create Files and Folders',
+  'icon-refresh': 'Refresh File List',
+  'icon-select': 'Select files for batch actions',
+  'icon-more': 'Actions used on selected files such as Copy, Delete, Move, …',
+  'drawer': 'Extra options, tools and links are here',
+  'icon-search': 'Search your storage for a certain file'
+};
+
+var DIALOG_HIDE_DELAY = 2000;
+
+exports['default'] = function () {
+  var tourRan = localStorage.getItem('tourRan');
+  var wrapper = document.querySelector('#wrapper');
+  var tour = document.querySelector('.tour-dialog');
+
+  var timeout = undefined;
+  var shown = 0;
+
+  if (!tourRan) {
+    var _iteratorNormalCompletion;
+
+    var _didIteratorError;
+
+    var _iteratorError;
+
+    var _iterator, _step;
+
+    (function () {
+      wrapper.classList.add('tour');
+
+      var items = [].concat(_toConsumableArray(document.querySelectorAll('.tour-item'))).sort(function (a, b) {
+        return +a.dataset.index - +b.dataset.index;
+      });
+
+      var listeners = [];
+
+      _iteratorNormalCompletion = true;
+      _didIteratorError = false;
+      _iteratorError = undefined;
+
+      try {
+        var _loop = function () {
+          var item = _step.value;
+
+          item.addEventListener('touchstart', function listener(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            clearTimeout(timeout);
+            listeners.push({ item: item, listener: listener });
+
+            shown++;
+
+            var firstClass = item.className.slice(0, item.className.indexOf(' '));
+            tour.innerHTML = MESSAGES[firstClass];
+
+            timeout = setTimeout(function () {
+              if (shown >= items.length) {
+                wrapper.classList.remove('tour');
+                localStorage.setItem('tourRan', 'true');
+
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                  for (var _iterator2 = listeners[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var _step2$value = _step2.value;
+                    var _item = _step2$value.item;
+                    var _listener = _step2$value.listener;
+
+                    console.log(_item, _listener);
+                    _item.removeEventListener('touchstart', _listener);
+                  }
+                } catch (err) {
+                  _didIteratorError2 = true;
+                  _iteratorError2 = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+                      _iterator2['return']();
+                    }
+                  } finally {
+                    if (_didIteratorError2) {
+                      throw _iteratorError2;
+                    }
+                  }
+                }
+              }
+            }, DIALOG_HIDE_DELAY);
+          });
+        };
+
+        for (_iterator = items[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          _loop();
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator['return']) {
+            _iterator['return']();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    })();
+  }
+};
+
+module.exports = exports['default'];
+
+},{}],"utils":[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32355,4 +32495,4 @@ function humanSize(size) {
   }
 }
 
-},{"actions/dialog":218,"store":"store"}]},{},[217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,"store","utils"]);
+},{"actions/dialog":218,"store":"store"}]},{},[217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,"store","tour","utils"]);
