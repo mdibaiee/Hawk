@@ -27,16 +27,19 @@ export default function() {
     let listeners = [];
 
     for (let item of items) {
-      item.addEventListener('touchstart', function listener(e) {
+
+      let firstClass = item.className.slice(0, item.className.indexOf(' '));
+      let ev = firstClass === 'drawer' ? 'touchstart' : 'click';
+
+      item.addEventListener(ev, function listener(e) {
         e.preventDefault();
         e.stopPropagation();
 
         clearTimeout(timeout);
-        listeners.push({item, listener});
+        listeners.push({item, listener, ev});
 
         shown++;
 
-        let firstClass = item.className.slice(0, item.className.indexOf(' '));
         tour.innerHTML = MESSAGES[firstClass];
 
         timeout = setTimeout(() => {
@@ -44,9 +47,9 @@ export default function() {
             wrapper.classList.remove('tour');
             localStorage.setItem('tourRan', 'true');
 
-            for (let {item, listener} of listeners) {
+            for (let {item, listener, ev} of listeners) {
               console.log(item, listener);
-              item.removeEventListener('touchstart', listener);
+              item.removeEventListener(ev, listener);
             }
           }
         }, DIALOG_HIDE_DELAY);

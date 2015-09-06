@@ -32355,16 +32355,18 @@ exports['default'] = function () {
         var _loop = function () {
           var item = _step.value;
 
-          item.addEventListener('touchstart', function listener(e) {
+          var firstClass = item.className.slice(0, item.className.indexOf(' '));
+          var ev = firstClass === 'drawer' ? 'touchstart' : 'click';
+
+          item.addEventListener(ev, function listener(e) {
             e.preventDefault();
             e.stopPropagation();
 
             clearTimeout(timeout);
-            listeners.push({ item: item, listener: listener });
+            listeners.push({ item: item, listener: listener, ev: ev });
 
             shown++;
 
-            var firstClass = item.className.slice(0, item.className.indexOf(' '));
             tour.innerHTML = MESSAGES[firstClass];
 
             timeout = setTimeout(function () {
@@ -32381,9 +32383,10 @@ exports['default'] = function () {
                     var _step2$value = _step2.value;
                     var _item = _step2$value.item;
                     var _listener = _step2$value.listener;
+                    var _ev = _step2$value.ev;
 
                     console.log(_item, _listener);
-                    _item.removeEventListener('touchstart', _listener);
+                    _item.removeEventListener(_ev, _listener);
                   }
                 } catch (err) {
                   _didIteratorError2 = true;

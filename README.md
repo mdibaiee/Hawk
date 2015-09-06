@@ -23,7 +23,7 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Filter Files
 - [x] Swipe Gestures (Up directory by swiping right)
 - [x] Search
-- [x] Intro
+- [x] First-run Tour
 - [ ] Different views (List, Icons, etc)
 - [ ] Share Files
 - [ ] Preferences
