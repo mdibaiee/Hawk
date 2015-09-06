@@ -207,6 +207,7 @@ input:checked + label::after {
 }
 li.coming-soon::after {
   margin-right: 13px;
+  height: 16px;
   float: right;
 }
 button.coming-soon {
@@ -437,7 +438,8 @@ nav i {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
+  width: 95vw;
+  box-sizing: border-box;
   height: auto;
   padding: 1.5rem 1.7rem;
   background: white;
