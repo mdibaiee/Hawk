@@ -1,23 +1,17 @@
 {
-  "name": "",
-  "version": "0.1.0",
+  "name": "hawk",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "phantom": "mochify --transform babelify",
-    "wd": "mochify --transform babelify --wd",
-    "cover": "mochify --transform babelify --cover",
-    "test": "npm run phantom && npm run wd && npm run cover"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mdibaiee/"
+    "url": "https://github.com/mdibaiee/Hawk"
   },
   "keywords": [],
   "author": "Mahdi Dibaiee",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mdibaiee//issues"
+    "url": "https://github.com/mdibaiee/Hawk/issues"
   },
   "files": [
     "types",

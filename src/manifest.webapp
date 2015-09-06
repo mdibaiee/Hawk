@@ -18,14 +18,10 @@
     "device-storage:sdcard": {"access": "readwrite"},
     "device-storage:videos": {"access": "readwrite"},
     "device-storage:pictures": {"access": "readwrite"},
-    "device-storage:music": {"access": "readwrite"},
-    "device-storage:apps": {"access": "readwrite"},
-    "webapps-manage": {}
+    "device-storage:music": {"access": "readwrite"}
   },
   "installs_allowed_from": [
-    "*"
+    "marketplace.firefox.com"
   ],
-  "locales": {
-  },
   "default_locale": "en"
 }
