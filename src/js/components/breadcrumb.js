@@ -40,7 +40,9 @@ export default class Breadcrumb extends Component {
 
     return (
       <div className='breadcrumb'>
-        {els}
+        <div>
+          {els}
+        </div>
       </div>
     );
   }

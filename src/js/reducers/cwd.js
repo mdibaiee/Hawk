@@ -1,8 +1,8 @@
 import { CHANGE_DIRECTORY, REFRESH, SETTINGS } from 'actions/types';
-import listFiles from 'actions/list-files';
 import { children } from 'api/files';
 import store from 'store';
 import { reportError } from 'utils';
+import { listFiles } from 'actions/files-view';
 
 export default function(state = '', action) {
   if (action.type === CHANGE_DIRECTORY) {

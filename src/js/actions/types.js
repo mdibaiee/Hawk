@@ -16,10 +16,14 @@ const TYPES = {
   RENAME_FILE: Symbol('RENAME_FILE'),
   ACTIVE_FILE: Symbol('ACTIVE_FILE'),
   DELETE_FILE: Symbol('DELETE_FILE'),
+  COPY_FILE: Symbol('COPY_FILE'),
+  MOVE_FILE: Symbol('MOVE_FILE'),
 
   MENU: Symbol('MENU'),
 
   DIALOG: Symbol('DIALOG'),
+
+  SPINNER: Symbol('SPINNER'),
 
   SETTINGS: Symbol('SETTINGS'),
 

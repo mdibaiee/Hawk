@@ -10,7 +10,7 @@ export default class Toolbar extends Component {
     return (
       <div className='toolbar'>
         <button className='icon-plus' onClick={this.newFile} />
-        <button className='icon-view' onClick={bind(toggleView())} />
+        <button className='icon-view coming-soon' onClick={bind(toggleView())} />
         <button className='icon-refresh' onClick={bind(refresh())} />
         <button className='icon-select' onClick={bind(selectView('toggle'))} />
         <button className='icon-more' onClick={this.showMore.bind(this)} ref='more' />

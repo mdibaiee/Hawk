@@ -1,18 +1,34 @@
 import React, { Component } from 'react';
 import { toggle } from 'actions/navigation';
-import store from 'store';
+import { show } from 'actions/dialog';
+import { search } from 'actions/files-view';
+import { bind } from 'store';
+import { connect } from 'react-redux';
 
+@connect(props)
 export default class Header extends Component {
   render() {
+    let i;
+
+    if (this.props.search) {
+      i = <i className='icon-cross' onClick={bind(search())} />
+    } else {
+      i = <i className='icon-search' onClick={bind(show('searchDialog'))} />
+    }
+
     return (
       <header>
-        <button className='drawer' onClick={this.toggleNavigation.bind(this)}></button>
+        <button className='drawer' onTouchStart={bind(toggle())} />
         <h1 className='regular-medium'>Hawk</h1>
+
+        {i}
       </header>
     );
   }
+}
 
-  toggleNavigation() {
-    store.dispatch(toggle());
+function props(state) {
+  return {
+    search: state.get('search')
   }
 }

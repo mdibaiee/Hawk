@@ -14,9 +14,8 @@ input {
   .light-medium;
 }
 
-label {
-  clear: left;
-
+input[type='checkbox'] + label,
+input[type='radio'] + label {
   &::after {
     content: '';
     display: block;
@@ -36,10 +35,8 @@ label {
   }
 }
 
-input[type='checkbox'] {
-  clear: right;
-  float: right;
-
+input[type='checkbox'],
+input[type='radio'] {
   display: none;
 }
 

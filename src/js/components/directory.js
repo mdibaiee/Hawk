@@ -4,10 +4,16 @@ import { show } from 'actions/menu';
 import { active } from 'actions/file';
 import { MENU_WIDTH } from './menu';
 import store from 'store';
+import entry from './mixins/entry';
 
 const MENU_TOP_SPACE = 20;
 
 export default class Directory extends Component {
+  constructor() {
+    super();
+    Object.assign(this, entry);
+  }
+
   render() {
     let checkId = `file-${this.props.index}`;
 
@@ -39,29 +45,5 @@ export default class Directory extends Component {
     let file = store.getState().get('files')[this.props.index];
 
     store.dispatch(changedir(file.path.slice(1) + file.name));
-  }
-
-  contextMenu(e) {
-    e.preventDefault();
-
-    let rect = React.findDOMNode(this.refs.container).getBoundingClientRect();
-    let {x, y, width, height} = rect;
-
-    let left = x + width / 2 - MENU_WIDTH / 2,
-        top  = y + height / 2 + MENU_TOP_SPACE;
-    store.dispatch(show('directoryMenu', {style: {left, top}}));
-    store.dispatch(active(this.props.index));
-  }
-
-  select() {
-    let current = (store.getState().get('activeFile') || []).slice(0);
-    let index = this.props.index;
-
-    if (current.indexOf(index) > -1) {
-      current.splice(current.indexOf(index), 1);
-    } else {
-      current.push(index)
-    }
-    store.dispatch(active(current));
   }
 }

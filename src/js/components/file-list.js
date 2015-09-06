@@ -4,6 +4,8 @@ import File from './file';
 import Directory from './directory';
 import store from 'store';
 import { type } from 'utils';
+import Hammer from 'hammerjs';
+import changedir from 'actions/changedir';
 
 @connect(props)
 export default class FileList extends Component {
@@ -17,7 +19,7 @@ export default class FileList extends Component {
     let settings = store.getState().get('settings');
 
     let els = files.map((file, index) => {
-      let selected = activeFile.indexOf(index) > -1;
+      let selected = activeFile.length && activeFile.indexOf(file) > -1;
       if (type(file) === 'File') {
         return <File selectView={selectView} selected={selected} key={index} index={index} name={file.name} size={file.size} />;
       } else {
@@ -26,10 +28,24 @@ export default class FileList extends Component {
     });
 
     return (
-      <div className='file-list'>
+      <div className='file-list' ref='container'>
         {els}
       </div>
     );
+  }
+
+  componentDidMount() {
+    let container = React.findDOMNode(this.refs.container);
+    let touch = Hammer(container);
+
+    touch.on('swipe', e => {
+      let current = store.getState().get('cwd');
+      let up = current.split('/').slice(0, -1).join('/');
+
+      if (up === current) return;
+
+      store.dispatch(changedir(up));
+    }).set({direction: Hammer.DIRECTION_RIGHT});
   }
 }
 

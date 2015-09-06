@@ -10,10 +10,11 @@ const DEFAULT = new Immutable.Map(Object.assign({
 }, dialogs, menus));
 
 let store = createStore(reducers, DEFAULT);
-store.dispatch(changedir(DEFAULT.get('dir')));
 
 export function bind(action) {
   return () => store.dispatch(action);
 }
 
 export default store;
+
+store.dispatch(changedir(DEFAULT.get('dir')));

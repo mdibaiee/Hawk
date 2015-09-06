@@ -18,14 +18,15 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] File Size
 - [x] Directory Child Count
 - [x] Actions on multiple files (selection)
-- [ ] Copy/Cut and Paste files
-- [ ] File Preview
-- [ ] Filter Files
-- [ ] Search
+- [x] Copy and Paste/Move files
+- [x] File Preview
+- [x] Filter Files
+- [x] Swipe Gestures (Up directory by swiping right)
+- [x] Search
+- [ ] Intro
 - [ ] Different views (List, Icons, etc)
 - [ ] Share Files
 - [ ] Preferences
 - [ ] FTP Browser
 - [ ] File Type Icons
-- [ ] Swipe Gestures
 - [ ] Wi-Fi File Transfer (is this possible?)

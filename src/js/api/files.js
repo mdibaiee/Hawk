@@ -75,13 +75,22 @@ export async function createDirectory(...args) {
   return parent.createDirectory(...args);
 }
 
-export async function remove(file) {
+export async function remove(file, deep) {
   let parent = await root();
 
-  return parent.remove(file);
+  console.log(deep);
+  return parent[deep ? 'removeDeep' : 'remove'](file);
 }
 
 export async function move(file, newPath) {
+  let path = (file.path || '').replace(/^\//, ''); // remove starting slash
+  let oldPath = path + file.name;
+
+  let process = await copy(file, newPath);
+  return remove(oldPath, true);
+}
+
+export async function copy(file, newPath) {
   let path = (file.path || '').replace(/^\//, ''); // remove starting slash
   let oldPath = path + file.name;
 
@@ -102,7 +111,6 @@ export async function move(file, newPath) {
       await move(child, newPath + '/' + child.name);
     }
 
-    await parent.remove(oldPath);
     return;
   } else {
     let content = await readFile(oldPath);
@@ -114,6 +122,6 @@ export async function move(file, newPath) {
       request.onsuccess = resolve;
       request.onerror = reject;
       request.onabort = reject;
-    }).then(() => sdcard().delete(oldPath));
+    });
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { hide, hideAll } from 'actions/dialog';
-import { rename, deleteFile, create, active } from 'actions/file';
+import { rename, remove, create, active } from 'actions/file';
+import { search } from 'actions/files-view';
 import store, { bind } from 'store';
 
 export default {
@@ -70,7 +71,7 @@ export default {
         text: 'Yes',
         action() {
           let activeFile = store.getState().get('activeFile');
-          this.props.dispatch(deleteFile(activeFile));
+          this.props.dispatch(remove(activeFile));
           this.props.dispatch(hideAll());
           this.props.dispatch(active());
         },
@@ -84,5 +85,26 @@ export default {
       text: 'Continue',
       action: bind(hideAll())
     }]
+  },
+  searchDialog: {
+    title: 'Search',
+    description: 'Enter keywords to search for',
+    input: true,
+    buttons: [
+      {
+        text: 'Cancel',
+        action: bind(hideAll())
+      },
+      {
+        text: 'Search',
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+
+          let action = search(input.value);
+          this.props.dispatch(action);
+          this.props.dispatch(hideAll());
+        }
+      }
+    ]
   }
 }

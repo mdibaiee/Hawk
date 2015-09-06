@@ -4,7 +4,9 @@
   align-items: center;
 
   width: 100vw;
-  height: 3.5rem;
+  height: 4.5rem;
+
+  overflow-x: auto;
 
   padding: 8px;
 
@@ -15,6 +17,14 @@
   background: @light-gray;
 
   border-bottom: 1px solid @dark-transparent;
+
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+
+  span {
+    white-space: nowrap;
+  }
 
   i {
     margin: 0 2px;

@@ -1,6 +1,6 @@
-import { LIST_FILES, RENAME_FILE, DELETE_FILE, CREATE_FILE } from 'actions/types';
+import { LIST_FILES, RENAME_FILE, DELETE_FILE, CREATE_FILE, MOVE_FILE, COPY_FILE, SEARCH } from 'actions/types';
 import { refresh } from 'actions/files-view';
-import { move, remove, sdcard, createFile, createDirectory } from 'api/files';
+import { move, remove, sdcard, createFile, createDirectory, copy } from 'api/files';
 import { show } from 'actions/dialog';
 import store, { bind } from 'store';
 import { reportError, type } from 'utils';
@@ -8,8 +8,8 @@ import { reportError, type } from 'utils';
 let boundRefresh = bind(refresh());
 
 export default function(state = [], action) {
-  if (action.type === LIST_FILES) {
 
+  if (action.type === LIST_FILES) {
     let settings = store.getState().get('settings');
 
     if (settings.showDirectoriesFirst) {
@@ -22,7 +22,16 @@ export default function(state = [], action) {
     if (!settings.showHiddenFiles) {
       action.files = action.files.filter(file => {
         return file.name[0] !== '.';
-      })
+      });
+    }
+
+    if (settings.filter) {
+      action.files = action.files.filter(file => {
+        if (type(file) === 'Directory') return true;
+
+        let fileType = file.type.slice(0, file.type.indexOf('/'));
+        return fileType === settings.filter;
+      });
     }
 
     return action.files;
@@ -36,34 +45,45 @@ export default function(state = [], action) {
   }
 
   if (action.type === RENAME_FILE) {
-    let file = state[action.file];
+    let all = Promise.all(action.file.map(file => {
+      return move(file, (file.path || '') + action.name);
+    }));
 
-    move(file, (file.path || '') + action.name).then(boundRefresh, reportError);
+    all.then(boundRefresh, reportError);
+    return state;
+  }
 
+  if (action.type === MOVE_FILE) {
+    let all = Promise.all(action.file.map(file => {
+      return move(file, action.newPath + '/' + file.name);
+    }));
+
+    all.then(boundRefresh, reportError);
+    return state;
+  }
+
+  if (action.type === COPY_FILE) {
+    let all = Promise.all(action.file.map(file => {
+      return copy(file, action.newPath + '/' + file.name);
+    }));
+
+    all.then(boundRefresh, reportError);
     return state;
   }
 
   if (action.type === DELETE_FILE) {
-    let copy = state.slice(0);
+    let all = Promise.all(action.file.map(file => {
+      let path = ((file.path || '') + file.name).replace(/^\//, '');
+      return remove(path, true);
+    }))
 
-    if (action.file.length) {
-      for (let index of action.file) {
-        del(state, index);
-      }
-
-      copy = copy.filter((a, i) => action.file.indexOf(i) === -1);
-    } else {
-      del(state, action.file);
-      copy.splice(action.file, 1);
-    }
-
-    return copy;
+    all.then(boundRefresh, reportError);
+    return state;
   }
 
   return state;
 }
 
-function del(state, index) {
-  let file = state[index];
-  return remove((file.path || '') + '/' + file.name).catch(reportError);
+function mov(file, newPath) {
+  return
 }

@@ -8,6 +8,8 @@ import menu from './menu';
 import dialog from './dialog';
 import settings from './settings';
 import selectView from './select-view';
+import spinner from './spinner';
+import search from './search';
 
 export default function(state = new Immutable.Map(), action) {
   console.log('action', action);
@@ -15,6 +17,8 @@ export default function(state = new Immutable.Map(), action) {
     lwd: lwd(state, action), // last working directory
     cwd: cwd(state.get('cwd'), action),
     files: files(state.get('files'), action),
+    search: search(state.get('search'), action),
+    spinner: spinner(state.get('spinner'), action),
     selectView: selectView(state.get('selectView'), action),
     activeFile: activeFile(state.get('activeFile'), action),
     navigation: navigation(state.get('navigation'), action),
@@ -26,5 +30,6 @@ export default function(state = new Immutable.Map(), action) {
     deleteDialog: dialog(state, action, 'deleteDialog'),
     errorDialog: dialog(state, action, 'errorDialog'),
     createDialog: dialog(state, action, 'createDialog'),
+    searchDialog: dialog(state, action, 'searchDialog')
   });
 }
