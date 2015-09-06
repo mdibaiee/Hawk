@@ -19,7 +19,7 @@ export default class FileList extends Component {
     let settings = store.getState().get('settings');
 
     let els = files.map((file, index) => {
-      let selected = activeFile.length && activeFile.indexOf(file) > -1;
+      let selected = activeFile.indexOf(file) > -1;
       if (type(file) === 'File') {
         return <File selectView={selectView} selected={selected} key={index} index={index} name={file.name} size={file.size} />;
       } else {

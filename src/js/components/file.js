@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import { show } from 'actions/menu';
-import { active } from 'actions/file';
-import { MENU_WIDTH } from './menu';
 import store from 'store';
 import { humanSize } from 'utils';
 import entry from './mixins/entry';
-
-const MENU_TOP_SPACE = 20;
 
 export default class File extends Component {
   constructor() {
@@ -19,7 +14,7 @@ export default class File extends Component {
 
     let input, label;
     if (this.props.selectView) {
-      input = <input type='checkbox' id={checkId} defaultChecked={this.props.selected} readOnly />;
+      input = <input type='checkbox' id={checkId} checked={this.props.selected} readOnly />;
       label = <label htmlFor={checkId}></label>;
     }
 

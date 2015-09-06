@@ -172,6 +172,28 @@ input:checked + label::after {
   transform: scale(0);
   animation: pulse 2s ease-out infinite;
 }
+.tour .swipe-instruction {
+  position: fixed;
+  left: 50%;
+  top: 20%;
+  width: 70vw;
+  height: 5rem;
+  margin-left: -35vw;
+  z-index: 1;
+  background: white;
+  border-radius: 3rem;
+}
+.tour .swipe-instruction::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5rem;
+  height: 5rem;
+  background: #d9d9d9;
+  border-radius: 50%;
+  animation: swipe 3s ease infinite;
+}
 .tour .tour-dialog {
   display: block;
   box-sizing: border-box;
@@ -194,6 +216,24 @@ input:checked + label::after {
   100% {
     opacity: 0;
     transform: scale(5);
+  }
+}
+@keyframes swipe {
+  80% {
+    left: calc(100% - 5rem);
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+    left: calc(100% - 5rem);
+  }
+  91% {
+    left: 0;
+    opacity: 0;
+  }
+  100% {
+    left: 0;
+    opacity: 1;
   }
 }
 .coming-soon::after {

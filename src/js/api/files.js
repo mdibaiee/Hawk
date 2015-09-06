@@ -32,17 +32,19 @@ export async function children(dir, gatherInfo) {
 
   if (gatherInfo) {
     for (let child of childs) {
-      if (type(child) !== 'Directory') continue;
+      if (type(child) === 'Directory') {
+        let subchildren;
+        try {
+          subchildren = await child.getFilesAndDirectories();
+        } catch(e) {
+          subchildren = [];
+        }
 
-      let subchildren;
-      try {
-        subchildren = await child.getFilesAndDirectories();
-      } catch(e) {
-        subchildren = [];
+        child.children = subchildren.length;
+      } else {
+        child.path = dir + '/';
       }
-
-      child.children = subchildren.length;
-    }
+    };
   }
 
   return childs;
@@ -108,7 +110,7 @@ export async function copy(file, newPath) {
         child.path = oldPath + '/';
       }
 
-      await move(child, newPath + '/' + child.name);
+      await copy(child, newPath + '/' + child.name);
     }
 
     return;

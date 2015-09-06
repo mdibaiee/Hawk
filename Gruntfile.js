@@ -2,6 +2,7 @@ module.exports = function(grunt) {
   require('grunt-task-loader')(grunt);
 
   grunt.initConfig({
+    pkg: require('./package.json'),
     browserify: {
       dev: {
         files: [{
@@ -53,15 +54,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    mochify: {
-      options: {
-        reporter: 'land'
-      },
-      tests: {
-        src: 'test/**/*.js',
-        options: '<%= browserify.dev.options %>'
-      }
-    },
     less: {
       dev: {
         files: [{
@@ -90,12 +82,11 @@ module.exports = function(grunt) {
         }]
       }
     },
-    mochaTest: {
-      tests: {
-        src: ['tests/**/*.js'],
-        options: {
-          reporter: 'landing'
-        }
+    zip: {
+      release: {
+        dest: 'releases/hawk-<%= pkg.version %>.zip',
+        src: 'build/**/*',
+        cwd: 'build/'
       }
     },
     watch: {
@@ -116,6 +107,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['browserify:dev', 'less:dev', 'copy']);
-  grunt.registerTask('production', ['browserify:prod', 'less:prod', 'copy']);
+  grunt.registerTask('production', ['browserify', 'less:prod', 'copy', 'zip']);
   grunt.registerTask('test', 'mochaTest');
 };

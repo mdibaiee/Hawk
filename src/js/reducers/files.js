@@ -46,7 +46,8 @@ export default function(state = [], action) {
 
   if (action.type === RENAME_FILE) {
     let all = Promise.all(action.file.map(file => {
-      return move(file, (file.path || '') + action.name);
+      let cwd = store.getState().get('cwd');
+      return move(file, cwd + '/' + action.name);
     }));
 
     all.then(boundRefresh, reportError);

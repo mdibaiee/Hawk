@@ -29964,16 +29964,18 @@ var children = _asyncToGenerator(function* (dir, gatherInfo) {
       for (var _iterator = childs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var child = _step.value;
 
-        if ((0, _utils.type)(child) !== 'Directory') continue;
+        if ((0, _utils.type)(child) === 'Directory') {
+          var subchildren = undefined;
+          try {
+            subchildren = yield child.getFilesAndDirectories();
+          } catch (e) {
+            subchildren = [];
+          }
 
-        var subchildren = undefined;
-        try {
-          subchildren = yield child.getFilesAndDirectories();
-        } catch (e) {
-          subchildren = [];
+          child.children = subchildren.length;
+        } else {
+          child.path = dir + '/';
         }
-
-        child.children = subchildren.length;
       }
     } catch (err) {
       _didIteratorError = true;
@@ -29989,6 +29991,8 @@ var children = _asyncToGenerator(function* (dir, gatherInfo) {
         }
       }
     }
+
+    ;
   }
 
   return childs;
@@ -30073,7 +30077,7 @@ var copy = _asyncToGenerator(function* (file, newPath) {
           child.path = oldPath + '/';
         }
 
-        yield move(child, newPath + '/' + child.name);
+        yield copy(child, newPath + '/' + child.name);
       }
     } catch (err) {
       _didIteratorError2 = true;
@@ -30354,12 +30358,6 @@ var _actionsChangedir = require('actions/changedir');
 
 var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
 
-var _actionsMenu = require('actions/menu');
-
-var _actionsFile = require('actions/file');
-
-var _menu = require('./menu');
-
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
@@ -30367,8 +30365,6 @@ var _store2 = _interopRequireDefault(_store);
 var _mixinsEntry = require('./mixins/entry');
 
 var _mixinsEntry2 = _interopRequireDefault(_mixinsEntry);
-
-var MENU_TOP_SPACE = 20;
 
 var Directory = (function (_Component) {
   _inherits(Directory, _Component);
@@ -30430,7 +30426,7 @@ var Directory = (function (_Component) {
 exports['default'] = Directory;
 module.exports = exports['default'];
 
-},{"./menu":233,"./mixins/entry":234,"actions/changedir":217,"actions/file":219,"actions/menu":221,"react":207,"store":"store"}],230:[function(require,module,exports){
+},{"./mixins/entry":234,"actions/changedir":217,"react":207,"store":"store"}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30505,7 +30501,7 @@ var FileList = (function (_Component) {
       var settings = _store2['default'].getState().get('settings');
 
       var els = files.map(function (file, index) {
-        var selected = activeFile.length && activeFile.indexOf(file) > -1;
+        var selected = activeFile.indexOf(file) > -1;
         if ((0, _utils.type)(file) === 'File') {
           return _react2['default'].createElement(_file2['default'], { selectView: selectView, selected: selected, key: index, index: index, name: file.name, size: file.size });
         } else {
@@ -30574,12 +30570,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _actionsMenu = require('actions/menu');
-
-var _actionsFile = require('actions/file');
-
-var _menu = require('./menu');
-
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
@@ -30589,8 +30579,6 @@ var _utils = require('utils');
 var _mixinsEntry = require('./mixins/entry');
 
 var _mixinsEntry2 = _interopRequireDefault(_mixinsEntry);
-
-var MENU_TOP_SPACE = 20;
 
 var File = (function (_Component) {
   _inherits(File, _Component);
@@ -30610,7 +30598,7 @@ var File = (function (_Component) {
       var input = undefined,
           label = undefined;
       if (this.props.selectView) {
-        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, defaultChecked: this.props.selected, readOnly: true });
+        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, checked: this.props.selected, readOnly: true });
         label = _react2['default'].createElement('label', { htmlFor: checkId });
       }
 
@@ -30658,7 +30646,7 @@ var File = (function (_Component) {
 exports['default'] = File;
 module.exports = exports['default'];
 
-},{"./menu":233,"./mixins/entry":234,"actions/file":219,"actions/menu":221,"react":207,"store":"store","utils":"utils"}],232:[function(require,module,exports){
+},{"./mixins/entry":234,"react":207,"store":"store","utils":"utils"}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30780,6 +30768,7 @@ var Menu = (function (_Component) {
       var items = _props.items;
       var active = _props.active;
       var style = _props.style;
+      var id = _props.id;
 
       items = items || [];
 
@@ -30797,7 +30786,7 @@ var Menu = (function (_Component) {
 
       return _react2['default'].createElement(
         'div',
-        { className: className, style: style },
+        { className: className, style: style, id: id },
         _react2['default'].createElement(
           'ul',
           null,
@@ -30818,25 +30807,48 @@ exports['default'] = Menu;
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _actionsFile = require('actions/file');
+
+var _actionsMenu = require('actions/menu');
+
+var _componentsMenu = require('components/menu');
+
+var MENU_TOP_SPACE = 20;
+
 exports['default'] = {
   contextMenu: function contextMenu(e) {
     e.preventDefault();
 
     var file = store.getState().get('files')[this.props.index];
-    var rect = React.findDOMNode(this.refs.container).getBoundingClientRect();
+    var rect = _react2['default'].findDOMNode(this.refs.container).getBoundingClientRect();
     var x = rect.x;
     var y = rect.y;
     var width = rect.width;
     var height = rect.height;
 
-    var left = x + width / 2 - MENU_WIDTH / 2,
+    var left = x + width / 2 - _componentsMenu.MENU_WIDTH / 2,
         top = y + height / 2 + MENU_TOP_SPACE;
-    store.dispatch(show('fileMenu', { style: { left: left, top: top } }));
-    store.dispatch(active([file]));
+
+    var dialogHeight = document.getElementById('fileMenu').offsetHeight;
+
+    var diff = window.innerHeight - (dialogHeight + top);
+    if (diff <= 0) {
+      top -= Math.abs(diff);
+    }
+
+    store.dispatch((0, _actionsMenu.show)('fileMenu', { style: { left: left, top: top } }));
+    store.dispatch((0, _actionsFile.active)([file]));
   },
 
   select: function select() {
-    var current = store.getState().get('activeFile').slice(0);
+    var current = (store.getState().get('activeFile') || []).slice(0);
     var file = store.getState().get('files')[this.props.index];
 
     if (current.indexOf(file) > -1) {
@@ -30844,12 +30856,12 @@ exports['default'] = {
     } else {
       current.push(file);
     }
-    store.dispatch(active(current));
+    store.dispatch((0, _actionsFile.active)(current));
   }
 };
 module.exports = exports['default'];
 
-},{}],235:[function(require,module,exports){
+},{"actions/file":219,"actions/menu":221,"components/menu":233,"react":207}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30917,7 +30929,7 @@ var Navigation = (function (_Component) {
           _react2['default'].createElement(
             'li',
             null,
-            _react2['default'].createElement('input', { id: 'filter-all', name: 'filter', value: '', type: 'radio', defaultChecked: !settings.filter }),
+            _react2['default'].createElement('input', { id: 'filter-all', name: 'filter', 'data-value': '', type: 'radio', defaultChecked: !settings.filter }),
             _react2['default'].createElement(
               'label',
               { htmlFor: 'filter-all' },
@@ -30927,7 +30939,7 @@ var Navigation = (function (_Component) {
           _react2['default'].createElement(
             'li',
             null,
-            _react2['default'].createElement('input', { id: 'filter-image', name: 'filter', value: 'image', type: 'radio', defaultChecked: settings.filter === 'image' }),
+            _react2['default'].createElement('input', { id: 'filter-image', name: 'filter', 'data-value': 'image', type: 'radio', defaultChecked: settings.filter === 'image' }),
             _react2['default'].createElement(
               'label',
               { htmlFor: 'filter-image' },
@@ -30937,7 +30949,7 @@ var Navigation = (function (_Component) {
           _react2['default'].createElement(
             'li',
             null,
-            _react2['default'].createElement('input', { id: 'filter-video', name: 'filter', value: 'video', type: 'radio', defaultChecked: settings.filter === 'video' }),
+            _react2['default'].createElement('input', { id: 'filter-video', name: 'filter', 'data-value': 'video', type: 'radio', defaultChecked: settings.filter === 'video' }),
             _react2['default'].createElement(
               'label',
               { htmlFor: 'filter-video' },
@@ -30947,7 +30959,7 @@ var Navigation = (function (_Component) {
           _react2['default'].createElement(
             'li',
             null,
-            _react2['default'].createElement('input', { id: 'filter-audio', name: 'filter', value: 'audio', type: 'radio', defaultChecked: settings.filter === 'audio' }),
+            _react2['default'].createElement('input', { id: 'filter-audio', name: 'filter', 'data-value': 'audio', type: 'radio', defaultChecked: settings.filter === 'audio' }),
             _react2['default'].createElement(
               'label',
               { htmlFor: 'filter-audio' },
@@ -31078,7 +31090,7 @@ var Navigation = (function (_Component) {
     key: 'onChange',
     value: function onChange(e) {
       var key = e.target.name || e.target.id;
-      var value = e.target.value === undefined ? e.target.checked : e.target.value;
+      var value = typeof e.target.dataset.value !== 'undefined' ? e.target.dataset.value : e.target.checked;
 
       var action = (0, _actionsSettings2['default'])(_defineProperty({}, key, value));
 
@@ -31186,9 +31198,7 @@ window.changedir = _actionsChangedir2['default'];
 var FileMenu = (0, _reactRedux.connect)(function (state) {
   return state.get('fileMenu');
 })(_componentsMenu2['default']);
-var DirectoryMenu = (0, _reactRedux.connect)(function (state) {
-  return state.get('directoryMenu');
-})(_componentsMenu2['default']);
+// let DirectoryMenu = connect(state => state.get('directoryMenu'))(Menu);
 var MoreMenu = (0, _reactRedux.connect)(function (state) {
   return state.get('moreMenu');
 })(_componentsMenu2['default']);
@@ -31223,21 +31233,22 @@ var Root = (function (_Component) {
     value: function render() {
       return _react2['default'].createElement(
         'div',
-        { onTouchStart: this.touchStart.bind(this), onClick: this.onClick.bind(this) },
+        { onTouchStart: this.touchStart.bind(this),
+          onClick: this.onClick.bind(this) },
         _react2['default'].createElement(_componentsHeader2['default'], null),
         _react2['default'].createElement(_componentsBreadcrumb2['default'], null),
         _react2['default'].createElement(_componentsNavigation2['default'], null),
         _react2['default'].createElement(_componentsFileList2['default'], null),
         _react2['default'].createElement(_componentsToolbar2['default'], null),
-        _react2['default'].createElement(FileMenu, null),
-        _react2['default'].createElement(DirectoryMenu, null),
-        _react2['default'].createElement(MoreMenu, null),
+        _react2['default'].createElement(FileMenu, { id: 'fileMenu' }),
+        _react2['default'].createElement(MoreMenu, { id: 'moreMenu' }),
         _react2['default'].createElement(RenameDialog, null),
         _react2['default'].createElement(DeleteDialog, null),
         _react2['default'].createElement(ErrorDialog, null),
         _react2['default'].createElement(CreateDialog, null),
         _react2['default'].createElement(SearchDialog, null),
         _react2['default'].createElement(_componentsSpinner2['default'], null),
+        _react2['default'].createElement('div', { className: 'swipe-instruction tour-item' }),
         _react2['default'].createElement(
           'div',
           { className: 'tour-dialog' },
@@ -31621,7 +31632,7 @@ var entryMenu = {
     action: function action() {
       var files = _store2['default'].getState().get('files');
       var active = _store2['default'].getState().get('activeFile');
-      var description = 'Enter the new name for ' + active[0].name + '?';
+      var description = 'Enter the new name for ' + active[0].name;
 
       _store2['default'].dispatch((0, _actionsMenu.hideAll)());
       _store2['default'].dispatch((0, _actionsDialog.show)('renameDialog', { description: description }));
@@ -31973,7 +31984,8 @@ exports['default'] = function (state, action) {
 
   if (action.type === _actionsTypes.RENAME_FILE) {
     var all = Promise.all(action.file.map(function (file) {
-      return (0, _apiFiles.move)(file, (file.path || '') + action.name);
+      var cwd = _store2['default'].getState().get('cwd');
+      return (0, _apiFiles.move)(file, cwd + '/' + action.name);
     }));
 
     all.then(boundRefresh, _utils.reportError);
@@ -32214,7 +32226,11 @@ exports['default'] = function (state, action) {
   if (state === undefined) state = DEFAULT;
 
   if (action.type === _actionsTypes.SETTINGS) {
-    return Object.assign({}, state, (0, _lodashObjectOmit2['default'])(action, 'type'));
+    var newSettings = Object.assign({}, state, (0, _lodashObjectOmit2['default'])(action, 'type'));
+
+    localStorage.setItem('settings', JSON.stringify(newSettings));
+
+    return newSettings;
   }
 
   return state;
@@ -32245,6 +32261,13 @@ exports['default'] = function (state, action) {
   switch (action.type) {
     case _actionsTypes.CHANGE_DIRECTORY:
     case _actionsTypes.REFRESH:
+    case _actionsTypes.SETTINGS:
+    case _actionsTypes.CREATE_FILE:
+    case _actionsTypes.MOVE_FILE:
+    case _actionsTypes.DELETE_FILE:
+    case _actionsTypes.RENAME_FILE:
+    case _actionsTypes.COPY_FILE:
+    case _actionsTypes.SEARCH:
       return true;
     case _actionsTypes.LIST_FILES:
       return false;
@@ -32288,7 +32311,8 @@ var _dialogs = require('./dialogs');
 var _dialogs2 = _interopRequireDefault(_dialogs);
 
 var DEFAULT = new _immutable2['default'].Map(Object.assign({
-  dir: ''
+  dir: '',
+  settings: JSON.parse(localStorage.getItem('settings') || '{}')
 }, _dialogs2['default'], _menus2['default']));
 
 var store = (0, _redux.createStore)(_reducersAll2['default'], DEFAULT);
@@ -32318,7 +32342,8 @@ var MESSAGES = {
   'icon-select': 'Select files for batch actions',
   'icon-more': 'Actions used on selected files such as Copy, Delete, Move, …',
   'drawer': 'Extra options, tools and links are here',
-  'icon-search': 'Search your storage for a certain file'
+  'icon-search': 'Search your storage for a certain file',
+  'swipe-instruction': 'Swipe from left to right to go to parent folder'
 };
 
 var DIALOG_HIDE_DELAY = 2000;

@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import changedir from 'actions/changedir';
-import { show } from 'actions/menu';
-import { active } from 'actions/file';
-import { MENU_WIDTH } from './menu';
 import store from 'store';
 import entry from './mixins/entry';
-
-const MENU_TOP_SPACE = 20;
 
 export default class Directory extends Component {
   constructor() {

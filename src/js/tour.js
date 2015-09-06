@@ -4,7 +4,8 @@ const MESSAGES = {
   'icon-select': 'Select files for batch actions',
   'icon-more': 'Actions used on selected files such as Copy, Delete, Move, …',
   'drawer': 'Extra options, tools and links are here',
-  'icon-search': 'Search your storage for a certain file'
+  'icon-search': 'Search your storage for a certain file',
+  'swipe-instruction': 'Swipe from left to right to go to parent folder'
 }
 
 const DIALOG_HIDE_DELAY = 2000;

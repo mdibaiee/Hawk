@@ -11,7 +11,7 @@ const entryMenu = {
       action() {
         let files = store.getState().get('files');
         let active = store.getState().get('activeFile');
-        const description = `Enter the new name for ${active[0].name}?`;
+        const description = `Enter the new name for ${active[0].name}`;
 
         store.dispatch(hideAll());
         store.dispatch(show('renameDialog', {description}));

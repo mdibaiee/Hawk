@@ -17,19 +17,19 @@ export default class Navigation extends Component {
         <p>Filter</p>
         <ul>
           <li>
-            <input id='filter-all' name='filter' value='' type='radio' defaultChecked={!settings.filter} />
+            <input id='filter-all' name='filter' data-value='' type='radio' defaultChecked={!settings.filter} />
             <label htmlFor='filter-all'>All</label>
           </li>
           <li>
-            <input id='filter-image' name='filter' value='image' type='radio' defaultChecked={settings.filter === 'image'} />
+            <input id='filter-image' name='filter' data-value='image' type='radio' defaultChecked={settings.filter === 'image'} />
             <label htmlFor='filter-image'>Image</label>
           </li>
           <li>
-            <input id='filter-video' name='filter' value='video' type='radio' defaultChecked={settings.filter === 'video'} />
+            <input id='filter-video' name='filter' data-value='video' type='radio' defaultChecked={settings.filter === 'video'} />
             <label htmlFor='filter-video'>Video</label>
           </li>
           <li>
-            <input id='filter-audio' name='filter' value='audio' type='radio' defaultChecked={settings.filter === 'audio'} />
+            <input id='filter-audio' name='filter' data-value='audio' type='radio' defaultChecked={settings.filter === 'audio'} />
             <label htmlFor='filter-audio'>Audio</label>
           </li>
         </ul>
@@ -77,7 +77,7 @@ export default class Navigation extends Component {
 
   onChange(e) {
     let key = e.target.name || e.target.id;
-    let value = e.target.value === undefined ? e.target.checked : e.target.value;
+    let value = typeof e.target.dataset.value !== 'undefined' ? e.target.dataset.value : e.target.checked;
 
     let action = updateSettings({
       [key]: value

@@ -8,7 +8,11 @@ const DEFAULT = {
 
 export default function(state = DEFAULT, action) {
   if (action.type === SETTINGS) {
-    return Object.assign({}, state, omit(action, 'type'));
+    let newSettings = Object.assign({}, state, omit(action, 'type'));
+
+    localStorage.setItem('settings', JSON.stringify(newSettings));
+
+    return newSettings;
   }
 
   return state;

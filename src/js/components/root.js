@@ -19,7 +19,7 @@ window.store = store;
 window.changedir = changedir;
 
 let FileMenu = connect(state => state.get('fileMenu'))(Menu);
-let DirectoryMenu = connect(state => state.get('directoryMenu'))(Menu);
+// let DirectoryMenu = connect(state => state.get('directoryMenu'))(Menu);
 let MoreMenu = connect(state => state.get('moreMenu'))(Menu);
 
 let RenameDialog = connect(state => state.get('renameDialog'))(Dialog);
@@ -31,16 +31,16 @@ let SearchDialog = connect(state => state.get('searchDialog'))(Dialog);
 export default class Root extends Component {
   render() {
     return (
-      <div onTouchStart={this.touchStart.bind(this)} onClick={this.onClick.bind(this)}>
+      <div onTouchStart={this.touchStart.bind(this)}
+           onClick={this.onClick.bind(this)}>
         <Header />
         <Breadcrumb />
         <Navigation />
         <FileList />
         <Toolbar />
 
-        <FileMenu />
-        <DirectoryMenu />
-        <MoreMenu />
+        <FileMenu id='fileMenu' />
+        <MoreMenu id='moreMenu' />
 
         <RenameDialog />
         <DeleteDialog />
@@ -49,6 +49,8 @@ export default class Root extends Component {
         <SearchDialog />
 
         <Spinner />
+
+        <div className='swipe-instruction tour-item'></div>
 
         <div className='tour-dialog'>
           Hello! Tap each highlighted button to get an understanding of how they work.
