@@ -18,13 +18,12 @@ export default function(state = '', action) {
 function search(keywords) {
   if (!keywords) {
     let cwd = store.getState().get('cwd');
-    console.log(cwd);
     children(cwd, true).then(files => {
       store.dispatch(listFiles(files));
     }, reportError);
     return '';
   }
-  let keys = keywords.split(' ');
+  let keys = keywords.split(' ').map(key => key.toLowerCase());
 
   // We don't want to show all the currently visible files from the
   // first iteration
@@ -41,10 +40,11 @@ function search(keywords) {
         children(path, true).then(showResults, reportError);
       }
       return keys.some(key => {
-        return file.name.indexOf(key) > -1;
+        return file.name.toLowerCase().indexOf(key) > -1;
       });
     });
 
+    if (!filtered.length) return;
     store.dispatch(listFiles(current.concat(filtered)));
   }, reportError);
 }

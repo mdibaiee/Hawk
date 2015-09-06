@@ -32135,13 +32135,14 @@ exports['default'] = function (state, action) {
 function search(keywords) {
   if (!keywords) {
     var cwd = _store2['default'].getState().get('cwd');
-    console.log(cwd);
     (0, _apiFiles.children)(cwd, true).then(function (files) {
       _store2['default'].dispatch((0, _actionsFilesView.listFiles)(files));
     }, _utils.reportError);
     return '';
   }
-  var keys = keywords.split(' ');
+  var keys = keywords.split(' ').map(function (key) {
+    return key.toLowerCase();
+  });
 
   // We don't want to show all the currently visible files from the
   // first iteration
@@ -32158,10 +32159,11 @@ function search(keywords) {
         (0, _apiFiles.children)(path, true).then(showResults, _utils.reportError);
       }
       return keys.some(function (key) {
-        return file.name.indexOf(key) > -1;
+        return file.name.toLowerCase().indexOf(key) > -1;
       });
     });
 
+    if (!filtered.length) return;
     _store2['default'].dispatch((0, _actionsFilesView.listFiles)(current.concat(filtered)));
   }, _utils.reportError);
 }
