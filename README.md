@@ -5,6 +5,10 @@ This app is under heavy development, things may change and break, but don't hesi
 
 Please read the Features section below and issues to make sure your issue is not already listed.
 
+#Thanks to
+
+Sergio Muriel - [@tfeserver](https://twitter.com/tfeserver)
+
 # Features
 
 Version 1.0
