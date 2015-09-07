@@ -5,6 +5,8 @@ This app is under heavy development, things may change and break, but don't hesi
 
 Please read the Features section below and issues to make sure your issue is not already listed.
 
+Firefox OS 2.2 and up are supported. Sadly 2.0 and 1.3 miss a lot of ES6 functionalities as well as CSS3 features (flexbox, etc) which break our application.
+
 #Thanks to
 
 Sergio Muriel [@tfeserver](https://twitter.com/tfeserver) for testing application

@@ -1,4 +1,3 @@
-require('babel/polyfill');
 import React from 'react';
 import Root from 'components/root';
 import store from 'store';
