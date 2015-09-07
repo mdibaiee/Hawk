@@ -103,7 +103,8 @@ export default {
           let action = search(input.value);
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
-        }
+        },
+        className: 'success'
       }
     ]
   }

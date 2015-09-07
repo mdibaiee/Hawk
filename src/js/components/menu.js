@@ -8,8 +8,9 @@ export default class Menu extends Component {
     items = items || [];
 
     let els = items.map((item, index) => {
-      let disabled = !(typeof item.enabled === 'function' ? item.enabled() : true)
-      let className = disabled ? 'disabled' : '';
+      let enabled = typeof item.enabled === 'function' ? item.enabled() : true
+      console.log(enabled);
+      let className = enabled ? '' : 'disabled';
 
       return <li key={index} className={className} onClick={item.action.bind(this)}>{item.name}</li>
     });

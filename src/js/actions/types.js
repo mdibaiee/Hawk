@@ -20,14 +20,15 @@ const TYPES = {
   MOVE_FILE: Symbol('MOVE_FILE'),
 
   MENU: Symbol('MENU'),
-
   DIALOG: Symbol('DIALOG'),
 
   SPINNER: Symbol('SPINNER'),
 
   SETTINGS: Symbol('SETTINGS'),
 
-  SEARCH: Symbol('SEARCH')
+  SEARCH: Symbol('SEARCH'),
+
+  PICK: Symbol('PICK')
 };
 
 export default TYPES;

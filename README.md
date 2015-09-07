@@ -24,8 +24,10 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] Swipe Gestures (Up directory by swiping right)
 - [x] Search
 - [x] First-run Tour
+- [x] Share Files
+- [x] Pick files
+- [ ] Sort Files
 - [ ] Different views (List, Icons, etc)
-- [ ] Share Files
 - [ ] Preferences
 - [ ] FTP Browser
 - [ ] File Type Icons

@@ -36,5 +36,15 @@
     "https://marketplace.firefox.com",
     "https://marketplace-dev.allizom.org"
   ],
-  "default_locale": "en"
+  "default_locale": "en",
+  "activities": {
+    "pick": {
+      "href": "./index.html",
+      "disposition": "inline",
+      "filters": {
+        "type": "*"
+      },
+      "returnValue": true
+    }
+  }
 }

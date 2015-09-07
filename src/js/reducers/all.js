@@ -10,6 +10,7 @@ import settings from './settings';
 import selectView from './select-view';
 import spinner from './spinner';
 import search from './search';
+import pick from './pick';
 
 export default function(state = new Immutable.Map(), action) {
   console.log('action', action);
@@ -20,6 +21,7 @@ export default function(state = new Immutable.Map(), action) {
     search: search(state.get('search'), action),
     spinner: spinner(state.get('spinner'), action),
     selectView: selectView(state.get('selectView'), action),
+    pick: pick(state.get('pick'), action),
     activeFile: activeFile(state.get('activeFile'), action),
     navigation: navigation(state.get('navigation'), action),
     settings: settings(state.get('settings'), action),

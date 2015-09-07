@@ -33,6 +33,36 @@ const entryMenu = {
         store.dispatch(selectView(false));
         store.dispatch(hideAll());
       }
+    },
+    {
+      name: 'Share',
+      action() {
+        let active = store.getState().get('activeFile');
+
+        new MozActivity({
+          name: 'share',
+          data: {
+            number: 1,
+            blobs: active
+          }
+        })
+      }
+    },
+    {
+      name: 'Pick',
+      enabled() {
+        return store.getState().get('pick');
+      },
+      action() {
+        let request = store.getState().get('pick');
+
+        let active = store.getState().get('activeFile');
+        let blob = active[0];
+        request.postResult({
+          type: blob.type,
+          blob
+        });
+      }
     }
   ]
 };
@@ -58,7 +88,7 @@ const moreMenu = {
         store.dispatch(show('deleteDialog', {description}));
       },
       enabled() {
-        return store.getState().get('activeFile');
+        return store.getState().get('selectView');
       }
     },
     {
@@ -96,7 +126,21 @@ const moreMenu = {
         store.dispatch(move(active, cwd));
         store.dispatch(hideAll());
       }
-    }
+    },
+    {
+      name: 'Share',
+      action() {
+        let active = store.getState().get('activeFile');
+
+        new MozActivity({
+          name: 'share',
+          data: {
+            number: active.length,
+            blobs: active
+          }
+        })
+      }
+    },
   ]
 }
 

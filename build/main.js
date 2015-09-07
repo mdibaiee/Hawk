@@ -29550,7 +29550,7 @@ function changedir(dir) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225}],218:[function(require,module,exports){
+},{"actions/types":226}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29602,7 +29602,7 @@ function hideAll() {
   }, props);
 }
 
-},{"actions/types":225}],219:[function(require,module,exports){
+},{"actions/types":226}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29671,7 +29671,7 @@ function remove(file) {
   };
 }
 
-},{"actions/types":225}],220:[function(require,module,exports){
+},{"actions/types":226}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29743,7 +29743,7 @@ function search(keywords) {
   };
 }
 
-},{"actions/types":225,"store":"store"}],221:[function(require,module,exports){
+},{"actions/types":226,"store":"store"}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29795,7 +29795,7 @@ function hideAll() {
   }, props);
 }
 
-},{"actions/types":225}],222:[function(require,module,exports){
+},{"actions/types":226}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29828,7 +29828,32 @@ function toggle() {
   };
 }
 
-},{"actions/types":225}],223:[function(require,module,exports){
+},{"actions/types":226}],223:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.enable = enable;
+exports.disable = disable;
+
+var _actionsTypes = require('actions/types');
+
+function enable(request) {
+  return {
+    type: _actionsTypes.PICK,
+    active: request
+  };
+}
+
+function disable() {
+  return {
+    type: _actionsTypes.PICK,
+    active: false
+  };
+}
+
+},{"actions/types":226}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29847,7 +29872,7 @@ exports['default'] = function (props) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225}],224:[function(require,module,exports){
+},{"actions/types":226}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29880,7 +29905,7 @@ function toggle() {
   };
 }
 
-},{"actions/types":225}],225:[function(require,module,exports){
+},{"actions/types":226}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29908,20 +29933,38 @@ var TYPES = {
   MOVE_FILE: Symbol('MOVE_FILE'),
 
   MENU: Symbol('MENU'),
-
   DIALOG: Symbol('DIALOG'),
 
   SPINNER: Symbol('SPINNER'),
 
   SETTINGS: Symbol('SETTINGS'),
 
-  SEARCH: Symbol('SEARCH')
+  SEARCH: Symbol('SEARCH'),
+
+  PICK: Symbol('PICK')
 };
 
 exports['default'] = TYPES;
 module.exports = exports['default'];
 
-},{}],226:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
+'use strict';
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _actionsPick = require('actions/pick');
+
+var _store = require('store');
+
+var _store2 = _interopRequireDefault(_store);
+
+navigator.mozSetMessageHandler('activity', function (request) {
+  if (request.source.name === 'pick') {
+    _store2['default'].dispatch((0, _actionsPick.enable)(request));
+  }
+});
+
+},{"actions/pick":223,"store":"store"}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30133,7 +30176,7 @@ function sdcard() {
 
 var ROOT_CACHE = undefined;
 
-},{"utils":"utils"}],227:[function(require,module,exports){
+},{"utils":"utils"}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30248,7 +30291,7 @@ function props(state) {
 }
 module.exports = exports['default'];
 
-},{"actions/changedir":217,"react":207,"react-redux":47,"store":"store"}],228:[function(require,module,exports){
+},{"actions/changedir":217,"react":207,"react-redux":47,"store":"store"}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30333,7 +30376,7 @@ var Dialog = (function (_Component) {
 exports['default'] = Dialog;
 module.exports = exports['default'];
 
-},{"react":207,"utils":"utils"}],229:[function(require,module,exports){
+},{"react":207,"utils":"utils"}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30426,7 +30469,7 @@ var Directory = (function (_Component) {
 exports['default'] = Directory;
 module.exports = exports['default'];
 
-},{"./mixins/entry":234,"actions/changedir":217,"react":207,"store":"store"}],230:[function(require,module,exports){
+},{"./mixins/entry":236,"actions/changedir":217,"react":207,"store":"store"}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30549,7 +30592,7 @@ function props(state) {
 
 module.exports = exports['default'];
 
-},{"./directory":229,"./file":231,"actions/changedir":217,"hammerjs":2,"react":207,"react-redux":47,"store":"store","utils":"utils"}],231:[function(require,module,exports){
+},{"./directory":231,"./file":233,"actions/changedir":217,"hammerjs":2,"react":207,"react-redux":47,"store":"store","utils":"utils"}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30646,7 +30689,7 @@ var File = (function (_Component) {
 exports['default'] = File;
 module.exports = exports['default'];
 
-},{"./mixins/entry":234,"react":207,"store":"store","utils":"utils"}],232:[function(require,module,exports){
+},{"./mixins/entry":236,"react":207,"store":"store","utils":"utils"}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30725,7 +30768,7 @@ function props(state) {
 }
 module.exports = exports['default'];
 
-},{"actions/dialog":218,"actions/files-view":220,"actions/navigation":222,"react":207,"react-redux":47,"store":"store"}],233:[function(require,module,exports){
+},{"actions/dialog":218,"actions/files-view":220,"actions/navigation":222,"react":207,"react-redux":47,"store":"store"}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30773,8 +30816,9 @@ var Menu = (function (_Component) {
       items = items || [];
 
       var els = items.map(function (item, index) {
-        var disabled = !(typeof item.enabled === 'function' ? item.enabled() : true);
-        var className = disabled ? 'disabled' : '';
+        var enabled = typeof item.enabled === 'function' ? item.enabled() : true;
+        console.log(enabled);
+        var className = enabled ? '' : 'disabled';
 
         return _react2['default'].createElement(
           'li',
@@ -30801,7 +30845,7 @@ var Menu = (function (_Component) {
 
 exports['default'] = Menu;
 
-},{"react":207}],234:[function(require,module,exports){
+},{"react":207}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30861,7 +30905,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{"actions/file":219,"actions/menu":221,"components/menu":233,"react":207}],235:[function(require,module,exports){
+},{"actions/file":219,"actions/menu":221,"components/menu":235,"react":207}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31121,7 +31165,7 @@ function props(store) {
 }
 module.exports = exports['default'];
 
-},{"actions/navigation":222,"actions/settings":223,"lodash/string/camelCase":40,"react":207,"react-redux":47,"store":"store"}],236:[function(require,module,exports){
+},{"actions/navigation":222,"actions/settings":224,"lodash/string/camelCase":40,"react":207,"react-redux":47,"store":"store"}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31307,7 +31351,7 @@ var Root = (function (_Component) {
 exports['default'] = Root;
 module.exports = exports['default'];
 
-},{"actions/changedir":217,"actions/dialog":218,"actions/menu":221,"components/breadcrumb":227,"components/dialog":228,"components/file-list":230,"components/header":232,"components/menu":233,"components/navigation":235,"components/spinner":237,"components/toolbar":238,"react":207,"react-redux":47,"store":"store","tour":"tour"}],237:[function(require,module,exports){
+},{"actions/changedir":217,"actions/dialog":218,"actions/menu":221,"components/breadcrumb":229,"components/dialog":230,"components/file-list":232,"components/header":234,"components/menu":235,"components/navigation":237,"components/spinner":239,"components/toolbar":240,"react":207,"react-redux":47,"store":"store","tour":"tour"}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31373,7 +31417,7 @@ function props(state) {
 }
 module.exports = exports['default'];
 
-},{"react":207,"react-redux":47}],238:[function(require,module,exports){
+},{"react":207,"react-redux":47}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31460,7 +31504,7 @@ var Toolbar = (function (_Component) {
 exports['default'] = Toolbar;
 module.exports = exports['default'];
 
-},{"./menu":233,"actions/dialog":218,"actions/files-view":220,"actions/menu":221,"react":207,"store":"store"}],239:[function(require,module,exports){
+},{"./menu":235,"actions/dialog":218,"actions/files-view":220,"actions/menu":221,"react":207,"store":"store"}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31571,13 +31615,14 @@ exports['default'] = {
         var action = (0, _actionsFilesView.search)(input.value);
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
-      }
+      },
+      className: 'success'
     }]
   }
 };
 module.exports = exports['default'];
 
-},{"actions/dialog":218,"actions/file":219,"actions/files-view":220,"react":207,"store":"store"}],240:[function(require,module,exports){
+},{"actions/dialog":218,"actions/file":219,"actions/files-view":220,"react":207,"store":"store"}],242:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -31596,6 +31641,8 @@ var _store2 = _interopRequireDefault(_store);
 
 var _reactRedux = require('react-redux');
 
+require('./activities');
+
 var wrapper = document.getElementById('wrapper');
 _react2['default'].render(_react2['default'].createElement(
   _reactRedux.Provider,
@@ -31605,7 +31652,7 @@ _react2['default'].render(_react2['default'].createElement(
   }
 ), wrapper);
 
-},{"components/root":236,"react":207,"react-redux":47,"store":"store"}],241:[function(require,module,exports){
+},{"./activities":227,"components/root":238,"react":207,"react-redux":47,"store":"store"}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31652,6 +31699,34 @@ var entryMenu = {
       _store2['default'].dispatch((0, _actionsFilesView.selectView)(false));
       _store2['default'].dispatch((0, _actionsMenu.hideAll)());
     }
+  }, {
+    name: 'Share',
+    action: function action() {
+      var active = _store2['default'].getState().get('activeFile');
+
+      new MozActivity({
+        name: 'share',
+        data: {
+          number: 1,
+          blobs: active
+        }
+      });
+    }
+  }, {
+    name: 'Pick',
+    enabled: function enabled() {
+      return _store2['default'].getState().get('pick');
+    },
+    action: function action() {
+      var request = _store2['default'].getState().get('pick');
+
+      var active = _store2['default'].getState().get('activeFile');
+      var blob = active[0];
+      request.postResult({
+        type: blob.type,
+        blob: blob
+      });
+    }
   }]
 };
 
@@ -31675,7 +31750,7 @@ var moreMenu = {
       _store2['default'].dispatch((0, _actionsDialog.show)('deleteDialog', { description: description }));
     },
     enabled: function enabled() {
-      return _store2['default'].getState().get('activeFile');
+      return _store2['default'].getState().get('selectView');
     }
   }, {
     name: 'Copy',
@@ -31710,6 +31785,19 @@ var moreMenu = {
       _store2['default'].dispatch((0, _actionsFile.move)(active, cwd));
       _store2['default'].dispatch((0, _actionsMenu.hideAll)());
     }
+  }, {
+    name: 'Share',
+    action: function action() {
+      var active = _store2['default'].getState().get('activeFile');
+
+      new MozActivity({
+        name: 'share',
+        data: {
+          number: active.length,
+          blobs: active
+        }
+      });
+    }
   }]
 };
 
@@ -31720,7 +31808,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{"actions/dialog":218,"actions/file":219,"actions/files-view":220,"actions/menu":221,"store":"store"}],242:[function(require,module,exports){
+},{"actions/dialog":218,"actions/file":219,"actions/files-view":220,"actions/menu":221,"store":"store"}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31741,7 +31829,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225}],243:[function(require,module,exports){
+},{"actions/types":226}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31798,6 +31886,10 @@ var _search = require('./search');
 
 var _search2 = _interopRequireDefault(_search);
 
+var _pick = require('./pick');
+
+var _pick2 = _interopRequireDefault(_pick);
+
 exports['default'] = function (state, action) {
   if (state === undefined) state = new _immutable2['default'].Map();
 
@@ -31809,6 +31901,7 @@ exports['default'] = function (state, action) {
     search: (0, _search2['default'])(state.get('search'), action),
     spinner: (0, _spinner2['default'])(state.get('spinner'), action),
     selectView: (0, _selectView2['default'])(state.get('selectView'), action),
+    pick: (0, _pick2['default'])(state.get('pick'), action),
     activeFile: (0, _activeFile2['default'])(state.get('activeFile'), action),
     navigation: (0, _navigation2['default'])(state.get('navigation'), action),
     settings: (0, _settings2['default'])(state.get('settings'), action),
@@ -31825,7 +31918,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"./active-file":242,"./cwd":244,"./dialog":245,"./files":246,"./lwd":247,"./menu":248,"./navigation":249,"./search":250,"./select-view":251,"./settings":252,"./spinner":253,"immutable":3}],244:[function(require,module,exports){
+},{"./active-file":244,"./cwd":246,"./dialog":247,"./files":248,"./lwd":249,"./menu":250,"./navigation":251,"./pick":252,"./search":253,"./select-view":254,"./settings":255,"./spinner":256,"immutable":3}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31871,7 +31964,7 @@ function changeTo(dir) {
 }
 module.exports = exports['default'];
 
-},{"actions/files-view":220,"actions/types":225,"api/files":226,"store":"store","utils":"utils"}],245:[function(require,module,exports){
+},{"actions/files-view":220,"actions/types":226,"api/files":228,"store":"store","utils":"utils"}],247:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31913,7 +32006,7 @@ exports['default'] = function (state, action, id) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225,"immutable":3,"lodash/object/omit":39}],246:[function(require,module,exports){
+},{"actions/types":226,"immutable":3,"lodash/object/omit":39}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32028,7 +32121,7 @@ function mov(file, newPath) {
 }
 module.exports = exports['default'];
 
-},{"actions/dialog":218,"actions/files-view":220,"actions/types":225,"api/files":226,"store":"store","utils":"utils"}],247:[function(require,module,exports){
+},{"actions/dialog":218,"actions/files-view":220,"actions/types":226,"api/files":228,"store":"store","utils":"utils"}],249:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32048,7 +32141,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225}],248:[function(require,module,exports){
+},{"actions/types":226}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32090,7 +32183,7 @@ exports['default'] = function (state, action, id) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225,"immutable":3,"lodash/object/omit":39}],249:[function(require,module,exports){
+},{"actions/types":226,"immutable":3,"lodash/object/omit":39}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32111,7 +32204,28 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225}],250:[function(require,module,exports){
+},{"actions/types":226}],252:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _actionsTypes = require('actions/types');
+
+exports['default'] = function (state, action) {
+  if (state === undefined) state = false;
+
+  if (action.type === _actionsTypes.PICK) {
+    return action.active;
+  }
+
+  return state;
+};
+
+module.exports = exports['default'];
+
+},{"actions/types":226}],253:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32181,7 +32295,7 @@ function search(keywords) {
 }
 module.exports = exports['default'];
 
-},{"actions/files-view":220,"actions/types":225,"api/files":226,"store":"store","utils":"utils"}],251:[function(require,module,exports){
+},{"actions/files-view":220,"actions/types":226,"api/files":228,"store":"store","utils":"utils"}],254:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32202,7 +32316,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225}],252:[function(require,module,exports){
+},{"actions/types":226}],255:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32238,7 +32352,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225,"lodash/object/omit":39}],253:[function(require,module,exports){
+},{"actions/types":226,"lodash/object/omit":39}],256:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32278,7 +32392,7 @@ exports['default'] = function (state, action) {
 
 module.exports = exports['default'];
 
-},{"actions/types":225}],"store":[function(require,module,exports){
+},{"actions/types":226}],"store":[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32327,7 +32441,7 @@ exports['default'] = store;
 
 store.dispatch((0, _actionsChangedir2['default'])(DEFAULT.get('dir')));
 
-},{"./dialogs":239,"./menus":241,"actions/changedir":217,"immutable":3,"reducers/all":243,"redux":209}],"tour":[function(require,module,exports){
+},{"./dialogs":241,"./menus":243,"actions/changedir":217,"immutable":3,"reducers/all":245,"redux":209}],"tour":[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32525,4 +32639,4 @@ function humanSize(size) {
   }
 }
 
-},{"actions/dialog":218,"store":"store"}]},{},[217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,"store","tour","utils"]);
+},{"actions/dialog":218,"store":"store"}]},{},[217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,"store","tour","utils"]);
