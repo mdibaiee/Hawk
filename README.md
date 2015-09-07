@@ -7,6 +7,8 @@ Please read the Features section below and issues to make sure your issue is not
 
 # Features
 
+Version 1.0
+-----------
 - [x] Breadcrumb
 - [x] Delete Files
 - [x] Refresh
@@ -26,9 +28,15 @@ Please read the Features section below and issues to make sure your issue is not
 - [x] First-run Tour
 - [x] Share Files
 - [x] Pick files
-- [ ] Sort Files
+
+
+Version 2.0
+------------
 - [ ] Different views (List, Icons, etc)
-- [ ] Preferences
+- [ ] Sort Files
+- [ ] Zip / Unzip
+- [ ] Image Thumbnails
 - [ ] FTP Browser
+- [ ] Preferences
 - [ ] File Type Icons
 - [ ] Wi-Fi File Transfer (is this possible?)
