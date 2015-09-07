@@ -7,7 +7,7 @@ Please read the Features section below and issues to make sure your issue is not
 
 Firefox OS 2.2 and up are supported. Sadly 2.0 and 1.3 miss a lot of ES6 functionalities as well as CSS3 features (flexbox, etc) which break our application.
 
-!(https://github.com/mdibaiee/Hawk/raw/master/Mobile%20Portrait.png)[Mobile Portrait Mockup]
+![Mobile Portrait Mockup](https://github.com/mdibaiee/Hawk/raw/master/Mobile%20Portrait.png)
 
 #Thanks to
 
