@@ -7,7 +7,7 @@ Please read the Features section below and issues to make sure your issue is not
 
 #Thanks to
 
-Sergio Muriel - [@tfeserver](https://twitter.com/tfeserver)
+Sergio Muriel [@tfeserver](https://twitter.com/tfeserver) for testing application
 
 # Features
 
