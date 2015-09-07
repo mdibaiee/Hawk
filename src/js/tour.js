@@ -49,7 +49,6 @@ export default function() {
             localStorage.setItem('tourRan', 'true');
 
             for (let {item, listener, ev} of listeners) {
-              console.log(item, listener);
               item.removeEventListener(ev, listener);
             }
           }

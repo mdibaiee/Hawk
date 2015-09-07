@@ -80,7 +80,6 @@ export async function createDirectory(...args) {
 export async function remove(file, deep) {
   let parent = await root();
 
-  console.log(deep);
   return parent[deep ? 'removeDeep' : 'remove'](file);
 }
 

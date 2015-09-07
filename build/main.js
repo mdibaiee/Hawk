@@ -34251,7 +34251,6 @@ exports.createDirectory = createDirectory;
 var remove = _asyncToGenerator(function* (file, deep) {
   var parent = yield root();
 
-  console.log(deep);
   return parent[deep ? 'removeDeep' : 'remove'](file);
 });
 
@@ -34989,7 +34988,6 @@ var Menu = (function (_Component) {
 
       var els = items.map(function (item, index) {
         var enabled = typeof item.enabled === 'function' ? item.enabled() : true;
-        console.log(enabled);
         var className = enabled ? '' : 'disabled';
 
         return _react2['default'].createElement(
@@ -35799,8 +35797,6 @@ module.exports = exports['default'];
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-require('babel/polyfill');
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -35816,6 +35812,8 @@ var _store2 = _interopRequireDefault(_store);
 var _reactRedux = require('react-redux');
 
 require('./activities');
+
+require('babel/polyfill');
 
 var wrapper = document.getElementById('wrapper');
 _react2['default'].render(_react2['default'].createElement(
@@ -36700,7 +36698,6 @@ exports['default'] = function () {
                     var _listener = _step2$value.listener;
                     var _ev = _step2$value.ev;
 
-                    console.log(_item, _listener);
                     _item.removeEventListener(_ev, _listener);
                   }
                 } catch (err) {
