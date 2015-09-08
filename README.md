@@ -12,6 +12,7 @@ Firefox OS 2.2 and up are supported. Sadly 2.0 and 1.3 miss a lot of ES6 functio
 #Thanks to
 
 Sergio Muriel [@tfeserver](https://twitter.com/tfeserver) for testing application
+Mohammad Jahani [@mamal72](https://twitter.com/mamal72) for ideas, and helping in designing the [webpage](http://dibaiee.ir/Hawk)
 
 # Features
 
