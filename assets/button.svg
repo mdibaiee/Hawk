@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="226px" height="60px" viewBox="0 0 226 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>Get on Firefox Marke + Rectangle 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Webpage" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Desktop" sketch:type="MSArtboardGroup" transform="translate(-401.000000, -326.000000)">
+            <g id="Header" sketch:type="MSLayerGroup" transform="translate(-19.000000, 0.000000)">
+                <g id="Get-on-Firefox-Marke-+-Rectangle-2" transform="translate(420.000000, 326.000000)">
+                    <text id="Get-on-Firefox-Marke" sketch:type="MSTextLayer" font-family="Fira Sans" font-size="15" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="21" y="34">Get on Firefox Marketplace</tspan>
+                    </text>
+                    <rect id="Rectangle-2" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-dasharray="232,45" sketch:type="MSShapeGroup" x="0" y="0" width="225.327811" height="59.0444755" rx="11"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

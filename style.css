@@ -1,0 +1,118 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  font-size: 1.6rem;
+
+  font-family: Fira Sans;
+}
+
+html, body {
+  margin: 0;
+}
+
+header {
+  box-sizing: border-box;
+
+  padding-top: 5rem;
+
+  width: 100%;
+  height: 70rem;
+
+  text-align: center;
+
+  background: url(assets/background.jpg) no-repeat;
+  background-size: cover;
+
+  color: white;
+
+  position: relative;
+
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+}
+
+header::after {
+  content: '';
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.3);
+
+  z-index: 0;
+}
+
+header h1, header h2, header svg {
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+  font-weight: 300;
+
+  font-size: 64pt;
+
+  margin-top: 0;
+}
+
+h2 {
+  font-weight: 200;
+
+  font-size: 24pt;
+
+  margin-bottom: 5rem;
+}
+
+footer {
+  background: #F0F0F0;
+
+  color: #5E6572;
+
+  text-align: center;
+}
+
+footer a {
+  text-decoration: none;
+  color: currentColor;
+}
+
+footer > p, footer > a {
+  display: inline-block;
+
+  width: 20%;
+}
+
+.heart {
+  background: url(assets/heart.svg) no-repeat;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+
+  position: relative;
+  top: 0.5rem;
+}
+
+svg {
+  cursor: pointer;
+}
+
+svg rect {
+  stroke-dashoffset: 15;
+
+  animation: cool 50s infinite;
+  animation-play-state: paused;
+}
+
+svg:hover rect {
+  animation-play-state: running;
+}
+
+@keyframes cool {
+  50% {
+    stroke-dashoffset: 5000;
+  }
+}
