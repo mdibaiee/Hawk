@@ -41,7 +41,7 @@ Version 1.0
 
 Version 2.0
 ------------
-- [ ] Different views (List, Icons, etc)
+- [x] Different views (List, Grid)
 - [ ] Sort Files
 - [ ] Zip / Unzip
 - [ ] Image Thumbnails
