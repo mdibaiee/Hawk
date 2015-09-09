@@ -260,34 +260,58 @@ button.coming-soon::after {
   opacity: 0.8;
   transform: translate(-50%, -50%) rotate(-45deg);
 }
+.list .file,
+.list .directory {
+  flex: 1 1 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.list .file p,
+.list .directory p {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.list .file > span,
+.list .directory > span {
+  font-weight: 100;
+  font-size: 1.5rem;
+  margin-left: 1rem;
+}
+.list .file i,
+.list .directory i {
+  margin-right: 1.4rem;
+}
+.grid .file,
+.grid .directory {
+  flex: 1 0 30%;
+  max-width: 30%;
+  padding: 1.4rem 0.5rem;
+  flex-direction: column;
+}
+.grid .file p,
+.grid .directory p {
+  max-height: 1.5em;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.grid .file span,
+.grid .directory span {
+  display: none;
+}
 .file,
 .directory {
   display: flex;
   flex-flow: row;
   align-items: center;
   padding: 1.4rem;
-  width: 100%;
   font-weight: 200;
   font-size: 1.8rem;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .file p,
 .directory p {
   flex: 1 1;
-  max-width: calc(100% - 9rem);
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-}
-.file > span,
-.directory > span {
-  font-weight: 100;
-  font-size: 1.5rem;
-  margin-left: 1rem;
-}
-.file i,
-.directory i {
-  margin-right: 1.4rem;
 }
 .directory i {
   display: block;
@@ -469,6 +493,10 @@ nav i {
   color: #9b9b93;
 }
 .file-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-content: flex-start;
   height: calc(100vh - 14.5rem);
   overflow-x: hidden;
   overflow-y: auto;

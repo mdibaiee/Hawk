@@ -14,7 +14,7 @@ export default class FileList extends Component {
   }
 
   render() {
-    let { files, selectView, activeFile } = this.props;
+    let { files, selectView, activeFile, view } = this.props;
     activeFile = activeFile || [];
     let settings = store.getState().get('settings');
 
@@ -27,8 +27,10 @@ export default class FileList extends Component {
       }
     });
 
+    let className= `file-list ${view}`;
+
     return (
-      <div className='file-list' ref='container'>
+      <div className={className} ref='container'>
         {els}
       </div>
     );
@@ -53,7 +55,8 @@ function props(state) {
   return {
     files: state.get('files'),
     selectView: state.get('selectView'),
-    activeFile: state.get('activeFile')
+    activeFile: state.get('activeFile'),
+    view: state.get('settings').view || 'list'
   }
 }
 

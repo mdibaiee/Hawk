@@ -3,7 +3,8 @@ import omit from 'lodash/object/omit';
 
 const DEFAULT = {
   showHiddenFiles: false,
-  showDirectoriesFirst: true
+  showDirectoriesFirst: true,
+  view: 'list'
 }
 
 export default function(state = DEFAULT, action) {

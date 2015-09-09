@@ -1,25 +1,11 @@
-.file, .directory {
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-
-  padding: 1.4rem;
-
-  width: 100%;
-  .light-big;
-
-  box-sizing: border-box;
+.list .file, .list .directory {
+  flex: 1 1 100%;
 
   border-bottom: 1px solid @dark-separator;
 
   p {
-    flex: 1 1;
-
-    max-width: ~'calc(100% - 9rem)';
-
-    text-overflow: ellipsis;
-
     word-wrap: break-word;
+    word-break: break-all;
   }
 
   > span {
@@ -30,6 +16,45 @@
 
   i {
     margin-right: 1.4rem;
+  }
+}
+
+.grid .file, .grid .directory {
+  flex: 1 0 30%;
+
+  max-width: 30%;
+
+  padding: 1.4rem 0.5rem;
+
+  flex-direction: column;
+
+  p {
+    max-height: 1.5em;
+    max-width: 100%;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  span {
+    display: none;
+  }
+}
+
+.file, .directory {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+
+  padding: 1.4rem;
+
+  .light-big;
+
+  box-sizing: border-box;
+
+  p {
+    flex: 1 1;
   }
 }
 

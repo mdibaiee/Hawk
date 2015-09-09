@@ -31,7 +31,9 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
         }
         queueIndex = -1;
         len = queue.length;
@@ -83,7 +85,6 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
-// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
@@ -29679,9 +29680,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.listFiles = listFiles;
 exports.refresh = refresh;
-exports.toggle = toggle;
-exports.details = details;
-exports.list = list;
 exports.selectView = selectView;
 exports.search = search;
 
@@ -29703,27 +29701,6 @@ function listFiles(files) {
 function refresh() {
   return {
     type: _actionsTypes.REFRESH
-  };
-}
-
-function toggle() {
-  return {
-    type: _actionsTypes.FILES_VIEW,
-    view: 'toggle'
-  };
-}
-
-function details() {
-  return {
-    type: _actionsTypes.FILES_VIEW,
-    view: 'details'
-  };
-}
-
-function list() {
-  return {
-    type: _actionsTypes.FILES_VIEW,
-    view: 'list'
   };
 }
 
@@ -29915,7 +29892,6 @@ var TYPES = {
   CHANGE_DIRECTORY: Symbol('CHANGE_DIRECTORY'),
 
   LIST_FILES: Symbol('LIST_FILES'),
-  FILES_VIEW: Symbol('FILES_VIEW'),
   SELECT_VIEW: Symbol('SELECT_VIEW'),
 
   NAVIGATION: Symbol('NAVIGATION'),
@@ -30538,6 +30514,7 @@ var FileList = (function (_Component) {
       var files = _props.files;
       var selectView = _props.selectView;
       var activeFile = _props.activeFile;
+      var view = _props.view;
 
       activeFile = activeFile || [];
       var settings = _store2['default'].getState().get('settings');
@@ -30551,9 +30528,11 @@ var FileList = (function (_Component) {
         }
       });
 
+      var className = 'file-list ' + view;
+
       return _react2['default'].createElement(
         'div',
-        { className: 'file-list', ref: 'container' },
+        { className: className, ref: 'container' },
         els
       );
     }
@@ -30585,7 +30564,8 @@ function props(state) {
   return {
     files: state.get('files'),
     selectView: state.get('selectView'),
-    activeFile: state.get('activeFile')
+    activeFile: state.get('activeFile'),
+    view: state.get('settings').view || 'list'
   };
 }
 
@@ -31443,6 +31423,10 @@ var _actionsDialog = require('actions/dialog');
 
 var _actionsMenu = require('actions/menu');
 
+var _actionsSettings = require('actions/settings');
+
+var _actionsSettings2 = _interopRequireDefault(_actionsSettings);
+
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
@@ -31465,7 +31449,7 @@ var Toolbar = (function (_Component) {
         'div',
         { className: 'toolbar' },
         _react2['default'].createElement('button', { className: 'icon-plus tour-item', onClick: this.newFile }),
-        _react2['default'].createElement('button', { className: 'icon-view coming-soon', onClick: (0, _store.bind)((0, _actionsFilesView.toggle)()) }),
+        _react2['default'].createElement('button', { className: 'icon-view tour-item', onClick: this.toggleView }),
         _react2['default'].createElement('button', { className: 'icon-refresh tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
         _react2['default'].createElement('button', { className: 'icon-select tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.selectView)('toggle')) }),
         _react2['default'].createElement('button', { className: 'icon-more tour-item', onClick: this.showMore.bind(this), ref: 'more' })
@@ -31495,6 +31479,14 @@ var Toolbar = (function (_Component) {
       });
       _store2['default'].dispatch(action);
     }
+  }, {
+    key: 'toggleView',
+    value: function toggleView() {
+      var current = _store2['default'].getState().get('settings').view;
+      var value = current === 'list' ? 'grid' : 'list';
+
+      _store2['default'].dispatch((0, _actionsSettings2['default'])({ view: value }));
+    }
   }]);
 
   return Toolbar;
@@ -31503,7 +31495,7 @@ var Toolbar = (function (_Component) {
 exports['default'] = Toolbar;
 module.exports = exports['default'];
 
-},{"./menu":235,"actions/dialog":218,"actions/files-view":220,"actions/menu":221,"react":207,"store":"store"}],241:[function(require,module,exports){
+},{"./menu":235,"actions/dialog":218,"actions/files-view":220,"actions/menu":221,"actions/settings":224,"react":207,"store":"store"}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32332,7 +32324,8 @@ var _lodashObjectOmit2 = _interopRequireDefault(_lodashObjectOmit);
 
 var DEFAULT = {
   showHiddenFiles: false,
-  showDirectoriesFirst: true
+  showDirectoriesFirst: true,
+  view: 'list'
 };
 
 exports['default'] = function (state, action) {
@@ -32454,6 +32447,7 @@ var MESSAGES = {
   'icon-refresh': 'Refresh File List',
   'icon-select': 'Select files for batch actions',
   'icon-more': 'Actions used on selected files such as Copy, Delete, Move, …',
+  'icon-view': 'Toggle between List and Grid view',
   'drawer': 'Extra options, tools and links are here',
   'icon-search': 'Search your storage for a certain file',
   'swipe-instruction': 'Swipe from left to right to go to parent folder'
