@@ -29930,15 +29930,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var _actionsPick = require('actions/pick');
 
-var _actionsSettings = require('actions/settings');
-
-var _actionsSettings2 = _interopRequireDefault(_actionsSettings);
-
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
-
-var FILTERS = ['image', 'audio', 'video'];
 
 navigator.mozSetMessageHandler('activity', function (request) {
   if (request.source.name === 'pick') {
@@ -29946,7 +29940,7 @@ navigator.mozSetMessageHandler('activity', function (request) {
   }
 });
 
-},{"actions/pick":223,"actions/settings":224,"store":"store"}],228:[function(require,module,exports){
+},{"actions/pick":223,"store":"store"}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
