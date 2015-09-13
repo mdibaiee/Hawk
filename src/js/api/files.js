@@ -1,11 +1,15 @@
 import { type } from 'utils';
+import { refresh } from 'actions/files-view';
+import { bind } from 'store';
 
 let SD_CACHE;
 export function sdcard() {
   if (SD_CACHE) return SD_CACHE;
 
   SD_CACHE = navigator.getDeviceStorage('sdcard');
+  SD_CACHE.onchange = bind(refresh());
   window.sdcard = SD_CACHE;
+
   return SD_CACHE;
 }
 
@@ -27,7 +31,7 @@ export async function getFile(dir = '/') {
 }
 
 export async function children(dir, gatherInfo) {
-  let parent = await getFile(dir);
+  let parent = shimDirectory(await getFile(dir));
   let childs = await parent.getFilesAndDirectories();
 
   if (gatherInfo) {
@@ -42,7 +46,9 @@ export async function children(dir, gatherInfo) {
 
         child.children = subchildren.length;
       } else {
-        child.path = dir + '/';
+        if (typeof child.path === 'undefined') {
+          child.path = dir + '/';
+        }
       }
     };
   }

@@ -29971,7 +29971,7 @@ var getFile = _asyncToGenerator(function* () {
 exports.getFile = getFile;
 
 var children = _asyncToGenerator(function* (dir, gatherInfo) {
-  var parent = yield getFile(dir);
+  var parent = shimDirectory((yield getFile(dir)));
   var childs = yield parent.getFilesAndDirectories();
 
   if (gatherInfo) {
@@ -29993,7 +29993,9 @@ var children = _asyncToGenerator(function* (dir, gatherInfo) {
 
           child.children = subchildren.length;
         } else {
-          child.path = dir + '/';
+          if (typeof child.path === 'undefined') {
+            child.path = dir + '/';
+          }
         }
       }
     } catch (err) {
@@ -30139,19 +30141,25 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 var _utils = require('utils');
 
+var _actionsFilesView = require('actions/files-view');
+
+var _store = require('store');
+
 var SD_CACHE = undefined;
 
 function sdcard() {
   if (SD_CACHE) return SD_CACHE;
 
   SD_CACHE = navigator.getDeviceStorage('sdcard');
+  SD_CACHE.onchange = (0, _store.bind)((0, _actionsFilesView.refresh)());
   window.sdcard = SD_CACHE;
+
   return SD_CACHE;
 }
 
 var ROOT_CACHE = undefined;
 
-},{"utils":"utils"}],229:[function(require,module,exports){
+},{"actions/files-view":220,"store":"store","utils":"utils"}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -32584,7 +32592,7 @@ var _store2 = _interopRequireDefault(_store);
 var _actionsDialog = require('actions/dialog');
 
 function type(obj) {
-  return Object.prototype.toString.call(obj).slice(8, -1);
+  return obj.toString().slice(8, -1);
 }
 
 function template(string, props) {
@@ -32610,6 +32618,7 @@ function getKey(object, key) {
 }
 
 function reportError(err) {
+  console.error(err);
   var action = (0, _actionsDialog.show)('errorDialog', { description: err.message });
   _store2['default'].dispatch(action);
 }

@@ -99,7 +99,7 @@ module.exports = function(grunt) {
         tasks: ['browserify:dev']
       },
       assets: {
-        files: ['src/index.html', 'src/manifest.webapp',
+        files: ['src/index.html', 'src/manifest.webapp', 'src/polyfill.js',
                 'src/fonts/**', 'src/img/**', 'src/data/**'],
         tasks: ['copy']
       }

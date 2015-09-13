@@ -23,5 +23,5 @@ export default function(state = '', action) {
 function changeTo(dir) {
   children(dir, true).then(files => {
     store.dispatch(listFiles(files));
-  }, reportError);
+  }, reportError)
 }
