@@ -77,7 +77,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src',
           dest: 'build',
-          src: ['index.html', 'manifest.webapp',
+          src: ['index.html', 'manifest.webapp', 'polyfill.js',
                 'fonts/**', 'img/**', 'js/libs/**', 'icon/**']
         }]
       }
