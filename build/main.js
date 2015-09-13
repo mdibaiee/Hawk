@@ -29930,9 +29930,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var _actionsPick = require('actions/pick');
 
+var _actionsSettings = require('actions/settings');
+
+var _actionsSettings2 = _interopRequireDefault(_actionsSettings);
+
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
+
+var FILTERS = ['image', 'audio', 'video'];
 
 navigator.mozSetMessageHandler('activity', function (request) {
   if (request.source.name === 'pick') {
@@ -29940,7 +29946,7 @@ navigator.mozSetMessageHandler('activity', function (request) {
   }
 });
 
-},{"actions/pick":223,"store":"store"}],228:[function(require,module,exports){
+},{"actions/pick":223,"actions/settings":224,"store":"store"}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -31529,7 +31535,7 @@ exports['default'] = {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
         var cwd = _store2['default'].getState().get('cwd');
-        var action = (0, _actionsFile.create)(cwd + input.value);
+        var action = (0, _actionsFile.create)(cwd + '/' + input.value);
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
         this.props.dispatch((0, _actionsFile.active)());
@@ -31540,7 +31546,7 @@ exports['default'] = {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
         var cwd = _store2['default'].getState().get('cwd');
-        var action = (0, _actionsFile.create)(cwd + input.value, true);
+        var action = (0, _actionsFile.create)(cwd + '/' + input.value, true);
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
         this.props.dispatch((0, _actionsFile.active)());

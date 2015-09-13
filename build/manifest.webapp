@@ -41,9 +41,6 @@
     "pick": {
       "href": "./index.html",
       "disposition": "inline",
-      "filters": {
-        "type": "*"
-      },
       "returnValue": true
     }
   }

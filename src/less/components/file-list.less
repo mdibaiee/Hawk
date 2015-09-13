@@ -2,11 +2,15 @@
   display: flex;
   flex-flow: row wrap;
 
-  justify-content: space-around;
   align-content: flex-start;
+  align-items: flex-start;
 
   height: ~'calc(100vh - 14.5rem)';
 
   overflow-x: hidden;
   overflow-y: auto;
+
+  &.grid {
+    justify-content: space-around;
+  }
 }

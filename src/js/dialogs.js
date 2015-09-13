@@ -16,7 +16,7 @@ export default {
           let input = React.findDOMNode(this.refs.input);
 
           let cwd = store.getState().get('cwd');
-          let action = create(cwd + input.value);
+          let action = create(cwd + '/' + input.value);
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
           this.props.dispatch(active());
@@ -28,7 +28,7 @@ export default {
           let input = React.findDOMNode(this.refs.input);
 
           let cwd = store.getState().get('cwd');
-          let action = create(cwd + input.value, true);
+          let action = create(cwd + '/' + input.value, true);
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
           this.props.dispatch(active());
