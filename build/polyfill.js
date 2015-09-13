@@ -26,32 +26,35 @@ function shimDirectory(directory) {
     directory.toString = function() { return '[object Directory]' };
     directory.getFilesAndDirectories = function getFilesAndDirectories() {
       var current = (this.path || '') + this.name;
+			console.log('gettingFilesAndDirectories of', this);
       var children = [];
 
       return new Promise(function(resolve, reject) {
-
         var request = sdcard.enumerate(current);
         request.onsuccess = function() {
-          if (!this.result) return resolve(children);
+					if (!this.result) {
+						if (this.done) resolve(children);
+						else this.continue();
+						return;
+					}
 
           var parts = this.result.name.replace('/sdcard/', '').split('/');
 
           // immediate children files
           if (parts.slice(0, -1).join('/') === current) {
+						console.log('constructing file');
             var file = new File([this.result], parts[parts.length - 1], {
               type: this.result.type
             });
+						console.log('defining path');
             Object.defineProperty(file, 'path', {
               value: parts.slice(0, -1).join('/') + '/'
             });
             children.push(file);
 
-            return this.continue();
-          }
-
-          // directories
-          if (parts.slice(0, -2).join('/') === current) {
-            var path = parts.slice(0, -2).join('');
+					// Directories
+          } else if (parts.slice(0, -2).join('/') === current) {
+            var path = parts.slice(0, -2).join('/') + '/';
             var name = parts[parts.length - 2];
 
             var exists = children.some(function(child) {
@@ -64,10 +67,12 @@ function shimDirectory(directory) {
               dir.path = path;
               children.push(dir);
             }
-
-            return this.continue();
           }
+
+	        if (this.done) return resolve(children);
+					else this.continue();
         }
+
         request.onerror = reject;
       });
     }

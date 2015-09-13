@@ -10,8 +10,14 @@ export default class Navigation extends Component {
   render() {
     let { settings } = this.props;
 
+    let noFlex = typeof getComputedStyle(document.body)['flex-flow'] === 'undefined';
+
+    let style = noFlex ? {display: 'block'} : {};
+
     return (
-      <nav className={this.props.active ? 'active' : ''} onChange={this.onChange.bind(this)}>
+      <nav className={this.props.active ? 'active' : ''}
+           onChange={this.onChange.bind(this)}
+           style={style}>
         <i onTouchStart={this.hide} />
 
         <p>Filter</p>

@@ -39,6 +39,6 @@ export default class Directory extends Component {
   peek() {
     let file = store.getState().get('files')[this.props.index];
 
-    store.dispatch(changedir(file.path.slice(1) + file.name));
+    store.dispatch(changedir(file.path.replace(/^\//, '') + file.name));
   }
 }

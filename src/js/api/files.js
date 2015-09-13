@@ -17,7 +17,7 @@ let ROOT_CACHE;
 export async function root() {
   if (ROOT_CACHE) return ROOT_CACHE;
 
-  ROOT_CACHE = await sdcard().getRoot();
+  ROOT_CACHE = shimDirectory(await sdcard().getRoot());
   window.root = ROOT_CACHE;
   return ROOT_CACHE;
 }
@@ -32,6 +32,9 @@ export async function getFile(dir = '/') {
 
 export async function children(dir, gatherInfo) {
   let parent = shimDirectory(await getFile(dir));
+  if (!parent.path) {
+    parent.path = dir.slice(0, dir.lastIndexOf('/') + 1);
+  }
   let childs = await parent.getFilesAndDirectories();
 
   if (gatherInfo) {
@@ -39,7 +42,7 @@ export async function children(dir, gatherInfo) {
       if (type(child) === 'Directory') {
         let subchildren;
         try {
-          subchildren = await child.getFilesAndDirectories();
+          subchildren = await shimDirectory(child).getFilesAndDirectories();
         } catch(e) {
           subchildren = [];
         }
@@ -80,7 +83,9 @@ export async function createFile(...args) {
 export async function createDirectory(...args) {
   let parent = await root();
 
-  return parent.createDirectory(...args);
+  return parent.createDirectory(...args).then(() => {
+    return createFile(args[0] + '/.empty');
+  });
 }
 
 export async function remove(file, deep) {
@@ -108,11 +113,13 @@ export async function copy(file, newPath) {
 
   if (type(target) === 'Directory') {
     await parent.createDirectory(newPath);
-    let childs = await target.getFilesAndDirectories();
+    let childs = await shimDirectory(target).getFilesAndDirectories();
 
     for (let child of childs) {
       if (type(child) === 'File') {
-        child.path = oldPath + '/';
+        Object.defineProperty(child, 'path', {
+          value: oldPath + '/'
+        });
       }
 
       await copy(child, newPath + '/' + child.name);

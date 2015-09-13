@@ -29951,7 +29951,7 @@ exports.sdcard = sdcard;
 var root = _asyncToGenerator(function* () {
   if (ROOT_CACHE) return ROOT_CACHE;
 
-  ROOT_CACHE = yield sdcard().getRoot();
+  ROOT_CACHE = shimDirectory((yield sdcard().getRoot()));
   window.root = ROOT_CACHE;
   return ROOT_CACHE;
 });
@@ -29972,6 +29972,9 @@ exports.getFile = getFile;
 
 var children = _asyncToGenerator(function* (dir, gatherInfo) {
   var parent = shimDirectory((yield getFile(dir)));
+  if (!parent.path) {
+    parent.path = dir.slice(0, dir.lastIndexOf('/') + 1);
+  }
   var childs = yield parent.getFilesAndDirectories();
 
   if (gatherInfo) {
@@ -29986,7 +29989,7 @@ var children = _asyncToGenerator(function* (dir, gatherInfo) {
         if ((0, _utils.type)(child) === 'Directory') {
           var subchildren = undefined;
           try {
-            subchildren = yield child.getFilesAndDirectories();
+            subchildren = yield shimDirectory(child).getFilesAndDirectories();
           } catch (e) {
             subchildren = [];
           }
@@ -30047,9 +30050,15 @@ var createFile = _asyncToGenerator(function* () {
 exports.createFile = createFile;
 
 var createDirectory = _asyncToGenerator(function* () {
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
   var parent = yield root();
 
-  return parent.createDirectory.apply(parent, arguments);
+  return parent.createDirectory.apply(parent, args).then(function () {
+    return createFile(args[0] + '/.empty');
+  });
 });
 
 exports.createDirectory = createDirectory;
@@ -30083,7 +30092,7 @@ var copy = _asyncToGenerator(function* (file, newPath) {
 
   if ((0, _utils.type)(target) === 'Directory') {
     yield parent.createDirectory(newPath);
-    var childs = yield target.getFilesAndDirectories();
+    var childs = yield shimDirectory(target).getFilesAndDirectories();
 
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
@@ -30094,7 +30103,9 @@ var copy = _asyncToGenerator(function* (file, newPath) {
         var child = _step2.value;
 
         if ((0, _utils.type)(child) === 'File') {
-          child.path = oldPath + '/';
+          Object.defineProperty(child, 'path', {
+            value: oldPath + '/'
+          });
         }
 
         yield copy(child, newPath + '/' + child.name);
@@ -30442,7 +30453,7 @@ var Directory = (function (_Component) {
     value: function peek() {
       var file = _store2['default'].getState().get('files')[this.props.index];
 
-      _store2['default'].dispatch((0, _actionsChangedir2['default'])(file.path.slice(1) + file.name));
+      _store2['default'].dispatch((0, _actionsChangedir2['default'])(file.path.replace(/^\//, '') + file.name));
     }
   }]);
 
@@ -30944,9 +30955,15 @@ var Navigation = (function (_Component) {
     value: function render() {
       var settings = this.props.settings;
 
+      var noFlex = typeof getComputedStyle(document.body)['flex-flow'] === 'undefined';
+
+      var style = noFlex ? { display: 'block' } : {};
+
       return _react2['default'].createElement(
         'nav',
-        { className: this.props.active ? 'active' : '', onChange: this.onChange.bind(this) },
+        { className: this.props.active ? 'active' : '',
+          onChange: this.onChange.bind(this),
+          style: style },
         _react2['default'].createElement('i', { onTouchStart: this.hide }),
         _react2['default'].createElement(
           'p',
@@ -31537,7 +31554,8 @@ exports['default'] = {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
         var cwd = _store2['default'].getState().get('cwd');
-        var action = (0, _actionsFile.create)(cwd + '/' + input.value);
+        var path = cwd + '/' + input.value;
+        var action = (0, _actionsFile.create)(path.replace(/^\//, ''));
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
         this.props.dispatch((0, _actionsFile.active)());
@@ -31548,7 +31566,8 @@ exports['default'] = {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
         var cwd = _store2['default'].getState().get('cwd');
-        var action = (0, _actionsFile.create)(cwd + '/' + input.value, true);
+        var path = cwd + '/' + input.value;
+        var action = (0, _actionsFile.create)(path.replace(/^\//, ''), true);
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
         this.props.dispatch((0, _actionsFile.active)());
