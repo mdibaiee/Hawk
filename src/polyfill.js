@@ -21,8 +21,11 @@ function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPr
 	};
 }(Element.prototype));
 
+window.needsShim = false;
+
 function shimDirectory(directory) {
   if (!directory.getFilesAndDirectories) {
+		window.needsShim = true;
     directory.toString = function() { return '[object Directory]' };
     directory.getFilesAndDirectories = function getFilesAndDirectories() {
       var current = (this.path || '') + this.name;

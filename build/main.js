@@ -30057,7 +30057,9 @@ var createDirectory = _asyncToGenerator(function* () {
   var parent = yield root();
 
   return parent.createDirectory.apply(parent, args).then(function () {
-    return createFile(args[0] + '/.empty');
+    if (window.needsShim) {
+      return createFile(args[0] + '/.empty');
+    }
   });
 });
 

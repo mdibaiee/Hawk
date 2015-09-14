@@ -9,10 +9,24 @@ Firefox OS 2.2 and up are supported. Sadly 2.0 and 1.3 miss a lot of ES6 functio
 
 ![Mobile Portrait Mockup](https://github.com/mdibaiee/Hawk/raw/master/Mobile%20Portrait.png)
 
-#Thanks to
+# Thanks to
 
 Sergio Muriel [@tfeserver](https://twitter.com/tfeserver) for testing application
 Mohammad Jahani [@mamal72](https://twitter.com/mamal72) for ideas, and helping in designing the [webpage](http://dibaiee.ir/Hawk)
+
+# Frequently Asked Questions
+
+**Q: Why does Hawk create an `.empty` file inside new folders I create?**
+
+This happens on Firefox OS devices below version 3, and that's because the API doesn't allow
+listing empty folders, in order to show you the folder, Hawk has to fake the folder to have a child.
+
+
+**Q: Why is Hawk slow?**
+
+Hawk is much faster on Firefox OS 3.0 and up, and that's because the way old Device Storage API works,
+it's slow by nature. Nothing we can do about it, sadly.
+
 
 # Features
 

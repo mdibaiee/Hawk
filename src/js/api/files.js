@@ -84,7 +84,9 @@ export async function createDirectory(...args) {
   let parent = await root();
 
   return parent.createDirectory(...args).then(() => {
-    return createFile(args[0] + '/.empty');
+    if (window.needsShim) {
+      return createFile(args[0] + '/.empty');
+    }
   });
 }
 
