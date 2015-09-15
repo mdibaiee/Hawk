@@ -509,7 +509,7 @@ nav i {
   overflow-y: auto;
 }
 .file-list.grid {
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .dialog {
   display: flex;
