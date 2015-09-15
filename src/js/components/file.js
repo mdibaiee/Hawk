@@ -18,6 +18,8 @@ export default class File extends Component {
       label = <label htmlFor={checkId}></label>;
     }
 
+    console.log(this.props.type);
+
     let clickHandler = this.props.selectView ? this.select.bind(this)
                                              : this.open.bind(this);
 

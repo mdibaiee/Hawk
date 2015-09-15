@@ -1,5 +1,5 @@
 import { CHANGE_DIRECTORY, REFRESH, SETTINGS } from 'actions/types';
-import { children } from 'api/files';
+import { children, CACHE } from 'api/files';
 import store from 'store';
 import { reportError } from 'utils';
 import { listFiles } from 'actions/files-view';
@@ -9,6 +9,10 @@ export default function(state = '', action) {
     changeTo(action.dir);
 
     return action.dir;
+  }
+
+  if (action.type === REFRESH) {
+    CACHE[state] = null;
   }
 
   if (action.type === REFRESH || action.type === SETTINGS) {

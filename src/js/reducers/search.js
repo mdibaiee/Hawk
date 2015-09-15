@@ -3,7 +3,7 @@ import store from 'store';
 import { reportError } from 'utils';
 import { listFiles } from 'actions/files-view';
 import { children } from 'api/files';
-import { type } from 'utils';
+import { type, normalize } from 'utils';
 
 export default function(state = '', action) {
   if (action.type === SEARCH) {
@@ -36,7 +36,7 @@ function search(keywords) {
 
     let filtered = files.filter(file => {
       if (type(file) === 'Directory') {
-        let path = (file.path + file.name).replace(/^\//, '');
+        let path = normalize(file.path + file.name);
         children(path, true).then(showResults, reportError);
       }
       return keys.some(key => {

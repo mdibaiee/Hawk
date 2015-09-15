@@ -1,13 +1,16 @@
-import { type } from 'utils';
+import { type, normalize } from 'utils';
 import { refresh } from 'actions/files-view';
 import { bind } from 'store';
 
 let SD_CACHE;
+export let CACHE = {};
+
+localStorage.setItem('cache', '{}');
+
 export function sdcard() {
   if (SD_CACHE) return SD_CACHE;
 
   SD_CACHE = navigator.getDeviceStorage('sdcard');
-  SD_CACHE.onchange = bind(refresh());
   window.sdcard = SD_CACHE;
 
   return SD_CACHE;
@@ -18,6 +21,10 @@ export async function root() {
   if (ROOT_CACHE) return ROOT_CACHE;
 
   ROOT_CACHE = shimDirectory(await sdcard().getRoot());
+  Object.defineProperty(ROOT_CACHE, 'name', {
+    value: '',
+    enumerable: true
+  });
   window.root = ROOT_CACHE;
   return ROOT_CACHE;
 }
@@ -27,17 +34,19 @@ export async function getFile(dir = '/') {
 
   if (dir === '/' || !dir) return parent;
 
-  return await parent.get(dir);
+  return await parent.get(normalize(dir));
 }
 
 export async function children(dir, gatherInfo) {
+  if (CACHE[dir]) return CACHE[dir];
+
   let parent = shimDirectory(await getFile(dir));
   if (!parent.path) {
     parent.path = dir.slice(0, dir.lastIndexOf('/') + 1);
   }
   let childs = await parent.getFilesAndDirectories();
 
-  if (gatherInfo) {
+  if (gatherInfo && !window.needsShim) {
     for (let child of childs) {
       if (type(child) === 'Directory') {
         let subchildren;
@@ -55,6 +64,8 @@ export async function children(dir, gatherInfo) {
       }
     };
   }
+
+  CACHE[dir] = childs;
 
   return childs;
 }
@@ -97,7 +108,7 @@ export async function remove(file, deep) {
 }
 
 export async function move(file, newPath) {
-  let path = (file.path || '').replace(/^\//, ''); // remove starting slash
+  let path = normalize(file.path || '');
   let oldPath = path + file.name;
 
   let process = await copy(file, newPath);
@@ -105,10 +116,10 @@ export async function move(file, newPath) {
 }
 
 export async function copy(file, newPath) {
-  let path = (file.path || '').replace(/^\//, ''); // remove starting slash
+  let path = normalize(file.path || '').replace(/^\//, '');
   let oldPath = path + file.name;
 
-  newPath = newPath.replace(/^\//, '');
+  newPath = normalize(newPath);
 
   let target = await getFile(oldPath);
   let parent = await root();
@@ -120,7 +131,8 @@ export async function copy(file, newPath) {
     for (let child of childs) {
       if (type(child) === 'File') {
         Object.defineProperty(child, 'path', {
-          value: oldPath + '/'
+          value: oldPath + '/',
+          enumerable: true
         });
       }
 

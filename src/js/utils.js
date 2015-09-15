@@ -31,6 +31,10 @@ export function reportError(err) {
   store.dispatch(action);
 }
 
+export function normalize(path) {
+  return path.replace(/^\//, '').replace('sdcard/', '');
+}
+
 const sizes = {
   'GB': Math.pow(2, 30),
   'MB': Math.pow(2, 20),

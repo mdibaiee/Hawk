@@ -31,7 +31,7 @@ export default class Directory extends Component {
 
         <i></i>
         <p>{this.props.name}</p>
-        <span>{this.props.children} items</span>
+        <span>{this.props.children ? this.props.children + ' items' : ''}</span>
       </div>
     );
   }

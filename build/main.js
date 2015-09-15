@@ -29952,6 +29952,10 @@ var root = _asyncToGenerator(function* () {
   if (ROOT_CACHE) return ROOT_CACHE;
 
   ROOT_CACHE = shimDirectory((yield sdcard().getRoot()));
+  Object.defineProperty(ROOT_CACHE, 'name', {
+    value: '',
+    enumerable: true
+  });
   window.root = ROOT_CACHE;
   return ROOT_CACHE;
 });
@@ -29965,19 +29969,21 @@ var getFile = _asyncToGenerator(function* () {
 
   if (dir === '/' || !dir) return parent;
 
-  return yield parent.get(dir);
+  return yield parent.get((0, _utils.normalize)(dir));
 });
 
 exports.getFile = getFile;
 
 var children = _asyncToGenerator(function* (dir, gatherInfo) {
+  if (CACHE[dir]) return CACHE[dir];
+
   var parent = shimDirectory((yield getFile(dir)));
   if (!parent.path) {
     parent.path = dir.slice(0, dir.lastIndexOf('/') + 1);
   }
   var childs = yield parent.getFilesAndDirectories();
 
-  if (gatherInfo) {
+  if (gatherInfo && !window.needsShim) {
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -30018,6 +30024,8 @@ var children = _asyncToGenerator(function* (dir, gatherInfo) {
 
     ;
   }
+
+  CACHE[dir] = childs;
 
   return childs;
 });
@@ -30074,7 +30082,7 @@ var remove = _asyncToGenerator(function* (file, deep) {
 exports.remove = remove;
 
 var move = _asyncToGenerator(function* (file, newPath) {
-  var path = (file.path || '').replace(/^\//, ''); // remove starting slash
+  var path = (0, _utils.normalize)(file.path || '');
   var oldPath = path + file.name;
 
   var process = yield copy(file, newPath);
@@ -30084,10 +30092,10 @@ var move = _asyncToGenerator(function* (file, newPath) {
 exports.move = move;
 
 var copy = _asyncToGenerator(function* (file, newPath) {
-  var path = (file.path || '').replace(/^\//, ''); // remove starting slash
+  var path = (0, _utils.normalize)(file.path || '').replace(/^\//, '');
   var oldPath = path + file.name;
 
-  newPath = newPath.replace(/^\//, '');
+  newPath = (0, _utils.normalize)(newPath);
 
   var target = yield getFile(oldPath);
   var parent = yield root();
@@ -30106,7 +30114,8 @@ var copy = _asyncToGenerator(function* (file, newPath) {
 
         if ((0, _utils.type)(child) === 'File') {
           Object.defineProperty(child, 'path', {
-            value: oldPath + '/'
+            value: oldPath + '/',
+            enumerable: true
           });
         }
 
@@ -30159,12 +30168,15 @@ var _actionsFilesView = require('actions/files-view');
 var _store = require('store');
 
 var SD_CACHE = undefined;
+var CACHE = {};
+
+exports.CACHE = CACHE;
+localStorage.setItem('cache', '{}');
 
 function sdcard() {
   if (SD_CACHE) return SD_CACHE;
 
   SD_CACHE = navigator.getDeviceStorage('sdcard');
-  SD_CACHE.onchange = (0, _store.bind)((0, _actionsFilesView.refresh)());
   window.sdcard = SD_CACHE;
 
   return SD_CACHE;
@@ -30445,8 +30457,7 @@ var Directory = (function (_Component) {
         _react2['default'].createElement(
           'span',
           null,
-          this.props.children,
-          ' items'
+          this.props.children ? this.props.children + ' items' : ''
         )
       );
     }
@@ -30644,6 +30655,8 @@ var File = (function (_Component) {
         input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, checked: this.props.selected, readOnly: true });
         label = _react2['default'].createElement('label', { htmlFor: checkId });
       }
+
+      console.log(this.props.type);
 
       var clickHandler = this.props.selectView ? this.select.bind(this) : this.open.bind(this);
 
@@ -31968,6 +31981,10 @@ exports['default'] = function (state, action) {
     return action.dir;
   }
 
+  if (action.type === _actionsTypes.REFRESH) {
+    _apiFiles.CACHE[state] = null;
+  }
+
   if (action.type === _actionsTypes.REFRESH || action.type === _actionsTypes.SETTINGS) {
     changeTo(state);
 
@@ -32301,7 +32318,7 @@ function search(keywords) {
 
     var filtered = files.filter(function (file) {
       if ((0, _utils.type)(file) === 'Directory') {
-        var path = (file.path + file.name).replace(/^\//, '');
+        var path = (0, _utils.normalize)(file.path + file.name);
         (0, _apiFiles.children)(path, true).then(showResults, _utils.reportError);
       }
       return keys.some(function (key) {
@@ -32602,6 +32619,7 @@ exports.type = type;
 exports.template = template;
 exports.getKey = getKey;
 exports.reportError = reportError;
+exports.normalize = normalize;
 exports.humanSize = humanSize;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -32642,6 +32660,10 @@ function reportError(err) {
   console.error(err);
   var action = (0, _actionsDialog.show)('errorDialog', { description: err.message });
   _store2['default'].dispatch(action);
+}
+
+function normalize(path) {
+  return path.replace(/^\//, '').replace('sdcard/', '');
 }
 
 var sizes = {
