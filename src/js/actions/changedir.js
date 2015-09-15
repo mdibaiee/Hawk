@@ -5,5 +5,5 @@ export default function changedir(dir) {
   return {
     type: CHANGE_DIRECTORY,
     dir
-  };
+  }
 }

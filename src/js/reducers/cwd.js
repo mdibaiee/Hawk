@@ -1,7 +1,7 @@
 import { CHANGE_DIRECTORY, REFRESH, SETTINGS } from 'actions/types';
 import { children, CACHE } from 'api/files';
 import store from 'store';
-import { reportError } from 'utils';
+import { reportError, normalize } from 'utils';
 import { listFiles } from 'actions/files-view';
 
 export default function(state = '', action) {
@@ -25,6 +25,7 @@ export default function(state = '', action) {
 }
 
 function changeTo(dir) {
+  dir = normalize(dir);
   children(dir, true).then(files => {
     store.dispatch(listFiles(files));
   }, reportError)

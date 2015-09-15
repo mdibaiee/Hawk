@@ -31995,6 +31995,7 @@ exports['default'] = function (state, action) {
 };
 
 function changeTo(dir) {
+  dir = (0, _utils.normalize)(dir);
   (0, _apiFiles.children)(dir, true).then(function (files) {
     _store2['default'].dispatch((0, _actionsFilesView.listFiles)(files));
   }, _utils.reportError);

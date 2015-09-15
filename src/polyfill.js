@@ -41,24 +41,22 @@ function shimDirectory(directory) {
 						return;
 					}
 
-          var parts = this.result.name.replace('/sdcard/', '').split('/');
+					var normalized = this.result.name.replace('/sdcard/', '');
+          var parts = normalized.split('/');
 
           // immediate children files
           if (parts.slice(0, -1).join('/') === current) {
-						console.log('constructing file');
             var file = new File([this.result], parts[parts.length - 1], {
               type: this.result.type
             });
-						console.log('defining path');
             Object.defineProperty(file, 'path', {
               value: parts.slice(0, -1).join('/') + '/'
             });
             children.push(file);
 
 					// Directories
-          } else if (parts.slice(0, -2).join('/') === current) {
-            var path = parts.slice(0, -2).join('/') + '/';
-            var name = parts[parts.length - 2];
+				} else if (normalized.indexOf(current) === 0) {
+            var name = normalized.slice(current.length).replace(/^\//, '').split('/')[0];
 
             var exists = children.some(function(child) {
               return child.name === name
@@ -67,7 +65,7 @@ function shimDirectory(directory) {
             if (!exists) {
               var dir = Object.assign({}, directory);
               dir.name = name;
-              dir.path = path;
+              dir.path = current + '/';
               children.push(dir);
             }
           }
