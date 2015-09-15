@@ -13,7 +13,7 @@ export default {
     let rect = React.findDOMNode(this.refs.container).getBoundingClientRect();
     let {x, y, width, height} = rect;
 
-    let left = x + width / 2 - MENU_WIDTH / 2,
+    let left = window.innerWidth / 2 - MENU_WIDTH / 2,
         top  = y + height / 2 + MENU_TOP_SPACE;
 
     let dialogHeight = document.getElementById('fileMenu').offsetHeight;

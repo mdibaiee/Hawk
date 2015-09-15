@@ -280,14 +280,10 @@ button.coming-soon::after {
 .list .directory i {
   margin-right: 1.4rem;
 }
-.list .file:active,
-.list .directory:active {
-  background: #f0f0f0;
-}
 .grid .file,
 .grid .directory {
-  flex: 1 0 30%;
-  max-width: 30%;
+  flex: 1 0 33.33%;
+  max-width: 33.33%;
   padding: 1.4rem 0.5rem;
   flex-direction: column;
 }
@@ -316,6 +312,10 @@ button.coming-soon::after {
 .file p,
 .directory p {
   flex: 1 1;
+}
+.file:active,
+.directory:active {
+  background: #f0f0f0;
 }
 .directory i {
   display: block;
@@ -507,9 +507,6 @@ nav i {
   height: calc(100vh - 14.5rem);
   overflow-x: hidden;
   overflow-y: auto;
-}
-.file-list.grid {
-  justify-content: space-between;
 }
 .dialog {
   display: flex;

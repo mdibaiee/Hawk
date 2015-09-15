@@ -30889,7 +30889,7 @@ exports['default'] = {
     var width = rect.width;
     var height = rect.height;
 
-    var left = x + width / 2 - _componentsMenu.MENU_WIDTH / 2,
+    var left = window.innerWidth / 2 - _componentsMenu.MENU_WIDTH / 2,
         top = y + height / 2 + MENU_TOP_SPACE;
 
     var dialogHeight = document.getElementById('fileMenu').offsetHeight;
