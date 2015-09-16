@@ -5,6 +5,7 @@ import { search } from 'actions/files-view';
 import store, { bind } from 'store';
 
 const INVALID_NAME = 'Please enter a valid name.';
+const INVALID_SEARCH = 'You can\'t leave the input empty';
 
 export default {
   createDialog: {
@@ -17,7 +18,12 @@ export default {
         action() {
           let input = React.findDOMNode(this.refs.input);
 
-          if (!input.value) show('errorDialog', {description: INVALID_NAME});
+          if (!input.value) {
+            this.props.dispatch(hideAll());
+            this.props.dispatch(active());
+            this.props.dispatch(show('errorDialog', {description: INVALID_NAME}));
+            return;
+          }
 
           let cwd = store.getState().get('cwd');
           let path = cwd + '/' + input.value;
@@ -33,7 +39,12 @@ export default {
         action() {
           let input = React.findDOMNode(this.refs.input);
 
-          if (!input.value) show('errorDialog', {description: INVALID_NAME});
+          if (!input.value) {
+            this.props.dispatch(hideAll());
+            this.props.dispatch(active());
+            this.props.dispatch(show('errorDialog', {description: INVALID_NAME}));
+            return;
+          }
 
           let cwd = store.getState().get('cwd');
           let path = cwd + '/' + input.value;
@@ -72,7 +83,12 @@ export default {
         action() {
           let input = React.findDOMNode(this.refs.input);
 
-          if (!input.value) show('errorDialog', {description: INVALID_NAME});
+          if (!input.value) {
+            this.props.dispatch(hideAll());
+            this.props.dispatch(active());
+            this.props.dispatch(show('errorDialog', {description: INVALID_NAME}));
+            return;
+          }
 
           let activeFile = store.getState().get('activeFile');
           this.props.dispatch(rename(activeFile, input.value))
@@ -129,7 +145,12 @@ export default {
         action() {
           let input = React.findDOMNode(this.refs.input);
 
-          if (!input.value) show('errorDialog', {description: INVALID_NAME});
+          if (!input.value) {
+            this.props.dispatch(hideAll());
+            this.props.dispatch(active());
+            this.props.dispatch(show('errorDialog', {description: INVALID_SEARCH}));
+            return;
+          }
 
           let action = search(input.value);
           this.props.dispatch(action);

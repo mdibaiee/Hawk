@@ -31593,6 +31593,7 @@ var _store = require('store');
 var _store2 = _interopRequireDefault(_store);
 
 var INVALID_NAME = 'Please enter a valid name.';
+var INVALID_SEARCH = 'You can\'t leave the input empty';
 
 exports['default'] = {
   createDialog: {
@@ -31604,7 +31605,12 @@ exports['default'] = {
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
-        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
+        if (!input.value) {
+          this.props.dispatch((0, _actionsDialog.hideAll)());
+          this.props.dispatch((0, _actionsFile.active)());
+          this.props.dispatch((0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME }));
+          return;
+        }
 
         var cwd = _store2['default'].getState().get('cwd');
         var path = cwd + '/' + input.value;
@@ -31619,7 +31625,12 @@ exports['default'] = {
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
-        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
+        if (!input.value) {
+          this.props.dispatch((0, _actionsDialog.hideAll)());
+          this.props.dispatch((0, _actionsFile.active)());
+          this.props.dispatch((0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME }));
+          return;
+        }
 
         var cwd = _store2['default'].getState().get('cwd');
         var path = cwd + '/' + input.value;
@@ -31654,7 +31665,12 @@ exports['default'] = {
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
-        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
+        if (!input.value) {
+          this.props.dispatch((0, _actionsDialog.hideAll)());
+          this.props.dispatch((0, _actionsFile.active)());
+          this.props.dispatch((0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME }));
+          return;
+        }
 
         var activeFile = _store2['default'].getState().get('activeFile');
         this.props.dispatch((0, _actionsFile.rename)(activeFile, input.value));
@@ -31705,7 +31721,12 @@ exports['default'] = {
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
 
-        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
+        if (!input.value) {
+          this.props.dispatch((0, _actionsDialog.hideAll)());
+          this.props.dispatch((0, _actionsFile.active)());
+          this.props.dispatch((0, _actionsDialog.show)('errorDialog', { description: INVALID_SEARCH }));
+          return;
+        }
 
         var action = (0, _actionsFilesView.search)(input.value);
         this.props.dispatch(action);
