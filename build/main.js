@@ -30116,7 +30116,8 @@ var copy = _asyncToGenerator(function* (file, newPath) {
         if ((0, _utils.type)(child) === 'File') {
           Object.defineProperty(child, 'path', {
             value: oldPath + '/',
-            enumerable: true
+            enumerable: true,
+            configurable: true
           });
         }
 
@@ -30344,7 +30345,7 @@ var Dialog = (function (_Component) {
       var active = _props.active;
       var value = _props.value;
 
-      var conditionalInput = input ? _react2['default'].createElement('input', { ref: 'input', value: value }) : '';
+      var conditionalInput = input ? _react2['default'].createElement('input', { ref: 'input', defaultValue: value }) : '';
 
       var buttons = this.props.buttons.map(function (button, i) {
         return _react2['default'].createElement(
@@ -30361,7 +30362,7 @@ var Dialog = (function (_Component) {
         if (i % 2 === 0) {
           groupButtons.push(_react2['default'].createElement(
             'div',
-            { className: 'foot' },
+            { className: 'foot', key: i / 2 },
             buttons[i],
             buttons[i + 1]
           ));
@@ -30565,9 +30566,9 @@ var FileList = (function (_Component) {
       var els = files.map(function (file, index) {
         var selected = activeFile.indexOf(file) > -1;
         if ((0, _utils.type)(file) === 'File') {
-          return _react2['default'].createElement(_file2['default'], { selectView: selectView, selected: selected, key: index, index: index, name: file.name, size: file.size });
+          return _react2['default'].createElement(_file2['default'], { selectView: selectView, selected: selected, key: index, index: index, name: file.name, size: file.size, type: file.type });
         } else {
-          return _react2['default'].createElement(_directory2['default'], { selectView: selectView, selected: selected, key: index, index: index, name: file.name, children: file.children });
+          return _react2['default'].createElement(_directory2['default'], { selectView: selectView, selected: selected, key: index, index: index, name: file.name, children: file.children, type: file.type });
         }
       });
 
@@ -30667,8 +30668,6 @@ var File = (function (_Component) {
         label = _react2['default'].createElement('label', { htmlFor: checkId });
       }
 
-      console.log(this.props.type);
-
       var clickHandler = this.props.selectView ? this.select.bind(this) : this.open.bind(this);
 
       return _react2['default'].createElement(
@@ -30694,6 +30693,8 @@ var File = (function (_Component) {
   }, {
     key: 'open',
     value: function open(e) {
+      e.preventDefault();
+      e.stopPropagation();
       var file = _store2['default'].getState().get('files')[this.props.index];
 
       var name = file.type === 'application/pdf' ? 'view' : 'open';
@@ -30892,6 +30893,7 @@ var MENU_TOP_SPACE = 20;
 exports['default'] = {
   contextMenu: function contextMenu(e) {
     e.preventDefault();
+    e.stopPropagation();
 
     var file = store.getState().get('files')[this.props.index];
     var rect = _react2['default'].findDOMNode(this.refs.container).getBoundingClientRect();
@@ -30914,7 +30916,10 @@ exports['default'] = {
     store.dispatch((0, _actionsFile.active)([file]));
   },
 
-  select: function select() {
+  select: function select(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
     var current = (store.getState().get('activeFile') || []).slice(0);
     var file = store.getState().get('files')[this.props.index];
 
@@ -31326,6 +31331,11 @@ var Root = (function (_Component) {
           'div',
           { className: 'tour-dialog' },
           'Hello! Tap each highlighted button to get an understanding of how they work.'
+        ),
+        _react2['default'].createElement(
+          'button',
+          { id: 'skip-tour' },
+          'Skip'
         )
       );
     }
@@ -32537,45 +32547,77 @@ exports['default'] = function () {
   var tourRan = localStorage.getItem('tourRan');
   var wrapper = document.querySelector('#wrapper');
   var tour = document.querySelector('.tour-dialog');
+  var skip = document.querySelector('#skip-tour');
 
   var timeout = undefined;
   var shown = 0;
 
   if (!tourRan) {
-    var _iteratorNormalCompletion;
+    var _iteratorNormalCompletion2;
 
-    var _didIteratorError;
+    var _didIteratorError2;
 
-    var _iteratorError;
+    var _iteratorError2;
 
-    var _iterator, _step;
+    var _iterator2, _step2;
 
     (function () {
+      var listeners = [];
+
       wrapper.classList.add('tour');
+
+      skip.addEventListener('touchstart', function () {
+        wrapper.classList.remove('tour');
+        localStorage.setItem('tourRan', 'true');
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = listeners[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _step$value = _step.value;
+            var item = _step$value.item;
+            var listener = _step$value.listener;
+
+            item.removeEventListener('touchstart', listener);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator['return']) {
+              _iterator['return']();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      });
 
       var items = [].concat(_toConsumableArray(document.querySelectorAll('.tour-item'))).sort(function (a, b) {
         return +a.dataset.index - +b.dataset.index;
       });
 
-      var listeners = [];
-
-      _iteratorNormalCompletion = true;
-      _didIteratorError = false;
-      _iteratorError = undefined;
+      _iteratorNormalCompletion2 = true;
+      _didIteratorError2 = false;
+      _iteratorError2 = undefined;
 
       try {
         var _loop = function () {
-          var item = _step.value;
+          var item = _step2.value;
 
           var firstClass = item.className.slice(0, item.className.indexOf(' '));
-          var ev = firstClass === 'drawer' ? 'touchstart' : 'click';
 
-          item.addEventListener(ev, function listener(e) {
+          item.addEventListener('touchstart', function listener(e) {
             e.preventDefault();
             e.stopPropagation();
 
             clearTimeout(timeout);
-            listeners.push({ item: item, listener: listener, ev: ev });
+            listeners.push({ item: item, listener: listener });
 
             shown++;
 
@@ -32586,30 +32628,29 @@ exports['default'] = function () {
                 wrapper.classList.remove('tour');
                 localStorage.setItem('tourRan', 'true');
 
-                var _iteratorNormalCompletion2 = true;
-                var _didIteratorError2 = false;
-                var _iteratorError2 = undefined;
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
 
                 try {
-                  for (var _iterator2 = listeners[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var _step2$value = _step2.value;
-                    var _item = _step2$value.item;
-                    var _listener = _step2$value.listener;
-                    var _ev = _step2$value.ev;
+                  for (var _iterator3 = listeners[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var _step3$value = _step3.value;
+                    var _item = _step3$value.item;
+                    var _listener = _step3$value.listener;
 
-                    _item.removeEventListener(_ev, _listener);
+                    _item.removeEventListener('touchstart', _listener);
                   }
                 } catch (err) {
-                  _didIteratorError2 = true;
-                  _iteratorError2 = err;
+                  _didIteratorError3 = true;
+                  _iteratorError3 = err;
                 } finally {
                   try {
-                    if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-                      _iterator2['return']();
+                    if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+                      _iterator3['return']();
                     }
                   } finally {
-                    if (_didIteratorError2) {
-                      throw _iteratorError2;
+                    if (_didIteratorError3) {
+                      throw _iteratorError3;
                     }
                   }
                 }
@@ -32618,20 +32659,20 @@ exports['default'] = function () {
           });
         };
 
-        for (_iterator = items[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (_iterator2 = items[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
           _loop();
         }
       } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator['return']) {
-            _iterator['return']();
+          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+            _iterator2['return']();
           }
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }

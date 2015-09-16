@@ -133,7 +133,8 @@ export async function copy(file, newPath) {
       if (type(child) === 'File') {
         Object.defineProperty(child, 'path', {
           value: oldPath + '/',
-          enumerable: true
+          enumerable: true,
+          configurable: true
         });
       }
 

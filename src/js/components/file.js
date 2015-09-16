@@ -18,8 +18,6 @@ export default class File extends Component {
       label = <label htmlFor={checkId}></label>;
     }
 
-    console.log(this.props.type);
-
     let clickHandler = this.props.selectView ? this.select.bind(this)
                                              : this.open.bind(this);
 
@@ -39,6 +37,8 @@ export default class File extends Component {
   }
 
   open(e) {
+    e.preventDefault();
+    e.stopPropagation();
     let file = store.getState().get('files')[this.props.index];
 
     let name = file.type === 'application/pdf' ? 'view' : 'open';

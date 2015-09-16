@@ -8,6 +8,7 @@ const MENU_TOP_SPACE = 20;
 export default {
   contextMenu(e) {
     e.preventDefault();
+    e.stopPropagation();
 
     let file = store.getState().get('files')[this.props.index];
     let rect = React.findDOMNode(this.refs.container).getBoundingClientRect();
@@ -27,7 +28,10 @@ export default {
     store.dispatch(active([file]));
   },
 
-  select() {
+  select(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
     let current = (store.getState().get('activeFile') || []).slice(0);
     let file = store.getState().get('files')[this.props.index];
 

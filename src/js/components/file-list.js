@@ -21,9 +21,9 @@ export default class FileList extends Component {
     let els = files.map((file, index) => {
       let selected = activeFile.indexOf(file) > -1;
       if (type(file) === 'File') {
-        return <File selectView={selectView} selected={selected} key={index} index={index} name={file.name} size={file.size} />;
+        return <File selectView={selectView} selected={selected} key={index} index={index} name={file.name} size={file.size} type={file.type} />;
       } else {
-        return <Directory selectView={selectView} selected={selected} key={index} index={index} name={file.name} children={file.children} />
+        return <Directory selectView={selectView} selected={selected} key={index} index={index} name={file.name} children={file.children} type={file.type} />
       }
     });
 

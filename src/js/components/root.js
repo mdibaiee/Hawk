@@ -55,6 +55,7 @@ export default class Root extends Component {
         <div className='tour-dialog'>
           Hello! Tap each highlighted button to get an understanding of how they work.
         </div>
+        <button id='skip-tour'>Skip</button>
       </div>
     );
   }

@@ -209,7 +209,21 @@ input:checked + label::after {
   transform: translate(-50%, -50%);
   z-index: 5;
 }
-.tour-dialog {
+.tour #skip-tour {
+  font-size: 2rem;
+  display: block;
+  padding: 0.5rem 5rem;
+  margin: 1rem auto;
+  background: #b8e986;
+  position: fixed;
+  left: 50%;
+  top: 65%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 15px 24px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+.tour-dialog,
+#skip-tour {
   display: none;
 }
 @keyframes pulse {

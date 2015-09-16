@@ -4,7 +4,7 @@ import { template } from 'utils';
 export default class Dialog extends Component {
   render() {
     let { input, title, description, active, value } = this.props;
-    let conditionalInput = input ? <input ref='input' value={value} /> : '';
+    let conditionalInput = input ? <input ref='input' defaultValue={value} /> : '';
 
     let buttons = this.props.buttons.map((button, i) => {
       return (
@@ -20,7 +20,7 @@ export default class Dialog extends Component {
     for (let i = 0; i < buttons.length; i++) {
       if (i % 2 === 0) {
         groupButtons.push(
-          <div className='foot'>
+          <div className='foot' key={i / 2}>
             {buttons[i]}
             {buttons[i+1]}
           </div>

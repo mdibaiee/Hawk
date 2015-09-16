@@ -29,7 +29,6 @@ function shimDirectory(directory) {
     directory.toString = function() { return '[object Directory]' };
     directory.getFilesAndDirectories = function getFilesAndDirectories() {
       var current = (this.path || '') + this.name;
-			console.log('gettingFilesAndDirectories of', this);
       var children = [];
 
       return new Promise(function(resolve, reject) {
@@ -50,7 +49,9 @@ function shimDirectory(directory) {
               type: this.result.type
             });
             Object.defineProperty(file, 'path', {
-              value: parts.slice(0, -1).join('/') + '/'
+              value: parts.slice(0, -1).join('/') + '/',
+							configurable: true,
+							enumerable: true
             });
             children.push(file);
 
