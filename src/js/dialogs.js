@@ -21,6 +21,7 @@ export default {
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
           this.props.dispatch(active());
+          input.value = '';
         }
       },
       {
@@ -34,6 +35,15 @@ export default {
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
           this.props.dispatch(active());
+          input.value = '';
+        }
+      },
+      {
+        text: 'Cancel',
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+          this.props.dispatch(hideAll());
+          input.value = '';
         }
       }
     ]
@@ -45,7 +55,11 @@ export default {
     buttons: [
       {
         text: 'Cancel',
-        action: bind(hideAll())
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+          this.props.dispatch(hideAll());
+          input.value = '';
+        }
       },
       {
         text: 'Rename',
@@ -56,6 +70,7 @@ export default {
           this.props.dispatch(rename(activeFile, input.value))
           this.props.dispatch(hideAll());
           this.props.dispatch(active());
+          input.value = '';
         },
         className: 'success'
       }
@@ -95,7 +110,11 @@ export default {
     buttons: [
       {
         text: 'Cancel',
-        action: bind(hideAll())
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+          this.props.dispatch(hideAll());
+          input.value = '';
+        }
       },
       {
         text: 'Search',
@@ -105,6 +124,7 @@ export default {
           let action = search(input.value);
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
+          input.value = '';
         },
         className: 'success'
       }

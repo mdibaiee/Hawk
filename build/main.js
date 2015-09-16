@@ -30074,9 +30074,10 @@ var createDirectory = _asyncToGenerator(function* () {
 exports.createDirectory = createDirectory;
 
 var remove = _asyncToGenerator(function* (file, deep) {
+  var path = (0, _utils.normalize)(file);
   var parent = yield root();
 
-  return parent[deep ? 'removeDeep' : 'remove'](file);
+  return parent[deep ? 'removeDeep' : 'remove'](path);
 });
 
 exports.remove = remove;
@@ -30093,7 +30094,7 @@ exports.move = move;
 
 var copy = _asyncToGenerator(function* (file, newPath) {
   var path = (0, _utils.normalize)(file.path || '').replace(/^\//, '');
-  var oldPath = path + file.name;
+  var oldPath = (0, _utils.normalize)(path + file.name);
 
   newPath = (0, _utils.normalize)(newPath);
 
@@ -30341,8 +30342,9 @@ var Dialog = (function (_Component) {
       var title = _props.title;
       var description = _props.description;
       var active = _props.active;
+      var value = _props.value;
 
-      var conditionalInput = input ? _react2['default'].createElement('input', { ref: 'input' }) : '';
+      var conditionalInput = input ? _react2['default'].createElement('input', { ref: 'input', value: value }) : '';
 
       var buttons = this.props.buttons.map(function (button, i) {
         return _react2['default'].createElement(
@@ -30352,6 +30354,19 @@ var Dialog = (function (_Component) {
           button.text
         );
       });
+
+      var groupButtons = [];
+
+      for (var i = 0; i < buttons.length; i++) {
+        if (i % 2 === 0) {
+          groupButtons.push(_react2['default'].createElement(
+            'div',
+            { className: 'foot' },
+            buttons[i],
+            buttons[i + 1]
+          ));
+        }
+      }
 
       var className = active ? 'dialog active' : 'dialog';
 
@@ -30369,11 +30384,7 @@ var Dialog = (function (_Component) {
           description
         ),
         conditionalInput,
-        _react2['default'].createElement(
-          'div',
-          { className: 'foot' },
-          buttons
-        )
+        groupButtons
       );
     }
   }]);
@@ -31574,6 +31585,7 @@ exports['default'] = {
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
         this.props.dispatch((0, _actionsFile.active)());
+        input.value = '';
       }
     }, {
       text: 'Directory',
@@ -31586,6 +31598,14 @@ exports['default'] = {
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
         this.props.dispatch((0, _actionsFile.active)());
+        input.value = '';
+      }
+    }, {
+      text: 'Cancel',
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+        input.value = '';
       }
     }]
   },
@@ -31595,7 +31615,11 @@ exports['default'] = {
     input: true,
     buttons: [{
       text: 'Cancel',
-      action: (0, _store.bind)((0, _actionsDialog.hideAll)())
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+        input.value = '';
+      }
     }, {
       text: 'Rename',
       action: function action() {
@@ -31605,6 +31629,7 @@ exports['default'] = {
         this.props.dispatch((0, _actionsFile.rename)(activeFile, input.value));
         this.props.dispatch((0, _actionsDialog.hideAll)());
         this.props.dispatch((0, _actionsFile.active)());
+        input.value = '';
       },
       className: 'success'
     }]
@@ -31639,7 +31664,11 @@ exports['default'] = {
     input: true,
     buttons: [{
       text: 'Cancel',
-      action: (0, _store.bind)((0, _actionsDialog.hideAll)())
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+        input.value = '';
+      }
     }, {
       text: 'Search',
       action: function action() {
@@ -31648,6 +31677,7 @@ exports['default'] = {
         var action = (0, _actionsFilesView.search)(input.value);
         this.props.dispatch(action);
         this.props.dispatch((0, _actionsDialog.hideAll)());
+        input.value = '';
       },
       className: 'success'
     }]
@@ -31712,10 +31742,11 @@ var entryMenu = {
     action: function action() {
       var files = _store2['default'].getState().get('files');
       var active = _store2['default'].getState().get('activeFile');
-      var description = 'Enter the new name for ' + active[0].name;
+      var name = active[0].name;
+      var description = 'Enter the new name for ' + name;
 
       _store2['default'].dispatch((0, _actionsMenu.hideAll)());
-      _store2['default'].dispatch((0, _actionsDialog.show)('renameDialog', { description: description }));
+      _store2['default'].dispatch((0, _actionsDialog.show)('renameDialog', { description: description, value: name }));
     }
   }, {
     name: 'Delete',

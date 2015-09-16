@@ -542,6 +542,7 @@ nav i {
 .dialog .foot {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 .dialog .foot button {
   flex: 1;

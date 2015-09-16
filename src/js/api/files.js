@@ -102,9 +102,10 @@ export async function createDirectory(...args) {
 }
 
 export async function remove(file, deep) {
+  let path = normalize(file);
   let parent = await root();
 
-  return parent[deep ? 'removeDeep' : 'remove'](file);
+  return parent[deep ? 'removeDeep' : 'remove'](path);
 }
 
 export async function move(file, newPath) {
@@ -117,7 +118,7 @@ export async function move(file, newPath) {
 
 export async function copy(file, newPath) {
   let path = normalize(file.path || '').replace(/^\//, '');
-  let oldPath = path + file.name;
+  let oldPath = normalize(path + file.name);
 
   newPath = normalize(newPath);
 
