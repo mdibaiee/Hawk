@@ -1,8 +1,10 @@
 import React from 'react';
-import { hide, hideAll } from 'actions/dialog';
+import { hide, hideAll, show } from 'actions/dialog';
 import { rename, remove, create, active } from 'actions/file';
 import { search } from 'actions/files-view';
 import store, { bind } from 'store';
+
+const INVALID_NAME = 'Please enter a valid name.';
 
 export default {
   createDialog: {
@@ -14,6 +16,8 @@ export default {
         text: 'File',
         action() {
           let input = React.findDOMNode(this.refs.input);
+
+          if (!input.value) show('errorDialog', {description: INVALID_NAME});
 
           let cwd = store.getState().get('cwd');
           let path = cwd + '/' + input.value;
@@ -28,6 +32,8 @@ export default {
         text: 'Directory',
         action() {
           let input = React.findDOMNode(this.refs.input);
+
+          if (!input.value) show('errorDialog', {description: INVALID_NAME});
 
           let cwd = store.getState().get('cwd');
           let path = cwd + '/' + input.value;
@@ -65,6 +71,8 @@ export default {
         text: 'Rename',
         action() {
           let input = React.findDOMNode(this.refs.input);
+
+          if (!input.value) show('errorDialog', {description: INVALID_NAME});
 
           let activeFile = store.getState().get('activeFile');
           this.props.dispatch(rename(activeFile, input.value))
@@ -120,6 +128,8 @@ export default {
         text: 'Search',
         action() {
           let input = React.findDOMNode(this.refs.input);
+
+          if (!input.value) show('errorDialog', {description: INVALID_NAME});
 
           let action = search(input.value);
           this.props.dispatch(action);

@@ -3,8 +3,8 @@ import { template } from 'utils';
 
 export default class Dialog extends Component {
   render() {
-    let { input, title, description, active, value } = this.props;
-    let conditionalInput = input ? <input ref='input' defaultValue={value} /> : '';
+    let { input, title, description, active } = this.props;
+    let conditionalInput = input ? <input ref='input' /> : '';
 
     let buttons = this.props.buttons.map((button, i) => {
       return (
@@ -40,5 +40,13 @@ export default class Dialog extends Component {
         {groupButtons}
       </div>
     )
+  }
+
+  componentDidUpdate() {
+    if (!this.props.value) return;
+
+    let input = React.findDOMNode(this.refs.input);
+
+    input.value = this.props.value;
   }
 }

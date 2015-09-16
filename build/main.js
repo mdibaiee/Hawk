@@ -30343,9 +30343,8 @@ var Dialog = (function (_Component) {
       var title = _props.title;
       var description = _props.description;
       var active = _props.active;
-      var value = _props.value;
 
-      var conditionalInput = input ? _react2['default'].createElement('input', { ref: 'input', defaultValue: value }) : '';
+      var conditionalInput = input ? _react2['default'].createElement('input', { ref: 'input' }) : '';
 
       var buttons = this.props.buttons.map(function (button, i) {
         return _react2['default'].createElement(
@@ -30387,6 +30386,15 @@ var Dialog = (function (_Component) {
         conditionalInput,
         groupButtons
       );
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      if (!this.props.value) return;
+
+      var input = _react2['default'].findDOMNode(this.refs.input);
+
+      input.value = this.props.value;
     }
   }]);
 
@@ -31584,6 +31592,8 @@ var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var INVALID_NAME = 'Please enter a valid name.';
+
 exports['default'] = {
   createDialog: {
     title: 'Create',
@@ -31593,6 +31603,8 @@ exports['default'] = {
       text: 'File',
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
+
+        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
 
         var cwd = _store2['default'].getState().get('cwd');
         var path = cwd + '/' + input.value;
@@ -31606,6 +31618,8 @@ exports['default'] = {
       text: 'Directory',
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
+
+        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
 
         var cwd = _store2['default'].getState().get('cwd');
         var path = cwd + '/' + input.value;
@@ -31639,6 +31653,8 @@ exports['default'] = {
       text: 'Rename',
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
+
+        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
 
         var activeFile = _store2['default'].getState().get('activeFile');
         this.props.dispatch((0, _actionsFile.rename)(activeFile, input.value));
@@ -31688,6 +31704,8 @@ exports['default'] = {
       text: 'Search',
       action: function action() {
         var input = _react2['default'].findDOMNode(this.refs.input);
+
+        if (!input.value) (0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME });
 
         var action = (0, _actionsFilesView.search)(input.value);
         this.props.dispatch(action);
