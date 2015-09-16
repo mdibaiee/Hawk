@@ -17,7 +17,7 @@ export default {
     let left = window.innerWidth / 2 - MENU_WIDTH / 2,
         top  = y + height / 2 + MENU_TOP_SPACE;
 
-    let dialogHeight = document.getElementById('fileMenu').offsetHeight;
+    let dialogHeight = document.getElementById('file-menu').offsetHeight;
 
     let diff = window.innerHeight - (dialogHeight + top);
     if (diff <= 0) {
@@ -29,16 +29,19 @@ export default {
   },
 
   select(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    if (document.querySelector('#file-menu.active')) return;
 
     let current = (store.getState().get('activeFile') || []).slice(0);
     let file = store.getState().get('files')[this.props.index];
 
+    let check = React.findDOMNode(this.refs.check);
+
     if (current.indexOf(file) > -1) {
       current.splice(current.indexOf(file), 1);
+      check.checked = false;
     } else {
       current.push(file)
+      check.checked = true;
     }
     store.dispatch(active(current));
   }

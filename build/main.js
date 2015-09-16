@@ -30447,7 +30447,7 @@ var Directory = (function (_Component) {
       var input = undefined,
           label = undefined;
       if (this.props.selectView) {
-        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, checked: this.props.selected, readOnly: true });
+        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, checked: this.props.selected, readOnly: true, ref: 'check' });
         label = _react2['default'].createElement('label', { htmlFor: checkId });
       }
 
@@ -30476,6 +30476,8 @@ var Directory = (function (_Component) {
   }, {
     key: 'peek',
     value: function peek() {
+      if (document.querySelector('#file-menu.active')) return;
+
       var file = _store2['default'].getState().get('files')[this.props.index];
 
       _store2['default'].dispatch((0, _actionsChangedir2['default'])(file.path.replace(/^\//, '') + file.name));
@@ -30664,7 +30666,7 @@ var File = (function (_Component) {
       var input = undefined,
           label = undefined;
       if (this.props.selectView) {
-        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, checked: this.props.selected, readOnly: true });
+        input = _react2['default'].createElement('input', { type: 'checkbox', id: checkId, checked: this.props.selected, readOnly: true, ref: 'check' });
         label = _react2['default'].createElement('label', { htmlFor: checkId });
       }
 
@@ -30693,8 +30695,8 @@ var File = (function (_Component) {
   }, {
     key: 'open',
     value: function open(e) {
-      e.preventDefault();
-      e.stopPropagation();
+      if (document.querySelector('#file-menu.active')) return;
+
       var file = _store2['default'].getState().get('files')[this.props.index];
 
       var name = file.type === 'application/pdf' ? 'view' : 'open';
@@ -30905,7 +30907,7 @@ exports['default'] = {
     var left = window.innerWidth / 2 - _componentsMenu.MENU_WIDTH / 2,
         top = y + height / 2 + MENU_TOP_SPACE;
 
-    var dialogHeight = document.getElementById('fileMenu').offsetHeight;
+    var dialogHeight = document.getElementById('file-menu').offsetHeight;
 
     var diff = window.innerHeight - (dialogHeight + top);
     if (diff <= 0) {
@@ -30917,16 +30919,19 @@ exports['default'] = {
   },
 
   select: function select(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    if (document.querySelector('#file-menu.active')) return;
 
     var current = (store.getState().get('activeFile') || []).slice(0);
     var file = store.getState().get('files')[this.props.index];
 
+    var check = _react2['default'].findDOMNode(this.refs.check);
+
     if (current.indexOf(file) > -1) {
       current.splice(current.indexOf(file), 1);
+      check.checked = false;
     } else {
       current.push(file);
+      check.checked = true;
     }
     store.dispatch((0, _actionsFile.active)(current));
   }
@@ -31318,8 +31323,8 @@ var Root = (function (_Component) {
         _react2['default'].createElement(_componentsNavigation2['default'], null),
         _react2['default'].createElement(_componentsFileList2['default'], null),
         _react2['default'].createElement(_componentsToolbar2['default'], null),
-        _react2['default'].createElement(FileMenu, { id: 'fileMenu' }),
-        _react2['default'].createElement(MoreMenu, { id: 'moreMenu' }),
+        _react2['default'].createElement(FileMenu, { id: 'file-menu' }),
+        _react2['default'].createElement(MoreMenu, { id: 'more-menu' }),
         _react2['default'].createElement(RenameDialog, null),
         _react2['default'].createElement(DeleteDialog, null),
         _react2['default'].createElement(ErrorDialog, null),
@@ -32750,8 +32755,8 @@ function humanSize(size) {
   for (var key in sizes) {
     var value = sizes[key];
 
-    if (size > value) {
-      return Math.round(size / value) + key;
+    if (size >= value) {
+      return Math.abs(Math.round(size / value)) + key;
     }
   }
 }

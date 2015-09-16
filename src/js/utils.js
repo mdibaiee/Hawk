@@ -39,14 +39,14 @@ const sizes = {
   'GB': Math.pow(2, 30),
   'MB': Math.pow(2, 20),
   'KB': Math.pow(2, 10),
-  'B': 0
+  'B': -1
 }
 export function humanSize(size) {
   for (let key in sizes) {
     let value = sizes[key];
 
     if (size >= value) {
-      return Math.round(size / value) + key;
+      return Math.abs(Math.round(size / value)) + key;
     }
   }
 }

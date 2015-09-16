@@ -14,7 +14,7 @@ export default class File extends Component {
 
     let input, label;
     if (this.props.selectView) {
-      input = <input type='checkbox' id={checkId} checked={this.props.selected} readOnly />;
+      input = <input type='checkbox' id={checkId} checked={this.props.selected} readOnly ref='check' />;
       label = <label htmlFor={checkId}></label>;
     }
 
@@ -37,8 +37,8 @@ export default class File extends Component {
   }
 
   open(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    if (document.querySelector('#file-menu.active')) return;
+
     let file = store.getState().get('files')[this.props.index];
 
     let name = file.type === 'application/pdf' ? 'view' : 'open';

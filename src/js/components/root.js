@@ -39,8 +39,8 @@ export default class Root extends Component {
         <FileList />
         <Toolbar />
 
-        <FileMenu id='fileMenu' />
-        <MoreMenu id='moreMenu' />
+        <FileMenu id='file-menu' />
+        <MoreMenu id='more-menu' />
 
         <RenameDialog />
         <DeleteDialog />
