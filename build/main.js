@@ -30280,9 +30280,20 @@ var Breadcrumb = (function (_Component) {
         _react2['default'].createElement(
           'div',
           null,
+          _react2['default'].createElement('span', { onClick: this.goUp, className: 'icon-up' }),
           els
         )
       );
+    }
+  }, {
+    key: 'goUp',
+    value: function goUp() {
+      var current = store.getState().get('cwd');
+      var up = current.split('/').slice(0, -1).join('/');
+
+      if (up === current) return;
+
+      store.dispatch((0, _actionsChangedir2['default'])(up));
     }
   }]);
 

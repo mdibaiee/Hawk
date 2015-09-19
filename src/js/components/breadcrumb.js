@@ -41,10 +41,20 @@ export default class Breadcrumb extends Component {
     return (
       <div className='breadcrumb'>
         <div>
+          <span onClick={this.goUp} className='icon-up'></span>
           {els}
         </div>
       </div>
     );
+  }
+
+  goUp() {
+    let current = store.getState().get('cwd');
+    let up = current.split('/').slice(0, -1).join('/');
+
+    if (up === current) return;
+
+    store.dispatch(changedir(up));
   }
 }
 

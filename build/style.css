@@ -59,6 +59,19 @@
 .icon-cross svg * {
   fill: white;
 }
+.icon-up {
+  display: block;
+  display: inline-block;
+  border: 11px solid transparent;
+  border-right-color: #63b0cd;
+  border-top-width: 8px;
+  border-bottom-width: 8px;
+  border-radius: 3px;
+  margin-right: 0.5rem;
+  position: relative;
+  top: 2px;
+  right: 0.5rem;
+}
 .regular-medium {
   font-weight: normal;
 }
@@ -365,7 +378,9 @@ header button {
   background: none;
   border: none;
   width: 8rem;
-  height: 4rem;
+  height: 3rem;
+  padding-top: 1rem;
+  margin-top: -1rem;
 }
 header button::before {
   content: '';
