@@ -30215,8 +30215,6 @@ var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
 
 var _store = require('store');
 
-// TODO: Fix history not working when clicking on sdcard
-
 var Breadcrumb = (function (_Component) {
   _inherits(Breadcrumb, _Component);
 
@@ -30229,49 +30227,67 @@ var Breadcrumb = (function (_Component) {
   _createClass(Breadcrumb, [{
     key: 'render',
     value: function render() {
-      var directories = this.props.cwd.split('/').filter(function (a) {
-        return a;
-      });
-      directories.unshift('sdcard');
+      var _this = this;
 
-      var els = directories.map(function (dir, index, arr) {
-        var path = arr.slice(1, index + 1).join('/');
+      var els = [];
 
-        return _react2['default'].createElement(
+      if (this.props.search) {
+        console.log('search');
+        els = [_react2['default'].createElement(
           'span',
-          { key: index, onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
-          _react2['default'].createElement(
-            'i',
-            null,
-            '/'
-          ),
-          dir
-        );
-      });
+          { key: '000' },
+          'Search: ',
+          this.props.search
+        )];
+      } else {
+        (function () {
+          els.unshift(_react2['default'].createElement('span', { onClick: _this.goUp, className: 'icon-up', key: '000' }));
 
-      var lastDirectories = this.props.lwd.split('/').filter(function (a) {
-        return a;
-      });
-      if (lastDirectories.length > directories.length - 1) {
-        lastDirectories.splice(0, directories.length - 1);
+          var directories = _this.props.cwd.split('/').filter(function (a) {
+            return a;
+          });
+          directories.unshift('sdcard');
 
-        var _history = lastDirectories.map(function (dir, index, arr) {
-          var current = directories.slice(1).concat(arr.slice(0, index + 1));
-          var path = current.join('/').replace(/^\//, ''); // remove starting slash
+          els = els.concat(directories.map(function (dir, index, arr) {
+            var path = arr.slice(1, index + 1).join('/');
 
-          return _react2['default'].createElement(
-            'span',
-            { key: directories.length + index, className: 'history', onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
-            _react2['default'].createElement(
-              'i',
-              null,
-              '/'
-            ),
-            dir
-          );
-        });
+            return _react2['default'].createElement(
+              'span',
+              { key: index, onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
+              _react2['default'].createElement(
+                'i',
+                null,
+                '/'
+              ),
+              dir
+            );
+          }));
 
-        els = els.concat(_history);
+          var lastDirectories = _this.props.lwd.split('/').filter(function (a) {
+            return a;
+          });
+          if (lastDirectories.length > directories.length - 1) {
+            lastDirectories.splice(0, directories.length - 1);
+
+            var _history = lastDirectories.map(function (dir, index, arr) {
+              var current = directories.slice(1).concat(arr.slice(0, index + 1));
+              var path = current.join('/').replace(/^\//, ''); // remove starting slash
+
+              return _react2['default'].createElement(
+                'span',
+                { key: directories.length + index, className: 'history', onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
+                _react2['default'].createElement(
+                  'i',
+                  null,
+                  '/'
+                ),
+                dir
+              );
+            });
+
+            els = els.concat(_history);
+          }
+        })();
       }
 
       return _react2['default'].createElement(
@@ -30280,7 +30296,6 @@ var Breadcrumb = (function (_Component) {
         _react2['default'].createElement(
           'div',
           null,
-          _react2['default'].createElement('span', { onClick: this.goUp, className: 'icon-up' }),
           els
         )
       );
@@ -30307,7 +30322,8 @@ exports['default'] = Breadcrumb;
 function props(state) {
   return {
     lwd: state.get('lwd'), // last working directory
-    cwd: state.get('cwd')
+    cwd: state.get('cwd'),
+    search: state.get('search')
   };
 }
 module.exports = exports['default'];
@@ -32389,6 +32405,10 @@ exports['default'] = function (state, action) {
     return action.keywords;
   }
 
+  if (action.type === _actionsTypes.CHANGE_DIRECTORY || action.type === _actionsTypes.REFRESH) {
+    return '';
+  }
+
   return state;
 };
 
@@ -32407,7 +32427,7 @@ function search(keywords) {
   // We don't want to show all the currently visible files from the
   // first iteration
   var once = true;
-  (0, _apiFiles.children)('/', true).then(function showResults(files) {
+  (0, _apiFiles.children)('', true).then(function showResults(files) {
     if (!_store2['default'].getState().get('search')) return;
 
     var current = once ? [] : _store2['default'].getState().get('files');

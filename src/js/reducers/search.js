@@ -1,4 +1,4 @@
-import { SEARCH } from 'actions/types';
+import { SEARCH, CHANGE_DIRECTORY, REFRESH } from 'actions/types';
 import store from 'store';
 import { reportError } from 'utils';
 import { listFiles } from 'actions/files-view';
@@ -10,6 +10,10 @@ export default function(state = '', action) {
     search(action.keywords);
 
     return action.keywords;
+  }
+
+  if (action.type === CHANGE_DIRECTORY || action.type === REFRESH) {
+    return '';
   }
 
   return state;
@@ -28,7 +32,7 @@ function search(keywords) {
   // We don't want to show all the currently visible files from the
   // first iteration
   let once = true;
-  children('/', true).then(function showResults(files) {
+  children('', true).then(function showResults(files) {
     if (!store.getState().get('search')) return;
 
     let current = once ? [] : store.getState().get('files');
