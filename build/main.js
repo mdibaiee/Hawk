@@ -30241,46 +30241,40 @@ var Breadcrumb = (function (_Component) {
         )];
       } else {
         (function () {
-          els.unshift(_react2['default'].createElement('span', { onClick: _this.goUp, className: 'icon-up', key: '000' }));
-
           var directories = _this.props.cwd.split('/').filter(function (a) {
+            return a;
+          });
+          var lastDirectories = _this.props.lwd.split('/').filter(function (a) {
             return a;
           });
           directories.unshift('sdcard');
 
+          var sumLength = directories.length + lastDirectories.length;
+
           els = els.concat(directories.map(function (dir, index, arr) {
             var path = arr.slice(1, index + 1).join('/');
+            var style = { zIndex: sumLength - index };
 
             return _react2['default'].createElement(
               'span',
-              { key: index, onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
-              _react2['default'].createElement(
-                'i',
-                null,
-                '/'
-              ),
+              { key: index, onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)), style: style },
               dir
             );
           }));
 
-          var lastDirectories = _this.props.lwd.split('/').filter(function (a) {
-            return a;
-          });
           if (lastDirectories.length > directories.length - 1) {
             lastDirectories.splice(0, directories.length - 1);
 
             var _history = lastDirectories.map(function (dir, index, arr) {
               var current = directories.slice(1).concat(arr.slice(0, index + 1));
               var path = current.join('/').replace(/^\//, ''); // remove starting slash
+              var key = directories.length + index;
+              var style = { zIndex: arr.length - index };
+              console.log('history', dir);
 
               return _react2['default'].createElement(
                 'span',
-                { key: directories.length + index, className: 'history', onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
-                _react2['default'].createElement(
-                  'i',
-                  null,
-                  '/'
-                ),
+                { key: key, className: 'history', onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)), style: style },
                 dir
               );
             });
@@ -30292,7 +30286,7 @@ var Breadcrumb = (function (_Component) {
 
       return _react2['default'].createElement(
         'div',
-        { className: 'breadcrumb' },
+        { className: 'breadcrumb', ref: 'container' },
         _react2['default'].createElement(
           'div',
           null,
@@ -30309,6 +30303,14 @@ var Breadcrumb = (function (_Component) {
       if (up === current) return;
 
       store.dispatch((0, _actionsChangedir2['default'])(up));
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var container = _react2['default'].findDOMNode(this.refs.container);
+      var currents = container.querySelectorAll('span:not(.history)');
+
+      container.scrollLeft = currents[currents.length - 1].offsetLeft;
     }
   }]);
 

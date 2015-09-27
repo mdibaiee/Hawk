@@ -509,21 +509,41 @@ nav i {
   width: 100vw;
   height: 4.5rem;
   overflow-x: auto;
-  padding: 8px;
   box-sizing: border-box;
   font-weight: 200;
   font-size: 1.6rem;
+  padding-right: 8px;
   background: #f8f8f8;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
 }
-.breadcrumb span {
-  white-space: nowrap;
+.breadcrumb div {
+  display: flex;
+  align-items: center;
 }
-.breadcrumb i {
-  margin: 0 2px;
+.breadcrumb span {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 4.5rem;
+  white-space: nowrap;
+  padding: 0 5px 0 30px;
+  background: #f0f0f0;
+  filter: drop-shadow(1px 0 0 rgba(0, 0, 0, 0.2));
+}
+.breadcrumb span:first-of-type {
+  padding-left: 10px;
+}
+.breadcrumb span::after {
+  position: absolute;
+  right: -46px;
+  top: 0;
+  content: '';
+  display: block;
+  border: 23px solid transparent;
+  border-left-color: #f0f0f0;
 }
 .breadcrumb span.history {
   color: #9b9b93;

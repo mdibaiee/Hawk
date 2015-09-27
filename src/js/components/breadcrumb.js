@@ -14,34 +14,33 @@ export default class Breadcrumb extends Component {
         <span key='000'>Search: {this.props.search}</span>
       ]
     } else {
-      els.unshift(<span onClick={this.goUp} className='icon-up' key='000'></span>);
-
-
       let directories = this.props.cwd.split('/').filter(a => a);
+      let lastDirectories = this.props.lwd.split('/').filter(a => a);
       directories.unshift('sdcard');
+
+      let sumLength = directories.length + lastDirectories.length;
 
       els = els.concat(directories.map((dir, index, arr) => {
         let path = arr.slice(1, index + 1).join('/');
+        let style = { zIndex: sumLength - index };
 
         return (
-          <span key={index} onClick={bind(changedir(path))}>
-            <i>/</i>{dir}
-          </span>
+          <span key={index} onClick={bind(changedir(path))} style={style}>{dir}</span>
         );
       }));
 
-      let lastDirectories = this.props.lwd.split('/').filter(a => a);
       if (lastDirectories.length > directories.length - 1) {
         lastDirectories.splice(0, directories.length - 1);
 
         let history = lastDirectories.map((dir, index, arr) => {
           let current = directories.slice(1).concat(arr.slice(0, index + 1));
           let path = current.join('/').replace(/^\//, ''); // remove starting slash
+          let key = directories.length + index;
+          let style = { zIndex: arr.length - index};
+          console.log('history', dir)
 
           return (
-            <span key={directories.length + index} className='history' onClick={bind(changedir(path))}>
-              <i>/</i>{dir}
-            </span>
+            <span key={key} className='history' onClick={bind(changedir(path))} style={style}>{dir}</span>
           )
         });
 
@@ -50,7 +49,7 @@ export default class Breadcrumb extends Component {
     }
 
     return (
-      <div className='breadcrumb'>
+      <div className='breadcrumb' ref='container'>
         <div>
           {els}
         </div>
@@ -65,6 +64,13 @@ export default class Breadcrumb extends Component {
     if (up === current) return;
 
     store.dispatch(changedir(up));
+  }
+
+  componentDidUpdate() {
+    let container = React.findDOMNode(this.refs.container);
+    let currents = container.querySelectorAll('span:not(.history)');
+
+    container.scrollLeft = currents[currents.length - 1].offsetLeft;
   }
 }
 

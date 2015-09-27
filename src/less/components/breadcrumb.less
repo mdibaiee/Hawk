@@ -8,11 +8,11 @@
 
   overflow-x: auto;
 
-  padding: 8px;
-
   box-sizing: border-box;
 
   .light-medium;
+
+  padding-right: 8px;
 
   background: @light-gray;
 
@@ -22,12 +22,43 @@
   overflow-y: hidden;
   white-space: nowrap;
 
-  span {
-    white-space: nowrap;
+  div {
+    display: flex;
+
+    align-items: center;
   }
 
-  i {
-    margin: 0 2px;
+  span {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    height: 4.5rem;
+
+    white-space: nowrap;
+
+    padding: 0 5px 0 30px;
+    background: @gray;
+
+    filter: drop-shadow(1px 0 0 @dark-transparent);
+
+    &:first-of-type {
+      padding-left: 10px;
+    }
+
+    &::after {
+      position: absolute;
+      right: -46px;
+      top: 0;
+
+      content: '';
+
+      display: block;
+
+      border: 23px solid transparent;
+      border-left-color: @gray;
+    }
   }
 
   span.history {
