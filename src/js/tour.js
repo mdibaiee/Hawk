@@ -3,7 +3,7 @@ const MESSAGES = {
   'icon-refresh': 'Refresh File List',
   'icon-select': 'Select files for batch actions',
   'icon-more': 'Actions used on selected files such as Copy, Delete, Move, …',
-  'icon-view': 'Toggle between List and Grid view',
+  'icon-back': 'Navigate to top directory',
   'drawer': 'Extra options, tools and links are here',
   'icon-search': 'Search your storage for a certain file',
   'swipe-instruction': 'Swipe from left to right to go to parent folder'

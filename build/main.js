@@ -30295,16 +30295,6 @@ var Breadcrumb = (function (_Component) {
       );
     }
   }, {
-    key: 'goUp',
-    value: function goUp() {
-      var current = store.getState().get('cwd');
-      var up = current.split('/').slice(0, -1).join('/');
-
-      if (up === current) return;
-
-      store.dispatch((0, _actionsChangedir2['default'])(up));
-    }
-  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
       var container = _react2['default'].findDOMNode(this.refs.container);
@@ -31090,6 +31080,35 @@ var Navigation = (function (_Component) {
         _react2['default'].createElement(
           'p',
           null,
+          'View'
+        ),
+        _react2['default'].createElement(
+          'ul',
+          null,
+          _react2['default'].createElement(
+            'li',
+            null,
+            _react2['default'].createElement('input', { id: 'view-list', name: 'view', 'data-value': 'list', type: 'radio', defaultChecked: settings.filter === 'list' }),
+            _react2['default'].createElement(
+              'label',
+              { htmlFor: 'view-list' },
+              'List'
+            )
+          ),
+          _react2['default'].createElement(
+            'li',
+            null,
+            _react2['default'].createElement('input', { id: 'view-grid', name: 'view', 'data-value': 'grid', type: 'radio', defaultChecked: settings.filter === 'grid' }),
+            _react2['default'].createElement(
+              'label',
+              { htmlFor: 'view-grid' },
+              'Grid'
+            )
+          )
+        ),
+        _react2['default'].createElement(
+          'p',
+          null,
           'Tools'
         ),
         _react2['default'].createElement(
@@ -31551,8 +31570,8 @@ var Toolbar = (function (_Component) {
       return _react2['default'].createElement(
         'div',
         { className: 'toolbar' },
+        _react2['default'].createElement('button', { className: 'icon-back tour-item', onClick: this.goUp }),
         _react2['default'].createElement('button', { className: 'icon-plus tour-item', onClick: this.newFile }),
-        _react2['default'].createElement('button', { className: 'icon-view tour-item', onClick: this.toggleView }),
         _react2['default'].createElement('button', { className: 'icon-refresh tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
         _react2['default'].createElement('button', { className: 'icon-select tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.selectView)('toggle')) }),
         _react2['default'].createElement('button', { className: 'icon-more tour-item', onClick: this.showMore.bind(this), ref: 'more' })
@@ -31572,6 +31591,16 @@ var Toolbar = (function (_Component) {
 
       var transform = 'translate(0, -100%)';
       _store2['default'].dispatch((0, _actionsMenu.show)('moreMenu', { style: { left: left, top: top, transform: transform } }));
+    }
+  }, {
+    key: 'goUp',
+    value: function goUp() {
+      var current = _store2['default'].getState().get('cwd');
+      var up = current.split('/').slice(0, -1).join('/');
+
+      if (up === current) return;
+
+      _store2['default'].dispatch(changedir(up));
     }
   }, {
     key: 'newFile',
@@ -32612,7 +32641,7 @@ var MESSAGES = {
   'icon-refresh': 'Refresh File List',
   'icon-select': 'Select files for batch actions',
   'icon-more': 'Actions used on selected files such as Copy, Delete, Move, …',
-  'icon-view': 'Toggle between List and Grid view',
+  'icon-back': 'Navigate to top directory',
   'drawer': 'Extra options, tools and links are here',
   'icon-search': 'Search your storage for a certain file',
   'swipe-instruction': 'Swipe from left to right to go to parent folder'

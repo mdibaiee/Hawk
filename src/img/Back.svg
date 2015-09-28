@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="15px" height="24px" viewBox="0 0 15 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>Back</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Components" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Toolbar" sketch:type="MSArtboardGroup" transform="translate(-26.000000, -14.000000)" stroke="#63B0CD" fill="#63B0CD">
+            <g sketch:type="MSLayerGroup" id="Buttons">
+                <g transform="translate(26.000000, 7.000000)" sketch:type="MSShapeGroup">
+                    <path d="M7.57710348,12.9048675 C7.04180408,12.7876066 6.46141311,12.9389926 6.04498016,13.3554255 L-2.89216446,22.2925701 C-3.53902314,22.9394288 -3.5418885,23.9953224 -2.89240043,24.6448105 C-2.23838425,25.2988266 -1.18977849,25.2941929 -0.540160097,24.6445745 L7.22721202,16.8772024 L14.9945841,24.6445745 C15.6414428,25.2914332 16.6973364,25.2942985 17.3468245,24.6448105 C18.0008407,23.9907943 17.9962069,22.9421885 17.3465885,22.2925701 L8.40944389,13.3554255 C8.17328851,13.1192701 7.88261547,12.9689485 7.57710348,12.9048675 Z" id="Back" transform="translate(7.228579, 19.000000) rotate(-90.000000) translate(-7.228579, -19.000000) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

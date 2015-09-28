@@ -10,8 +10,8 @@ export default class Toolbar extends Component {
   render() {
     return (
       <div className='toolbar'>
+        <button className='icon-back tour-item' onClick={this.goUp} />
         <button className='icon-plus tour-item' onClick={this.newFile} />
-        <button className='icon-view tour-item' onClick={this.toggleView} />
         <button className='icon-refresh tour-item' onClick={bind(refresh())} />
         <button className='icon-select tour-item' onClick={bind(selectView('toggle'))} />
         <button className='icon-more tour-item' onClick={this.showMore.bind(this)} ref='more' />
@@ -28,6 +28,15 @@ export default class Toolbar extends Component {
 
     let transform = 'translate(0, -100%)';
     store.dispatch(showMenu('moreMenu', {style: {left, top, transform}}));
+  }
+
+  goUp() {
+    let current = store.getState().get('cwd');
+    let up = current.split('/').slice(0, -1).join('/');
+
+    if (up === current) return;
+
+    store.dispatch(changedir(up));
   }
 
   newFile() {

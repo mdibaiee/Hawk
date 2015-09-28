@@ -57,15 +57,6 @@ export default class Breadcrumb extends Component {
     );
   }
 
-  goUp() {
-    let current = store.getState().get('cwd');
-    let up = current.split('/').slice(0, -1).join('/');
-
-    if (up === current) return;
-
-    store.dispatch(changedir(up));
-  }
-
   componentDidUpdate() {
     let container = React.findDOMNode(this.refs.container);
     let currents = container.querySelectorAll('span:not(.history)');
