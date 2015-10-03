@@ -30789,18 +30789,30 @@ var Header = (function (_Component) {
       var i = undefined;
 
       if (this.props.search) {
-        i = _react2['default'].createElement('i', { className: 'icon-cross', onClick: (0, _store.bind)((0, _actionsFilesView.search)()) });
+        i = _react2['default'].createElement(
+          'button',
+          { onClick: (0, _store.bind)((0, _actionsFilesView.search)()) },
+          _react2['default'].createElement('i', { className: 'icon-cross' })
+        );
       } else {
-        i = _react2['default'].createElement('i', { className: 'icon-search tour-item', onClick: (0, _store.bind)((0, _actionsDialog.show)('searchDialog')) });
+        i = _react2['default'].createElement(
+          'button',
+          { onClick: (0, _store.bind)((0, _actionsDialog.show)('searchDialog')) },
+          _react2['default'].createElement('i', { className: 'icon-search tour-item' })
+        );
       }
 
       return _react2['default'].createElement(
         'header',
         null,
-        _react2['default'].createElement('button', { className: 'drawer tour-item', onTouchStart: (0, _store.bind)((0, _actionsNavigation.toggle)()) }),
+        _react2['default'].createElement(
+          'button',
+          { className: 'drawer tour-item', onTouchStart: (0, _store.bind)((0, _actionsNavigation.toggle)()) },
+          _react2['default'].createElement('i', { className: 'icon-menu' })
+        ),
         _react2['default'].createElement(
           'h1',
-          { className: 'regular-medium' },
+          null,
           'Hawk'
         ),
         i
