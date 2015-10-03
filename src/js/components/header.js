@@ -21,7 +21,7 @@ export default class Header extends Component {
         <button className='drawer tour-item' onTouchStart={bind(toggle())}>
           <i className='icon-menu'></i>
         </button>
-        <h1 className='regular-medium'>Hawk</h1>
+        <h1>Hawk</h1>
 
         {i}
       </header>

@@ -30812,7 +30812,7 @@ var Header = (function (_Component) {
         ),
         _react2['default'].createElement(
           'h1',
-          { className: 'regular-medium' },
+          null,
           'Hawk'
         ),
         i

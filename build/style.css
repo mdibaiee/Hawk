@@ -57,13 +57,9 @@
 }
 .icon-cross {
   display: block;
-  background: url(/img/Plus.svg) no-repeat;
-  width: 24px;
-  height: 24px;
-  transform: rotate(45deg);
-}
-.icon-cross svg * {
-  fill: white;
+  background: url(/img/Close.svg) no-repeat;
+  width: 30px;
+  height: 30px;
 }
 .icon-back {
   display: block;
@@ -369,6 +365,7 @@ header {
 header h1 {
   font-size: 2.3rem;
   font-style: italic;
+  font-weight: 300;
   text-align: center;
   flex: 1;
 }
@@ -381,7 +378,6 @@ header button {
   margin-top: -1rem;
 }
 header button i {
-  padding: 2rem;
   background-position: center;
 }
 .menu {
