@@ -30215,8 +30215,6 @@ var _actionsChangedir2 = _interopRequireDefault(_actionsChangedir);
 
 var _store = require('store');
 
-// TODO: Fix history not working when clicking on sdcard
-
 var Breadcrumb = (function (_Component) {
   _inherits(Breadcrumb, _Component);
 
@@ -30229,71 +30227,80 @@ var Breadcrumb = (function (_Component) {
   _createClass(Breadcrumb, [{
     key: 'render',
     value: function render() {
-      var directories = this.props.cwd.split('/').filter(function (a) {
-        return a;
-      });
-      directories.unshift('sdcard');
+      var _this = this;
 
-      var els = directories.map(function (dir, index, arr) {
-        var path = arr.slice(1, index + 1).join('/');
+      var els = [];
 
-        return _react2['default'].createElement(
+      if (this.props.search) {
+        console.log('search');
+        els = [_react2['default'].createElement(
           'span',
-          { key: index, onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
-          _react2['default'].createElement(
-            'i',
-            null,
-            '/'
-          ),
-          dir
-        );
-      });
+          { key: '000' },
+          'Search: ',
+          this.props.search
+        )];
+      } else {
+        (function () {
+          var directories = _this.props.cwd.split('/').filter(function (a) {
+            return a;
+          });
+          var lastDirectories = _this.props.lwd.split('/').filter(function (a) {
+            return a;
+          });
+          directories.unshift('sdcard');
 
-      var lastDirectories = this.props.lwd.split('/').filter(function (a) {
-        return a;
-      });
-      if (lastDirectories.length > directories.length - 1) {
-        lastDirectories.splice(0, directories.length - 1);
+          var sumLength = directories.length + lastDirectories.length;
 
-        var _history = lastDirectories.map(function (dir, index, arr) {
-          var current = directories.slice(1).concat(arr.slice(0, index + 1));
-          var path = current.join('/').replace(/^\//, ''); // remove starting slash
+          els = els.concat(directories.map(function (dir, index, arr) {
+            var path = arr.slice(1, index + 1).join('/');
+            var style = { zIndex: sumLength - index };
 
-          return _react2['default'].createElement(
-            'span',
-            { key: directories.length + index, className: 'history', onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)) },
-            _react2['default'].createElement(
-              'i',
-              null,
-              '/'
-            ),
-            dir
-          );
-        });
+            return _react2['default'].createElement(
+              'span',
+              { key: index, onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)), style: style },
+              dir
+            );
+          }));
 
-        els = els.concat(_history);
+          if (lastDirectories.length > directories.length - 1) {
+            lastDirectories.splice(0, directories.length - 1);
+
+            var _history = lastDirectories.map(function (dir, index, arr) {
+              var current = directories.slice(1).concat(arr.slice(0, index + 1));
+              var path = current.join('/').replace(/^\//, ''); // remove starting slash
+              var key = directories.length + index;
+              var style = { zIndex: arr.length - index };
+              console.log('history', dir);
+
+              return _react2['default'].createElement(
+                'span',
+                { key: key, className: 'history', onClick: (0, _store.bind)((0, _actionsChangedir2['default'])(path)), style: style },
+                dir
+              );
+            });
+
+            els = els.concat(_history);
+          }
+        })();
       }
 
       return _react2['default'].createElement(
         'div',
-        { className: 'breadcrumb' },
+        { className: 'breadcrumb', ref: 'container' },
         _react2['default'].createElement(
           'div',
           null,
-          _react2['default'].createElement('span', { onClick: this.goUp, className: 'icon-up' }),
           els
         )
       );
     }
   }, {
-    key: 'goUp',
-    value: function goUp() {
-      var current = store.getState().get('cwd');
-      var up = current.split('/').slice(0, -1).join('/');
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var container = _react2['default'].findDOMNode(this.refs.container);
+      var currents = container.querySelectorAll('span:not(.history)');
 
-      if (up === current) return;
-
-      store.dispatch((0, _actionsChangedir2['default'])(up));
+      container.scrollLeft = currents[currents.length - 1].offsetLeft;
     }
   }]);
 
@@ -30307,7 +30314,8 @@ exports['default'] = Breadcrumb;
 function props(state) {
   return {
     lwd: state.get('lwd'), // last working directory
-    cwd: state.get('cwd')
+    cwd: state.get('cwd'),
+    search: state.get('search')
   };
 }
 module.exports = exports['default'];
@@ -31084,6 +31092,35 @@ var Navigation = (function (_Component) {
         _react2['default'].createElement(
           'p',
           null,
+          'View'
+        ),
+        _react2['default'].createElement(
+          'ul',
+          null,
+          _react2['default'].createElement(
+            'li',
+            null,
+            _react2['default'].createElement('input', { id: 'view-list', name: 'view', 'data-value': 'list', type: 'radio', defaultChecked: settings.filter === 'list' }),
+            _react2['default'].createElement(
+              'label',
+              { htmlFor: 'view-list' },
+              'List'
+            )
+          ),
+          _react2['default'].createElement(
+            'li',
+            null,
+            _react2['default'].createElement('input', { id: 'view-grid', name: 'view', 'data-value': 'grid', type: 'radio', defaultChecked: settings.filter === 'grid' }),
+            _react2['default'].createElement(
+              'label',
+              { htmlFor: 'view-grid' },
+              'Grid'
+            )
+          )
+        ),
+        _react2['default'].createElement(
+          'p',
+          null,
           'Tools'
         ),
         _react2['default'].createElement(
@@ -31545,8 +31582,8 @@ var Toolbar = (function (_Component) {
       return _react2['default'].createElement(
         'div',
         { className: 'toolbar' },
+        _react2['default'].createElement('button', { className: 'icon-back tour-item', onClick: this.goUp }),
         _react2['default'].createElement('button', { className: 'icon-plus tour-item', onClick: this.newFile }),
-        _react2['default'].createElement('button', { className: 'icon-view tour-item', onClick: this.toggleView }),
         _react2['default'].createElement('button', { className: 'icon-refresh tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
         _react2['default'].createElement('button', { className: 'icon-select tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.selectView)('toggle')) }),
         _react2['default'].createElement('button', { className: 'icon-more tour-item', onClick: this.showMore.bind(this), ref: 'more' })
@@ -31566,6 +31603,16 @@ var Toolbar = (function (_Component) {
 
       var transform = 'translate(0, -100%)';
       _store2['default'].dispatch((0, _actionsMenu.show)('moreMenu', { style: { left: left, top: top, transform: transform } }));
+    }
+  }, {
+    key: 'goUp',
+    value: function goUp() {
+      var current = _store2['default'].getState().get('cwd');
+      var up = current.split('/').slice(0, -1).join('/');
+
+      if (up === current) return;
+
+      _store2['default'].dispatch(changedir(up));
     }
   }, {
     key: 'newFile',
@@ -32401,6 +32448,10 @@ exports['default'] = function (state, action) {
     return action.keywords;
   }
 
+  if (action.type === _actionsTypes.CHANGE_DIRECTORY || action.type === _actionsTypes.REFRESH) {
+    return '';
+  }
+
   return state;
 };
 
@@ -32419,7 +32470,7 @@ function search(keywords) {
   // We don't want to show all the currently visible files from the
   // first iteration
   var once = true;
-  (0, _apiFiles.children)('/', true).then(function showResults(files) {
+  (0, _apiFiles.children)('', true).then(function showResults(files) {
     if (!_store2['default'].getState().get('search')) return;
 
     var current = once ? [] : _store2['default'].getState().get('files');
@@ -32602,7 +32653,7 @@ var MESSAGES = {
   'icon-refresh': 'Refresh File List',
   'icon-select': 'Select files for batch actions',
   'icon-more': 'Actions used on selected files such as Copy, Delete, Move, …',
-  'icon-view': 'Toggle between List and Grid view',
+  'icon-back': 'Navigate to top directory',
   'drawer': 'Extra options, tools and links are here',
   'icon-search': 'Search your storage for a certain file',
   'swipe-instruction': 'Swipe from left to right to go to parent folder'

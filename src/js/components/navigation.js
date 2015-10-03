@@ -40,6 +40,18 @@ export default class Navigation extends Component {
           </li>
         </ul>
 
+        <p>View</p>
+        <ul>
+          <li>
+            <input id='view-list' name='view' data-value='list' type='radio' defaultChecked={settings.filter === 'list'} />
+            <label htmlFor='view-list'>List</label>
+          </li>
+          <li>
+            <input id='view-grid' name='view' data-value='grid' type='radio' defaultChecked={settings.filter === 'grid'} />
+            <label htmlFor='view-grid'>Grid</label>
+          </li>
+        </ul>
+
         <p>Tools</p>
         <ul>
           <li className='coming-soon'>
