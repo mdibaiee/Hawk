@@ -1,6 +1,12 @@
 .icon {
   display: block;
 }
+.icon-menu {
+  display: block;
+  background: url(/img/Menu.svg) no-repeat;
+  width: 30px;
+  height: 30px;
+}
 .icon-directory {
   display: block;
   background: url(/img/Directory.svg) no-repeat;
@@ -46,8 +52,8 @@
 .icon-search {
   display: block;
   background: url(/img/Search.svg) no-repeat;
-  width: 19px;
-  height: 27px;
+  width: 30px;
+  height: 30px;
 }
 .icon-cross {
   display: block;
@@ -368,29 +374,22 @@ header {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 header h1 {
-  margin-left: -3rem;
+  font-size: 2.3rem;
+  font-style: italic;
+  text-align: center;
   flex: 1;
-}
-header i {
-  margin-right: 16px;
 }
 header button {
   background: none;
   border: none;
-  width: 8rem;
-  height: 3rem;
+  width: 5rem;
+  height: 5rem;
   padding-top: 1rem;
   margin-top: -1rem;
 }
-header button::before {
-  content: '';
-  display: block;
-  width: 2rem;
-  height: 4px;
-  margin-top: -9px;
-  border-radius: 4px;
-  background: #9b9b93;
-  box-shadow: 0 7px 0 #9b9b93, 0 14px 0 #9b9b93;
+header button i {
+  padding: 2rem;
+  background-position: center;
 }
 .menu {
   width: 24.5rem;
