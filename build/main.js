@@ -32012,6 +32012,10 @@ exports['default'] = function (state, action) {
     return action.file;
   }
 
+  if (action.type === _actionsTypes.CHANGE_DIRECTORY) {
+    return null;
+  }
+
   return state;
 };
 
