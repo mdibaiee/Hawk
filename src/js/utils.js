@@ -27,7 +27,8 @@ export function getKey(object = store.getState().toJS(), key) {
 
 export function reportError(err) {
   console.error(err);
-  let action = show('errorDialog', {description: err.message});
+  let msg = err.message || err.target.error.message;
+  let action = show('errorDialog', {description: msg});
   store.dispatch(action);
 }
 

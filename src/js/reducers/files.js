@@ -107,18 +107,20 @@ export default function(state = [], action) {
         })
       }
 
+      console.log('readFile', path);
       return readFile(path).then(content => {
+        console.log('readFile done', path);
         archive.file(archivePath + '/' + file.name, content);
       });
     }))
 
     all.then(() => {
       let buffer = archive.generate({ type: 'nodebuffer' });
-      console.log(buffer);
       let blob = new Blob([buffer], { type: 'application/zip' });
 
       let cwd = store.getState().get('cwd');
       let path = normalize(cwd + '/' + action.name);
+      console.log(path);
       return writeFile(path, blob);
     }).then(boundRefresh).catch(reportError);
 

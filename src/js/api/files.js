@@ -92,6 +92,15 @@ export async function readFile(path) {
 }
 
 export async function writeFile(path, content) {
+  try {
+    let file = await getFile(path);
+
+    return Promise.reject(new Error('File already exists: ' + path));
+  } catch(e) {
+
+  }
+
+
   let request = sdcard().addNamed(content, path);
 
   return new Promise((resolve, reject) => {

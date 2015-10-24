@@ -9,7 +9,6 @@ export default class Breadcrumb extends Component {
     let els = [];
 
     if (this.props.search) {
-      console.log('search');
       els = [
         <span key='000'>Search: {this.props.search}</span>
       ]

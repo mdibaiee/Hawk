@@ -41075,6 +41075,12 @@ var readFile = _asyncToGenerator(function* (path) {
 exports.readFile = readFile;
 
 var writeFile = _asyncToGenerator(function* (path, content) {
+  try {
+    var file = yield getFile(path);
+
+    return Promise.reject(new Error('File already exists: ' + path));
+  } catch (e) {}
+
   var request = sdcard().addNamed(content, path);
 
   return new Promise(function (resolve, reject) {
@@ -41258,7 +41264,6 @@ var Breadcrumb = (function (_Component) {
       var els = [];
 
       if (this.props.search) {
-        console.log('search');
         els = [_react2['default'].createElement(
           'span',
           { key: '000' },
@@ -43434,18 +43439,20 @@ exports['default'] = function (state, action) {
           });
         }
 
+        console.log('readFile', path);
         return (0, _apiFiles.readFile)(path).then(function (content) {
+          console.log('readFile done', path);
           archive.file(archivePath + '/' + file.name, content);
         });
       }));
 
       all.then(function () {
         var buffer = archive.generate({ type: 'nodebuffer' });
-        console.log(buffer);
         var blob = new Blob([buffer], { type: 'application/zip' });
 
         var cwd = _store2['default'].getState().get('cwd');
         var path = (0, _utils.normalize)(cwd + '/' + action.name);
+        console.log(path);
         return (0, _apiFiles.writeFile)(path, blob);
       }).then(boundRefresh)['catch'](_utils.reportError);
 
@@ -44021,7 +44028,8 @@ function getKey(object, key) {
 
 function reportError(err) {
   console.error(err);
-  var action = (0, _actionsDialog.show)('errorDialog', { description: err.message });
+  var msg = err.message || err.target.error.message;
+  var action = (0, _actionsDialog.show)('errorDialog', { description: msg });
   _store2['default'].dispatch(action);
 }
 
