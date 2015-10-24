@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { refresh, selectView } from 'actions/files-view';
 import { show as showDialog } from 'actions/dialog';
 import { show as showMenu } from 'actions/menu';
-import active from 'actions/active-file';
+import { active } from 'actions/file';
 import settings from 'actions/settings';
 import store, { bind } from 'store';
 import { MENU_WIDTH } from './menu';

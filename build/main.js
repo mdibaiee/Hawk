@@ -42582,6 +42582,8 @@ var _actionsDialog = require('actions/dialog');
 
 var _actionsMenu = require('actions/menu');
 
+var _actionsFile = require('actions/file');
+
 var _actionsSettings = require('actions/settings');
 
 var _actionsSettings2 = _interopRequireDefault(_actionsSettings);
@@ -42610,7 +42612,7 @@ var Toolbar = (function (_Component) {
         _react2['default'].createElement('button', { className: 'icon-back tour-item', onClick: this.goUp }),
         _react2['default'].createElement('button', { className: 'icon-plus tour-item', onClick: this.newFile }),
         _react2['default'].createElement('button', { className: 'icon-refresh tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.refresh)()) }),
-        _react2['default'].createElement('button', { className: 'icon-select tour-item', onClick: (0, _store.bind)((0, _actionsFilesView.selectView)('toggle')) }),
+        _react2['default'].createElement('button', { className: 'icon-select tour-item', onClick: this.selectView }),
         _react2['default'].createElement('button', { className: 'icon-more tour-item', onClick: this.showMore.bind(this), ref: 'more' })
       );
     }
@@ -42640,6 +42642,12 @@ var Toolbar = (function (_Component) {
       _store2['default'].dispatch(changedir(up));
     }
   }, {
+    key: 'selectView',
+    value: function selectView() {
+      _store2['default'].dispatch((0, _actionsFilesView.selectView)('toggle'));
+      _store2['default'].dispatch((0, _actionsFile.active)());
+    }
+  }, {
     key: 'newFile',
     value: function newFile() {
       var cwd = _store2['default'].getState().get('cwd');
@@ -42664,7 +42672,7 @@ var Toolbar = (function (_Component) {
 exports['default'] = Toolbar;
 module.exports = exports['default'];
 
-},{"./menu":279,"actions/dialog":262,"actions/files-view":264,"actions/menu":265,"actions/settings":268,"react":250,"store":"store"}],285:[function(require,module,exports){
+},{"./menu":279,"actions/dialog":262,"actions/file":263,"actions/files-view":264,"actions/menu":265,"actions/settings":268,"react":250,"store":"store"}],285:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
