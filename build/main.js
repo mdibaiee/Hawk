@@ -40551,10 +40551,10 @@ exports.decompress = decompress;
 
 var _types = require('./types');
 
-function compress(file) {
+function compress(file, name) {
   return {
     type: _types.COMPRESS,
-    file: file
+    file: file, name: name
   };
 }
 
@@ -42394,6 +42394,9 @@ var CreateDialog = (0, _reactRedux.connect)(function (state) {
 var SearchDialog = (0, _reactRedux.connect)(function (state) {
   return state.get('searchDialog');
 })(_componentsDialog2['default']);
+var CompressDialog = (0, _reactRedux.connect)(function (state) {
+  return state.get('compressDialog');
+})(_componentsDialog2['default']);
 
 var Root = (function (_Component) {
   _inherits(Root, _Component);
@@ -42423,6 +42426,7 @@ var Root = (function (_Component) {
         _react2['default'].createElement(ErrorDialog, null),
         _react2['default'].createElement(CreateDialog, null),
         _react2['default'].createElement(SearchDialog, null),
+        _react2['default'].createElement(CompressDialog, null),
         _react2['default'].createElement(_componentsSpinner2['default'], null),
         _react2['default'].createElement('div', { className: 'swipe-instruction tour-item' }),
         _react2['default'].createElement(
@@ -42691,6 +42695,8 @@ var _actionsFile = require('actions/file');
 
 var _actionsFilesView = require('actions/files-view');
 
+var _actionsCompress = require('actions/compress');
+
 var _store = require('store');
 
 var _store2 = _interopRequireDefault(_store);
@@ -42838,11 +42844,43 @@ exports['default'] = {
       },
       className: 'success'
     }]
+  },
+  compressDialog: {
+    title: 'Archive',
+    description: 'Enter your desired archive name',
+    input: true,
+    buttons: [{
+      text: 'Cancel',
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+        input.value = '';
+      }
+    }, {
+      text: 'Create',
+      action: function action() {
+        var input = _react2['default'].findDOMNode(this.refs.input);
+
+        if (!input.value) {
+          this.props.dispatch((0, _actionsDialog.hideAll)());
+          this.props.dispatch((0, _actionsFile.active)());
+          this.props.dispatch((0, _actionsDialog.show)('errorDialog', { description: INVALID_NAME }));
+          return;
+        }
+
+        var activeFile = _store2['default'].getState().get('activeFile');
+        this.props.dispatch((0, _actionsCompress.compress)(activeFile, input.value));
+        this.props.dispatch((0, _actionsDialog.hideAll)());
+        this.props.dispatch((0, _actionsFile.active)());
+        input.value = '';
+      },
+      className: 'success'
+    }]
   }
 };
 module.exports = exports['default'];
 
-},{"actions/dialog":262,"actions/file":263,"actions/files-view":264,"react":250,"store":"store"}],286:[function(require,module,exports){
+},{"actions/compress":261,"actions/dialog":262,"actions/file":263,"actions/files-view":264,"react":250,"store":"store"}],286:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -42966,9 +43004,8 @@ var entryMenu = {
   }, {
     name: 'Archive',
     action: function action() {
-      var active = _store2['default'].getState().get('activeFile');
-
-      _store2['default'].dispatch((0, _actionsCompress.compress)(active));
+      _store2['default'].dispatch((0, _actionsMenu.hideAll)());
+      _store2['default'].dispatch((0, _actionsDialog.show)('compressDialog'));
     }
   }]
 };
@@ -43044,9 +43081,8 @@ var moreMenu = {
   }, {
     name: 'Archive',
     action: function action() {
-      var active = _store2['default'].getState().get('activeFile');
-
-      _store2['default'].dispatch((0, _actionsCompress.compress)(active));
+      _store2['default'].dispatch((0, _actionsMenu.hideAll)());
+      _store2['default'].dispatch((0, _actionsDialog.show)('compressDialog'));
     }
   }]
 };
@@ -43162,7 +43198,8 @@ exports['default'] = function (state, action) {
     deleteDialog: (0, _dialog2['default'])(state, action, 'deleteDialog'),
     errorDialog: (0, _dialog2['default'])(state, action, 'errorDialog'),
     createDialog: (0, _dialog2['default'])(state, action, 'createDialog'),
-    searchDialog: (0, _dialog2['default'])(state, action, 'searchDialog')
+    searchDialog: (0, _dialog2['default'])(state, action, 'searchDialog'),
+    compressDialog: (0, _dialog2['default'])(state, action, 'compressDialog')
   });
 };
 
@@ -43408,7 +43445,7 @@ exports['default'] = function (state, action) {
         var blob = new Blob([buffer], { type: 'application/zip' });
 
         var cwd = _store2['default'].getState().get('cwd');
-        var path = (0, _utils.normalize)(cwd + '/archive.zip');
+        var path = (0, _utils.normalize)(cwd + '/' + action.name);
         return (0, _apiFiles.writeFile)(path, blob);
       }).then(boundRefresh)['catch'](_utils.reportError);
 

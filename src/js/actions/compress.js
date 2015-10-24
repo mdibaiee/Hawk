@@ -1,9 +1,9 @@
 import { COMPRESS, DECOMPRESS } from './types';
 
-export function compress(file) {
+export function compress(file, name) {
   return {
     type: COMPRESS,
-    file
+    file, name
   }
 }
 

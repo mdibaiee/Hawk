@@ -118,7 +118,7 @@ export default function(state = [], action) {
       let blob = new Blob([buffer], { type: 'application/zip' });
 
       let cwd = store.getState().get('cwd');
-      let path = normalize(cwd + '/archive.zip');
+      let path = normalize(cwd + '/' + action.name);
       return writeFile(path, blob);
     }).then(boundRefresh).catch(reportError);
 

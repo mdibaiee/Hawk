@@ -83,9 +83,8 @@ const entryMenu = {
     {
       name: 'Archive',
       action() {
-        let active = store.getState().get('activeFile');
-
-        store.dispatch(compress(active));
+        store.dispatch(hideAll());
+        store.dispatch(show('compressDialog'));
       }
     }
   ]
@@ -168,9 +167,8 @@ const moreMenu = {
     {
       name: 'Archive',
       action() {
-        let active = store.getState().get('activeFile');
-
-        store.dispatch(compress(active));
+        store.dispatch(hideAll());
+        store.dispatch(show('compressDialog'));
       }
     }
   ]

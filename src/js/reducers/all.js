@@ -32,6 +32,7 @@ export default function(state = new Immutable.Map(), action) {
     deleteDialog: dialog(state, action, 'deleteDialog'),
     errorDialog: dialog(state, action, 'errorDialog'),
     createDialog: dialog(state, action, 'createDialog'),
-    searchDialog: dialog(state, action, 'searchDialog')
+    searchDialog: dialog(state, action, 'searchDialog'),
+    compressDialog: dialog(state, action, 'compressDialog')
   });
 }

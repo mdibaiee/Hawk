@@ -27,6 +27,7 @@ let DeleteDialog = connect(state => state.get('deleteDialog'))(Dialog);
 let ErrorDialog = connect(state => state.get('errorDialog'))(Dialog);
 let CreateDialog = connect(state => state.get('createDialog'))(Dialog);
 let SearchDialog = connect(state => state.get('searchDialog'))(Dialog);
+let CompressDialog = connect(state => state.get('compressDialog'))(Dialog);
 
 export default class Root extends Component {
   render() {
@@ -47,6 +48,7 @@ export default class Root extends Component {
         <ErrorDialog />
         <CreateDialog />
         <SearchDialog />
+        <CompressDialog />
 
         <Spinner />
 

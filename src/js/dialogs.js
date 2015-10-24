@@ -2,6 +2,7 @@ import React from 'react';
 import { hide, hideAll, show } from 'actions/dialog';
 import { rename, remove, create, active } from 'actions/file';
 import { search } from 'actions/files-view';
+import { compress } from 'actions/compress';
 import store, { bind } from 'store';
 
 const INVALID_NAME = 'Please enter a valid name.';
@@ -148,13 +149,50 @@ export default {
           if (!input.value) {
             this.props.dispatch(hideAll());
             this.props.dispatch(active());
-            this.props.dispatch(show('errorDialog', {description: INVALID_SEARCH}));
+            this.props.dispatch(show('errorDialog',
+                                {description: INVALID_SEARCH}));
             return;
           }
 
           let action = search(input.value);
           this.props.dispatch(action);
           this.props.dispatch(hideAll());
+          input.value = '';
+        },
+        className: 'success'
+      }
+    ]
+  },
+  compressDialog: {
+    title: 'Archive',
+    description: 'Enter your desired archive name',
+    input: true,
+    buttons: [
+      {
+        text: 'Cancel',
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+          this.props.dispatch(hideAll());
+          input.value = '';
+        }
+      },
+      {
+        text: 'Create',
+        action() {
+          let input = React.findDOMNode(this.refs.input);
+
+          if (!input.value) {
+            this.props.dispatch(hideAll());
+            this.props.dispatch(active());
+            this.props.dispatch(show('errorDialog',
+                                {description: INVALID_NAME}));
+            return;
+          }
+
+          let activeFile = store.getState().get('activeFile');
+          this.props.dispatch(compress(activeFile, input.value))
+          this.props.dispatch(hideAll());
+          this.props.dispatch(active());
           input.value = '';
         },
         className: 'success'
