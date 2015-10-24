@@ -189,6 +189,10 @@ export default {
             return;
           }
 
+          if (input.value.slice(-4) !== '.zip') {
+            input.value += '.zip';
+          }
+
           let activeFile = store.getState().get('activeFile');
           this.props.dispatch(compress(activeFile, input.value))
           this.props.dispatch(hideAll());
