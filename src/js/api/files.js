@@ -70,6 +70,12 @@ export async function children(dir, gatherInfo) {
   return childs;
 }
 
+export async function isDirectory(path) {
+  let file = await getFile(path);
+
+  return !(file instanceof Blob);
+}
+
 export async function readFile(path) {
   let file = await getFile(path);
 
@@ -82,6 +88,16 @@ export async function readFile(path) {
     reader.onerror = reject;
     reader.onabort = reject;
     reader.readAsArrayBuffer(file);
+  });
+}
+
+export async function writeFile(path, content) {
+  let request = sdcard().addNamed(content, path);
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = resolve;
+    request.onerror = reject;
+    request.onabort = reject;
   });
 }
 
@@ -147,11 +163,6 @@ export async function copy(file, newPath) {
 
     let blob = new Blob([content], {type: target.type});
 
-    return new Promise((resolve, reject) => {
-      let request = sdcard().addNamed(blob, newPath);
-      request.onsuccess = resolve;
-      request.onerror = reject;
-      request.onabort = reject;
-    });
+    return writeFile(newPath, blob);
   }
 }

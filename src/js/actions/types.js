@@ -9,6 +9,9 @@ const TYPES = {
   REFRESH: Symbol('REFRESH'),
   SORT: Symbol('SORT'),
 
+  COMPRESS: Symbol('COMPRESS'),
+  DECOMPRESS: Symbol('DECOMPRESS'),
+
   NEW_FILE: Symbol('NEW_FILE'),
   CREATE_FILE: Symbol('CREATE_FILE'),
   SHARE_FILE: Symbol('SHARE_FILE'),

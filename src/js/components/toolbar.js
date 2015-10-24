@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { refresh, selectView } from 'actions/files-view';
 import { show as showDialog } from 'actions/dialog';
 import { show as showMenu } from 'actions/menu';
+import active from 'actions/active-file';
 import settings from 'actions/settings';
 import store, { bind } from 'store';
 import { MENU_WIDTH } from './menu';
@@ -13,7 +14,7 @@ export default class Toolbar extends Component {
         <button className='icon-back tour-item' onClick={this.goUp} />
         <button className='icon-plus tour-item' onClick={this.newFile} />
         <button className='icon-refresh tour-item' onClick={bind(refresh())} />
-        <button className='icon-select tour-item' onClick={bind(selectView('toggle'))} />
+        <button className='icon-select tour-item' onClick={this.selectView} />
         <button className='icon-more tour-item' onClick={this.showMore.bind(this)} ref='more' />
       </div>
     );
@@ -37,6 +38,11 @@ export default class Toolbar extends Component {
     if (up === current) return;
 
     store.dispatch(changedir(up));
+  }
+
+  selectView() {
+    store.dispatch(selectView('toggle'));
+    store.dispatch(active());
   }
 
   newFile() {

@@ -1,9 +1,10 @@
-import { LIST_FILES, RENAME_FILE, DELETE_FILE, CREATE_FILE, MOVE_FILE, COPY_FILE, SEARCH } from 'actions/types';
+import { LIST_FILES, RENAME_FILE, DELETE_FILE, CREATE_FILE, MOVE_FILE, COPY_FILE, SEARCH, COMPRESS, DECOMPRESS } from 'actions/types';
+import zip from 'jszip';
 import { refresh } from 'actions/files-view';
-import { move, remove, sdcard, createFile, createDirectory, copy } from 'api/files';
+import { move, remove, sdcard, createFile, readFile, writeFile, createDirectory, getFile, copy, children } from 'api/files';
 import { show } from 'actions/dialog';
 import store, { bind } from 'store';
-import { reportError, type } from 'utils';
+import { reportError, type, normalize } from 'utils';
 
 let boundRefresh = bind(refresh());
 
@@ -74,12 +75,75 @@ export default function(state = [], action) {
 
   if (action.type === DELETE_FILE) {
     let all = Promise.all(action.file.map(file => {
-      let path = ((file.path || '') + file.name).replace(/^\//, '');
+      let path = normalize((file.path || '') + file.name);
       return remove(path, true);
     }))
 
     all.then(boundRefresh, reportError);
     return state;
+  }
+
+  if (action.type === COMPRESS) {
+    let archive = new zip();
+    let cwd = store.getState().get('cwd');
+
+    let all = Promise.all(action.file.map(function addFile(file) {
+      console.log('addFile', file);
+      let path = normalize((file.path || '') + file.name);
+      let archivePath = path.slice(cwd.length);
+      // directory
+      if (!(file instanceof Blob)) {
+        let folder = archive.folder(file.name);
+
+        return children(path).then(files => {
+          return Promise.all(files.map(child => {
+            return addFile(child);
+
+            // return readFile(childPath).then(content => {
+            //   let blob = new Blob([content]);
+            //   folder.file(child.name, blob);
+            // });
+          }));
+        })
+      }
+
+      return readFile(path).then(content => {
+        archive.file(archivePath + '/' + file.name, content);
+      });
+    }))
+
+    all.then(() => {
+      let buffer = archive.generate({ type: 'nodebuffer' });
+      console.log(buffer);
+      let blob = new Blob([buffer], { type: 'application/zip' });
+
+      let cwd = store.getState().get('cwd');
+      let path = normalize(cwd + '/archive.zip');
+      return writeFile(path, blob);
+    }).then(boundRefresh).catch(reportError);
+
+    return state;
+  }
+
+  if (action.type === DECOMPRESS) {
+    let file = action.file[0];
+    let path = normalize((file.path || '') + file.name);
+    readFile(path).then(content => {
+      let archive = new zip(content);
+      let files = Object.keys(archive.files);
+
+      let all = Promise.all(files.map(name => {
+        let buffer = archive.files[name].asArrayBuffer();
+        let blob = new Blob([buffer]);
+
+        let cwd = store.getState().get('cwd');
+        let filePath = normalize(cwd + '/' + name);
+
+        return writeFile(filePath, blob);
+      }));
+
+      all.then(boundRefresh, reportError);
+    });
   }
 
   return state;

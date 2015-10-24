@@ -2,6 +2,7 @@ import { hideAll } from 'actions/menu';
 import { show } from 'actions/dialog';
 import { selectView } from 'actions/files-view';
 import { copy, move } from 'actions/file';
+import { compress, decompress } from 'actions/compress';
 import store from 'store';
 
 const entryMenu = {
@@ -63,6 +64,28 @@ const entryMenu = {
           type: blob.type,
           blob
         });
+      }
+    },
+    {
+      name: 'Extract',
+      enabled() {
+        let active = store.getState().get('activeFile');
+
+        if (active) console.log(active[0].name);
+        return active && active[0].name.indexOf('.zip') > -1;
+      },
+      action() {
+        let active = store.getState().get('activeFile');
+
+        store.dispatch(decompress(active));
+      }
+    },
+    {
+      name: 'Archive',
+      action() {
+        let active = store.getState().get('activeFile');
+
+        store.dispatch(compress(active));
       }
     }
   ]
@@ -142,6 +165,14 @@ const moreMenu = {
         })
       }
     },
+    {
+      name: 'Archive',
+      action() {
+        let active = store.getState().get('activeFile');
+
+        store.dispatch(compress(active));
+      }
+    }
   ]
 }
 

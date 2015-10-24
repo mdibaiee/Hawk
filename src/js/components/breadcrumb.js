@@ -37,7 +37,6 @@ export default class Breadcrumb extends Component {
           let path = current.join('/').replace(/^\//, ''); // remove starting slash
           let key = directories.length + index;
           let style = { zIndex: arr.length - index};
-          console.log('history', dir)
 
           return (
             <span key={key} className='history' onClick={bind(changedir(path))} style={style}>{dir}</span>
