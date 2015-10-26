@@ -88,9 +88,9 @@ export default function(state = [], action) {
     let cwd = store.getState().get('cwd');
 
     let all = Promise.all(action.file.map(function addFile(file) {
-      console.log('addFile', file);
       let path = normalize((file.path || '') + file.name);
       let archivePath = path.slice(cwd.length);
+      console.log(archivePath);
       // directory
       if (!(file instanceof Blob)) {
         let folder = archive.folder(file.name);
@@ -98,19 +98,12 @@ export default function(state = [], action) {
         return children(path).then(files => {
           return Promise.all(files.map(child => {
             return addFile(child);
-
-            // return readFile(childPath).then(content => {
-            //   let blob = new Blob([content]);
-            //   folder.file(child.name, blob);
-            // });
           }));
-        })
+        });
       }
 
-      console.log('readFile', path);
       return readFile(path).then(content => {
-        console.log('readFile done', path);
-        archive.file(archivePath + '/' + file.name, content);
+        archive.file(archivePath, content);
       });
     }))
 

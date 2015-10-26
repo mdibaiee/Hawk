@@ -71,13 +71,13 @@ const entryMenu = {
       enabled() {
         let active = store.getState().get('activeFile');
 
-        if (active) console.log(active[0].name);
-        return active && active[0].name.indexOf('.zip') > -1;
+        return active && active[0].name.slice(-4) === '.zip';
       },
       action() {
         let active = store.getState().get('activeFile');
 
         store.dispatch(decompress(active));
+        store.dispatch(hideAll());
       }
     },
     {

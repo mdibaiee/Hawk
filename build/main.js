@@ -42873,6 +42873,10 @@ exports['default'] = {
           return;
         }
 
+        if (input.value.slice(-4) !== '.zip') {
+          input.value += '.zip';
+        }
+
         var activeFile = _store2['default'].getState().get('activeFile');
         this.props.dispatch((0, _actionsCompress.compress)(activeFile, input.value));
         this.props.dispatch((0, _actionsDialog.hideAll)());
@@ -42998,13 +43002,13 @@ var entryMenu = {
     enabled: function enabled() {
       var active = _store2['default'].getState().get('activeFile');
 
-      if (active) console.log(active[0].name);
-      return active && active[0].name.indexOf('.zip') > -1;
+      return active && active[0].name.slice(-4) === '.zip';
     },
     action: function action() {
       var active = _store2['default'].getState().get('activeFile');
 
       _store2['default'].dispatch((0, _actionsCompress.decompress)(active));
+      _store2['default'].dispatch((0, _actionsMenu.hideAll)());
     }
   }, {
     name: 'Archive',
@@ -43420,9 +43424,9 @@ exports['default'] = function (state, action) {
       var cwd = _store2['default'].getState().get('cwd');
 
       var all = Promise.all(action.file.map(function addFile(file) {
-        console.log('addFile', file);
         var path = (0, _utils.normalize)((file.path || '') + file.name);
         var archivePath = path.slice(cwd.length);
+        console.log(archivePath);
         // directory
         if (!(file instanceof Blob)) {
           var folder = archive.folder(file.name);
@@ -43430,19 +43434,12 @@ exports['default'] = function (state, action) {
           return (0, _apiFiles.children)(path).then(function (files) {
             return Promise.all(files.map(function (child) {
               return addFile(child);
-
-              // return readFile(childPath).then(content => {
-              //   let blob = new Blob([content]);
-              //   folder.file(child.name, blob);
-              // });
             }));
           });
         }
 
-        console.log('readFile', path);
         return (0, _apiFiles.readFile)(path).then(function (content) {
-          console.log('readFile done', path);
-          archive.file(archivePath + '/' + file.name, content);
+          archive.file(archivePath, content);
         });
       }));
 
