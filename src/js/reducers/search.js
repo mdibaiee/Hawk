@@ -2,7 +2,7 @@ import { SEARCH, CHANGE_DIRECTORY, REFRESH } from 'actions/types';
 import store from 'store';
 import { reportError } from 'utils';
 import { listFiles } from 'actions/files-view';
-import { children } from 'api/files';
+import { children } from 'api/auto';
 import { type, normalize } from 'utils';
 
 export default function(state = '', action) {

@@ -20,7 +20,7 @@ export default class FileList extends Component {
 
     let els = files.map((file, index) => {
       let selected = activeFile.indexOf(file) > -1;
-      if (type(file) === 'File') {
+      if (file.type === 'File') {
         return <File selectView={selectView} selected={selected} key={index} index={index} name={file.name} size={file.size} type={file.type} />;
       } else {
         return <Directory selectView={selectView} selected={selected} key={index} index={index} name={file.name} children={file.children} type={file.type} />
@@ -58,11 +58,4 @@ function props(state) {
     activeFile: state.get('activeFile'),
     view: state.get('settings').view || 'list'
   }
-}
-
-async function getFiles(dir) {
-  let storage = navigator.getDeviceStorage('sdcard');
-  let root = await storage.get(dir);
-
-  return await root.getFilesAndDirectories();
 }

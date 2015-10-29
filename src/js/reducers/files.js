@@ -1,7 +1,7 @@
 import { LIST_FILES, RENAME_FILE, DELETE_FILE, CREATE_FILE, MOVE_FILE, COPY_FILE, SEARCH, COMPRESS, DECOMPRESS } from 'actions/types';
 import zip from 'jszip';
 import { refresh } from 'actions/files-view';
-import { move, remove, sdcard, createFile, readFile, writeFile, createDirectory, getFile, copy, children } from 'api/files';
+import * as auto from 'api/auto';
 import { show } from 'actions/dialog';
 import store, { bind } from 'store';
 import { reportError, type, normalize } from 'utils';
@@ -39,7 +39,7 @@ export default function(state = [], action) {
   }
 
   if (action.type === CREATE_FILE) {
-    let fn = action.directory ? createDirectory : createFile;
+    let fn = action.directory ? auto.createDirectory : auto.createFile;
     fn(action.path).then(boundRefresh, reportError);
 
     return state;
@@ -48,7 +48,7 @@ export default function(state = [], action) {
   if (action.type === RENAME_FILE) {
     let all = Promise.all(action.file.map(file => {
       let cwd = store.getState().get('cwd');
-      return move(file, cwd + '/' + action.name);
+      return auto.move(file, cwd + '/' + action.name);
     }));
 
     all.then(boundRefresh, reportError);
@@ -57,7 +57,7 @@ export default function(state = [], action) {
 
   if (action.type === MOVE_FILE) {
     let all = Promise.all(action.file.map(file => {
-      return move(file, action.newPath + '/' + file.name);
+      return auto.move(file, action.newPath + '/' + file.name);
     }));
 
     all.then(boundRefresh, reportError);
@@ -66,7 +66,7 @@ export default function(state = [], action) {
 
   if (action.type === COPY_FILE) {
     let all = Promise.all(action.file.map(file => {
-      return copy(file, action.newPath + '/' + file.name);
+      return auto.copy(file, action.newPath + '/' + file.name);
     }));
 
     all.then(boundRefresh, reportError);
@@ -76,7 +76,7 @@ export default function(state = [], action) {
   if (action.type === DELETE_FILE) {
     let all = Promise.all(action.file.map(file => {
       let path = normalize((file.path || '') + file.name);
-      return remove(path, true);
+      return auto.remove(path, true);
     }))
 
     all.then(boundRefresh, reportError);
@@ -95,14 +95,14 @@ export default function(state = [], action) {
       if (!(file instanceof Blob)) {
         let folder = archive.folder(file.name);
 
-        return children(path).then(files => {
+        return auto.children(path).then(files => {
           return Promise.all(files.map(child => {
             return addFile(child);
           }));
         });
       }
 
-      return readFile(path).then(content => {
+      return auto.readFile(path).then(content => {
         archive.file(archivePath, content);
       });
     }))
@@ -114,7 +114,7 @@ export default function(state = [], action) {
       let cwd = store.getState().get('cwd');
       let path = normalize(cwd + '/' + action.name);
       console.log(path);
-      return writeFile(path, blob);
+      return auto.writeFile(path, blob);
     }).then(boundRefresh).catch(reportError);
 
     return state;
@@ -123,7 +123,7 @@ export default function(state = [], action) {
   if (action.type === DECOMPRESS) {
     let file = action.file[0];
     let path = normalize((file.path || '') + file.name);
-    readFile(path).then(content => {
+    auto.readFile(path).then(content => {
       let archive = new zip(content);
       let files = Object.keys(archive.files);
 
@@ -134,7 +134,7 @@ export default function(state = [], action) {
         let cwd = store.getState().get('cwd');
         let filePath = normalize(cwd + '/' + name);
 
-        return writeFile(filePath, blob);
+        return auto.writeFile(filePath, blob);
       }));
 
       all.then(boundRefresh, reportError);
@@ -142,8 +142,4 @@ export default function(state = [], action) {
   }
 
   return state;
-}
-
-function mov(file, newPath) {
-  return
 }

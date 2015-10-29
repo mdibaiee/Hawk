@@ -1,5 +1,5 @@
 import { CHANGE_DIRECTORY, REFRESH, SETTINGS } from 'actions/types';
-import { children, CACHE } from 'api/files';
+import { children, CACHE, FTP_CACHE } from 'api/auto';
 import store from 'store';
 import { reportError, normalize } from 'utils';
 import { listFiles } from 'actions/files-view';
@@ -13,6 +13,7 @@ export default function(state = '', action) {
 
   if (action.type === REFRESH) {
     CACHE[state] = null;
+    FTP_CACHE[state] = null;
   }
 
   if (action.type === REFRESH || action.type === SETTINGS) {

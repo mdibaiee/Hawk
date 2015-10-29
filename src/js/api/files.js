@@ -34,7 +34,14 @@ export async function getFile(dir = '/') {
 
   if (dir === '/' || !dir) return parent;
 
-  return await parent.get(normalize(dir));
+  let file = await parent.get(normalize(dir));
+
+  Object.defineProperty(file, 'type', {
+    value: type(file),
+    enumerable: true
+  });
+
+  return file;
 }
 
 export async function children(dir, gatherInfo) {
@@ -46,9 +53,16 @@ export async function children(dir, gatherInfo) {
   }
   let childs = await parent.getFilesAndDirectories();
 
+  for (let child of childs) {
+    Object.defineProperty(child, 'type', {
+      value: type(child),
+      enumerable: true
+    });
+  }
+
   if (gatherInfo && !window.needsShim) {
     for (let child of childs) {
-      if (type(child) === 'Directory') {
+      if (child.type === 'Directory') {
         let subchildren;
         try {
           subchildren = await shimDirectory(child).getFilesAndDirectories();

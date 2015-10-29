@@ -30,6 +30,9 @@
     "device-storage:music": {
       "access": "readwrite",
       "description": "We need access to your files in order to give you the functionality of listing, reading, opening and writing files in your storage"
+    },
+    "tcp-socket": {
+      "description": "FTP Browser: Used to connect to FTP servers"
     }
   },
   "installs_allowed_from": [
