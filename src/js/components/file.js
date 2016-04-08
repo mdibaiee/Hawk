@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import store from 'store';
 import { humanSize } from 'utils';
 import entry from './mixins/entry';
+import Hammer from 'react-hammerjs';
+import mime from 'mime';
 
 export default class File extends Component {
   constructor() {
@@ -22,17 +25,18 @@ export default class File extends Component {
                                              : this.open.bind(this);
 
     return (
-      <div className='file' ref='container'
-           onClick={clickHandler}
-           onContextMenu={this.contextMenu.bind(this)}>
+      <Hammer onTap={clickHandler}>
+        <div className='file' ref='container'
+             onContextMenu={this.contextMenu.bind(this)}>
 
-        {input}
-        {label}
+          {input}
+          {label}
 
-        <i></i>
-        <p>{this.props.name}</p>
-        <span>{humanSize(this.props.size)}</span>
-      </div>
+          <i></i>
+          <p>{this.props.name}</p>
+          <span>{humanSize(this.props.size)}</span>
+        </div>
+      </Hammer>
     );
   }
 
@@ -41,12 +45,13 @@ export default class File extends Component {
 
     let file = store.getState().get('files')[this.props.index];
 
-    let name = file.type === 'application/pdf' ? 'view' : 'open';
+    const type = mime.lookup(file.name);
+    let name = type === 'application/pdf' ? 'view' : 'open';
     new MozActivity({
       name,
       data: {
-        type: file.type,
-        blob: file
+        blob: file,
+        type
       }
     })
   }

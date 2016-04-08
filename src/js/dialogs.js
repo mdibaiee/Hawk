@@ -17,7 +17,7 @@ export default {
       {
         text: 'File',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
 
           if (!input.value) {
             this.props.dispatch(hideAll());
@@ -38,7 +38,7 @@ export default {
       {
         text: 'Directory',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
 
           if (!input.value) {
             this.props.dispatch(hideAll());
@@ -59,7 +59,7 @@ export default {
       {
         text: 'Cancel',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
           this.props.dispatch(hideAll());
           input.value = '';
         }
@@ -74,7 +74,7 @@ export default {
       {
         text: 'Cancel',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
           this.props.dispatch(hideAll());
           input.value = '';
         }
@@ -82,7 +82,7 @@ export default {
       {
         text: 'Rename',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
 
           if (!input.value) {
             this.props.dispatch(hideAll());
@@ -136,7 +136,7 @@ export default {
       {
         text: 'Cancel',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
           this.props.dispatch(hideAll());
           input.value = '';
         }
@@ -144,7 +144,7 @@ export default {
       {
         text: 'Search',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
 
           if (!input.value) {
             this.props.dispatch(hideAll());
@@ -171,7 +171,7 @@ export default {
       {
         text: 'Cancel',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
           this.props.dispatch(hideAll());
           input.value = '';
         }
@@ -179,7 +179,7 @@ export default {
       {
         text: 'Create',
         action() {
-          let input = React.findDOMNode(this.refs.input);
+          let input = this.refs.input;
 
           if (!input.value) {
             this.props.dispatch(hideAll());

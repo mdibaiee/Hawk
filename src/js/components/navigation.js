@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { hide as hideNavigation } from 'actions/navigation';
 import camelCase from 'lodash/string/camelCase';
@@ -68,9 +69,6 @@ export default class Navigation extends Component {
           <li>
             <input id='showDirectoriesFirst' type='checkbox' defaultChecked={settings.showDirectoriesFirst} />
             <label htmlFor='showDirectoriesFirst'>Show Directories First</label>
-          </li>
-          <li className='coming-soon'>
-            <label>Advanced Preferences</label>
           </li>
         </ul>
 

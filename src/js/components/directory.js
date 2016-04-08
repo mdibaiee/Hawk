@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import changedir from 'actions/changedir';
 import store from 'store';
 import entry from './mixins/entry';
+import Hammer from 'react-hammerjs';
 
 export default class Directory extends Component {
   constructor() {
@@ -22,17 +24,18 @@ export default class Directory extends Component {
                                              : this.peek.bind(this);
 
     return (
-      <div className='directory' ref='container'
-           onClick={clickHandler}
-           onContextMenu={this.contextMenu.bind(this)}>
+      <Hammer onTap={clickHandler}>
+        <div className='directory' ref='container'
+             onContextMenu={this.contextMenu.bind(this)}>
 
-        {input}
-        {label}
+          {input}
+          {label}
 
-        <i></i>
-        <p>{this.props.name}</p>
-        <span>{this.props.children ? this.props.children + ' items' : ''}</span>
-      </div>
+          <i></i>
+          <p>{this.props.name}</p>
+          <span>{this.props.children ? this.props.children + ' items' : ''}</span>
+        </div>
+      </Hammer>
     );
   }
 
@@ -41,6 +44,7 @@ export default class Directory extends Component {
 
     let file = store.getState().get('files')[this.props.index];
 
-    store.dispatch(changedir(file.path.replace(/^\//, '') + file.name));
+    const path = file.path.endsWith(file.name) ? file.path : file.path + file.name;
+    store.dispatch(changedir(path));
   }
 }

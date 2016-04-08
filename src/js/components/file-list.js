@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import File from './file';
 import Directory from './directory';
 import store from 'store';
 import { type } from 'utils';
-import Hammer from 'hammerjs';
+import Hammer from 'react-hammerjs';
 import changedir from 'actions/changedir';
 
 @connect(props)
@@ -30,24 +31,21 @@ export default class FileList extends Component {
     let className= `file-list ${view}`;
 
     return (
-      <div className={className} ref='container'>
-        {els}
-      </div>
+      <Hammer onSwipe={this.swipe} options={{ direction: Hammer.DIRECTION_RIGHT }}>
+        <div className={className} ref='container'>
+          {els}
+        </div>
+      </Hammer>
     );
   }
 
-  componentDidMount() {
-    let container = React.findDOMNode(this.refs.container);
-    let touch = Hammer(container);
+  swipe(e) {
+    let current = store.getState().get('cwd');
+    let up = current.split('/').slice(0, -1).join('/');
 
-    touch.on('swipe', e => {
-      let current = store.getState().get('cwd');
-      let up = current.split('/').slice(0, -1).join('/');
+    if (up === current) return;
 
-      if (up === current) return;
-
-      store.dispatch(changedir(up));
-    }).set({direction: Hammer.DIRECTION_RIGHT});
+    store.dispatch(changedir(up));
   }
 }
 

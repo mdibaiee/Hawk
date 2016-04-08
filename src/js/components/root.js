@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom';
 import FileList from 'components/file-list';
 import Navigation from 'components/navigation';
 import Header from 'components/header';
@@ -10,6 +11,7 @@ import Spinner from 'components/spinner';
 import { connect } from 'react-redux';
 import { hideAll as hideAllMenus } from 'actions/menu';
 import { hideAll as hideAllDialogs} from 'actions/dialog';
+import Hammer from 'react-hammerjs';
 
 import tour from 'tour';
 import changedir from 'actions/changedir';
@@ -32,33 +34,34 @@ let CompressDialog = connect(state => state.get('compressDialog'))(Dialog);
 export default class Root extends Component {
   render() {
     return (
-      <div onTouchStart={this.touchStart.bind(this)}
-           onClick={this.onClick.bind(this)}>
-        <Header />
-        <Breadcrumb />
-        <Navigation />
-        <FileList />
-        <Toolbar />
+      <Hammer onTap={this.onClick.bind(this)}>
+        <div onTouchStart={this.touchStart.bind(this)}>
+          <Header />
+          <Breadcrumb />
+          <Navigation />
+          <FileList />
+          <Toolbar />
 
-        <FileMenu id='file-menu' />
-        <MoreMenu id='more-menu' />
+          <FileMenu id='file-menu' />
+          <MoreMenu id='more-menu' />
 
-        <RenameDialog />
-        <DeleteDialog />
-        <ErrorDialog />
-        <CreateDialog />
-        <SearchDialog />
-        <CompressDialog />
+          <RenameDialog />
+          <DeleteDialog />
+          <ErrorDialog />
+          <CreateDialog />
+          <SearchDialog />
+          <CompressDialog />
 
-        <Spinner />
+          <Spinner />
 
-        <div className='swipe-instruction tour-item'></div>
+          <div className='swipe-instruction tour-item'></div>
 
-        <div className='tour-dialog'>
-          Hello! Tap each highlighted button to get an understanding of how they work.
+          <div className='tour-dialog'>
+            Hello! Tap each highlighted button to get an understanding of how they work.
+          </div>
+          <button id='skip-tour'>Skip</button>
         </div>
-        <button id='skip-tour'>Skip</button>
-      </div>
+      </Hammer>
     );
   }
 

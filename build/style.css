@@ -490,6 +490,11 @@ nav i {
   box-sizing: border-box;
   background: #f8f8f8;
 }
+.toolbar button {
+  flex: 1;
+  width: auto;
+  background-position: center center;
+}
 .breadcrumb {
   display: flex;
   flex: 1;

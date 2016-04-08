@@ -90,12 +90,14 @@ export default function(state = [], action) {
     let all = Promise.all(action.file.map(function addFile(file) {
       let path = normalize((file.path || '') + file.name);
       let archivePath = path.slice(cwd.length);
-      console.log(archivePath);
       // directory
-      if (!(file instanceof Blob)) {
+      console.log(file);
+      if (file.type === 'Directory') {
         let folder = archive.folder(file.name);
 
         return auto.children(path).then(files => {
+          files = files.filter(file => file);
+
           return Promise.all(files.map(child => {
             return addFile(child);
           }));
@@ -108,12 +110,10 @@ export default function(state = [], action) {
     }))
 
     all.then(() => {
-      let buffer = archive.generate({ type: 'nodebuffer' });
-      let blob = new Blob([buffer], { type: 'application/zip' });
+      let blob = archive.generate({ type: 'blob' });
 
       let cwd = store.getState().get('cwd');
       let path = normalize(cwd + '/' + action.name);
-      console.log(path);
       return auto.writeFile(path, blob);
     }).then(boundRefresh).catch(reportError);
 

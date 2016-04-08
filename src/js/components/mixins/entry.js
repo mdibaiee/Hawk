@@ -11,7 +11,7 @@ export default {
     e.stopPropagation();
 
     let file = store.getState().get('files')[this.props.index];
-    let rect = React.findDOMNode(this.refs.container).getBoundingClientRect();
+    let rect = this.refs.container.getBoundingClientRect();
     let {x, y, width, height} = rect;
 
     let left = window.innerWidth / 2 - MENU_WIDTH / 2,
@@ -34,7 +34,7 @@ export default {
     let current = (store.getState().get('activeFile') || []).slice(0);
     let file = store.getState().get('files')[this.props.index];
 
-    let check = React.findDOMNode(this.refs.check);
+    let check = this.refs.check;
 
     if (current.indexOf(file) > -1) {
       current.splice(current.indexOf(file), 1);

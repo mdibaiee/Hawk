@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { refresh, selectView } from 'actions/files-view';
 import { show as showDialog } from 'actions/dialog';
 import { show as showMenu } from 'actions/menu';
@@ -6,22 +7,33 @@ import { active } from 'actions/file';
 import settings from 'actions/settings';
 import store, { bind } from 'store';
 import { MENU_WIDTH } from './menu';
+import Hammer from 'react-hammerjs';
 
 export default class Toolbar extends Component {
   render() {
     return (
       <div className='toolbar'>
-        <button className='icon-back tour-item' onClick={this.goUp} />
-        <button className='icon-plus tour-item' onClick={this.newFile} />
-        <button className='icon-refresh tour-item' onClick={bind(refresh())} />
-        <button className='icon-select tour-item' onClick={this.selectView} />
-        <button className='icon-more tour-item' onClick={this.showMore.bind(this)} ref='more' />
+        <Hammer onTap={this.goUp}>
+          <button className='icon-back tour-item' />
+        </Hammer>
+        <Hammer onTap={this.newFile}>
+          <button className='icon-plus tour-item'/>
+        </Hammer>
+        <Hammer onTap={bind(refresh())}>
+          <button className='icon-refresh tour-item'/>
+        </Hammer>
+        <Hammer onTap={this.selectView}>
+          <button className='icon-select tour-item'/>
+        </Hammer>
+        <Hammer onTap={this.showMore.bind(this)}>
+          <button className='icon-more tour-item' ref='more'/>
+        </Hammer>
       </div>
     );
   }
 
   showMore() {
-    let rect = React.findDOMNode(this.refs.more).getBoundingClientRect();
+    let rect = this.refs.more.getBoundingClientRect();
     let {x, y, width, height} = rect;
 
     let left = x + width - MENU_WIDTH,

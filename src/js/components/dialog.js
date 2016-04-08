@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { template } from 'utils';
+import Hammer from 'react-hammerjs';
 
 export default class Dialog extends Component {
   render() {
@@ -8,10 +10,11 @@ export default class Dialog extends Component {
 
     let buttons = this.props.buttons.map((button, i) => {
       return (
-        <button className={button.className + ' btn'} key={i}
-                onClick={button.action.bind(this)}>
-          {button.text}
-        </button>
+        <Hammer onTap={button.action.bind(this)}>
+          <button className={button.className + ' btn'} key={i}>
+            {button.text}
+          </button>
+        </Hammer>
       )
     });
 
@@ -45,7 +48,7 @@ export default class Dialog extends Component {
   componentDidUpdate() {
     if (!this.props.value) return;
 
-    let input = React.findDOMNode(this.refs.input);
+    let input = this.refs.input;
 
     input.value = this.props.value;
   }

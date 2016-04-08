@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import Hammer from 'react-hammerjs';
 
 export const MENU_WIDTH = 245;
 
@@ -11,7 +13,11 @@ export default class Menu extends Component {
       let enabled = typeof item.enabled === 'function' ? item.enabled() : true
       let className = enabled ? '' : 'disabled';
 
-      return <li key={index} className={className} onClick={item.action.bind(this)}>{item.name}</li>
+      return (
+        <Hammer key={index} onTap={item.action.bind(this)}>
+          <li className={className}>{item.name}</li>
+        </Hammer>
+      );
     });
     let className = 'menu ' + (active ? 'active' : '');
 

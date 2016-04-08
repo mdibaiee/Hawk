@@ -1,15 +1,14 @@
 import { refresh } from 'actions/files-view';
 import { bind } from 'store';
-import Eventconnection from 'events';
-import { humanSize, reportError, normalize, type } from 'utils';
+import EventEmitter from 'events';
+import { humanSize, reportError, normalize, type, getLength } from 'utils';
 
 export let FTP_CACHE = {};
 let socket;
-let connection = new Eventconnection();
+let connection = new EventEmitter();
 connection.setMaxListeners(99);
-let wd = '';
-let currentRequest;
-let queue = 0;
+
+export let queue = Object.assign([], EventEmitter.prototype);
 
 export async function connect(properties = {}) {
   let { host, port, username, password } = properties;
@@ -63,7 +62,6 @@ export function send(command, ...args) {
 
 export async function cwd(dir = '') {
   send('CWD', dir);
-  wd = dir;
 }
 
 const PWD_REGEX = /257 "(.*)"/;
@@ -76,6 +74,7 @@ export async function pwd() {
 
       connection.removeListener('data', listener);
     });
+
     send('PWD');
   });
 }
@@ -90,7 +89,7 @@ export async function pasv() {
 
       connection.removeListener('data', listener);
 
-      return resolve(port);
+      resolve(port);
     });
 
     send('EPSV');
@@ -99,7 +98,7 @@ export async function pasv() {
 
 const LIST_EXTRACTOR = /(.*?)\s+(\d+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\d+)\s+(\d+:?\d+)+\s+(.*)/;
 export async function list(dir = '') {
-  return pasv().then(port => {
+  let index = queue.push(port => {
     return secondary({ host: socket.host, port }).then(({data}) => {
       send('LIST', dir);
 
@@ -110,7 +109,7 @@ export async function list(dir = '') {
           let match = item.match(LIST_EXTRACTOR);
 
           return {
-            path: normalize(wd) + '/',
+            path: normalize(dir + '/'),
             type: match[1][0] === 'd' ? 'Directory' : 'File',
             permissions: match[1].slice(1),
             links: +match[2],
@@ -128,16 +127,20 @@ export async function list(dir = '') {
       }, reportError)
     });
   });
+
+  return handleQueue(index - 1);
 }
 
 export async function namelist(dir = '') {
-  return pasv().then(port => {
+  let index = queue.push(port => {
     return secondary({ host: socket.host, port }).then(({data}) => {
       send('NLST', dir);
 
       return data.then(names => names.split('\n'), reportError);
     });
-  })
+  });
+
+  return handleQueue(index - 1);
 }
 
 export async function secondary(properties = {}) {
@@ -145,19 +148,23 @@ export async function secondary(properties = {}) {
 
   let url = encodeURI(host);
 
+  send('TYPE', 'I');
+
   return new Promise((resolve, reject) => {
     let alt = navigator.mozTCPSocket.open(url, port);
 
-    alt.onopen = () => {
+    alt.onopen = e => {
       let data = new Promise((resolve, reject) => {
+        let d = '';
         alt.ondata = e => {
-          resolve(e.data);
+          d += e.data;
         }
         alt.onerror = e => {
           reject(e.data);
         }
         alt.onclose = e => {
-          resolve('');
+          console.log('<<', d);
+          resolve(d);
         }
       });
       resolve({data});
@@ -165,20 +172,36 @@ export async function secondary(properties = {}) {
   })
 }
 
+const BUFFER_SIZE = 32000;
 export async function secondaryWrite(properties = {}, content) {
   let { host, port } = properties;
 
   let url = encodeURI(host);
 
+  send('TYPE', 'I');
+
   return new Promise((resolve, reject) => {
     let alt = navigator.mozTCPSocket.open(url, port);
 
     alt.onopen = () => {
-      alt.send(content);
+      console.log('>>', content);
+      let step = 0;
 
-      setImmediate(() => {
-        alt.close();
-      })
+      (function send() {
+        if (!content) return;
+
+        let chunk = content.slice(0, BUFFER_SIZE);
+        content = content.slice(BUFFER_SIZE);
+
+        if (alt.send(chunk)) {
+          send();
+        } else {
+          alt.ondrain = () => {
+            console.log('drain');
+            send();
+          }
+        }
+      }());
     }
 
     alt.onclose = () => {
@@ -191,7 +214,7 @@ export async function children(dir = '', gatherInfo) {
   dir = normalize(dir);
   if (FTP_CACHE[dir]) return FTP_CACHE[dir];
 
-  let childs = gatherInfo ? await list(dir) : await namelist();
+  let childs = gatherInfo ? await list(dir) : await namelist(dir);
 
   FTP_CACHE[dir] = childs;
 
@@ -213,23 +236,45 @@ export async function isDirectory(path = '') {
 export async function readFile(path = '') {
   path = normalize(path);
 
-  return pasv().then(port => {
+  let index = queue.push(port => {
     return secondary({ host: socket.host, port }).then(({data}) => {
       send('RETR', path);
 
       return data;
     });
-  }).catch(reportError);
+  })
+
+  return handleQueue(index - 1);
 }
 
 export async function writeFile(path = '', content) {
+  let index;
   path = normalize(path);
 
-  return pasv().then(port => {
-    send('STOR', path);
-    return secondaryWrite({ host: socket.host, port }, content).then(() => {
-    })
-  }).catch(reportError);
+  if (type(content) === 'Blob') {
+    let reader = new FileReader();
+
+    index = queue.push(port => {
+      return new Promise((resolve, reject) => {
+        reader.addEventListener('loadend', () => {
+          send('TYPE', 'I');
+          send('STOR', path);
+
+          secondaryWrite({ host: socket.host, port }, reader.result)
+          .then(resolve, reject);
+        });
+
+        reader.readAsBinaryString(content);
+      })
+    });
+  } else {
+    index = queue.push(port => {
+      send('STOR', path);
+      return secondaryWrite({ host: socket.host, port }, content);
+    });
+  }
+
+  return handleQueue(index - 1);
 }
 
 export async function createFile(path = '') {
@@ -245,23 +290,49 @@ export async function createDirectory(path = '') {
 export async function remove(path = '') {
   path = normalize(path);
 
-  send('RMD', path);
+  let ls = await list(path);
   send('DELE', path);
+  send('DELE', path + '/*.*');
+  send('RMD', path);
 }
 
-export async function move(path = '', newPath = '') {
-  path = normalize(path);
+export async function move(file, newPath = '') {
+  let path = normalize(file.path + file.name);
   newPath = normalize(newPath);
 
   send('RNFR', path);
   send('RNTO', newPath);
 }
 
-export async function copy(path = '', newPath = '') {
-  path = normalize(path);
+export async function copy(file, newPath = '') {
+  let path = normalize(file.path + file.name);
   newPath = normalize(newPath);
 
   let content = await readFile(path);
+  console.log(content);
 
   return writeFile(newPath, content);
+}
+
+const LOOP_INTERVAL = 100;
+(function loopQueue() {
+  if (queue.length) {
+    pasv().then(queue[0]).then(result => {
+      queue.emit('done', {listener: queue[0], result});
+      queue.splice(0, 1);
+      loopQueue();
+    });
+  } else {
+    setTimeout(loopQueue, LOOP_INTERVAL);
+  }
+}());
+
+async function handleQueue(index) {
+  let fn = queue[index];
+
+  return new Promise(resolve => {
+    queue.on('done', ({listener, result}) => {
+      if (listener === fn) resolve(result);
+    });
+  });
 }

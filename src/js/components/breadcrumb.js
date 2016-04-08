@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import changedir from 'actions/changedir';
 import { bind } from 'store';
+import Hammer from 'react-hammerjs';
 
 @connect(props)
 export default class Breadcrumb extends Component {
@@ -24,7 +26,9 @@ export default class Breadcrumb extends Component {
         let style = { zIndex: sumLength - index };
 
         return (
-          <span key={index} onClick={bind(changedir(path))} style={style}>{dir}</span>
+          <Hammer onTap={bind(changedir(path))} key={index}>
+            <span style={style}>{dir}</span>
+          </Hammer>
         );
       }));
 
@@ -38,7 +42,9 @@ export default class Breadcrumb extends Component {
           let style = { zIndex: arr.length - index};
 
           return (
-            <span key={key} className='history' onClick={bind(changedir(path))} style={style}>{dir}</span>
+            <Hammer onTap={bind(changedir(path))} key={key}>
+              <span className='history' style={style}>{dir}</span>
+            </Hammer>
           )
         });
 
@@ -56,7 +62,7 @@ export default class Breadcrumb extends Component {
   }
 
   componentDidUpdate() {
-    let container = React.findDOMNode(this.refs.container);
+    let container = this.refs.container;
     let currents = container.querySelectorAll('span:not(.history)');
 
     container.scrollLeft = currents[currents.length - 1].offsetLeft;

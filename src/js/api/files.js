@@ -51,6 +51,13 @@ export async function children(dir, gatherInfo) {
   if (!parent.path) {
     parent.path = dir.slice(0, dir.lastIndexOf('/') + 1);
   }
+  if (parent.path.endsWith(parent.name)) {
+    Object.defineProperty(parent, 'path', {
+      value: normalize(parent.path.slice(0, -parent.name.length)),
+      enumerable: true
+    });
+  }
+
   let childs = await parent.getFilesAndDirectories();
 
   for (let child of childs) {
@@ -58,6 +65,13 @@ export async function children(dir, gatherInfo) {
       value: type(child),
       enumerable: true
     });
+
+    if (child.path && child.path.endsWith(child.name)) {
+      Object.defineProperty(child, 'path', {
+        value: normalize(child.path.slice(0, -child.name.length)),
+        enumerable: true
+      });
+    }
   }
 
   if (gatherInfo && !window.needsShim) {
@@ -114,7 +128,6 @@ export async function writeFile(path, content) {
 
   }
 
-
   let request = sdcard().addNamed(content, path);
 
   return new Promise((resolve, reject) => {
@@ -124,27 +137,55 @@ export async function writeFile(path, content) {
   });
 }
 
-export async function createFile(...args) {
-  let parent = await root();
+export async function createFile(path = '') {
+  const parentPath = path.split('/').slice(0, -1).join('/');
+  let filename = path.slice(path.lastIndexOf('/') + 1);
+  let parent = await getFile(parentPath);
 
-  return await parent.createFile(...args);
+  if (!parent.createFile) {
+    parent = await root();
+    filename = path;
+  }
+
+  CACHE[parentPath] = null;
+  return await parent.createFile(filename);
 }
 
-export async function createDirectory(...args) {
-  let parent = await root();
+export async function createDirectory(path) {
+  const parentPath = path.split('/').slice(0, -1).join('/');
+  let filename = path.slice(path.lastIndexOf('/') + 1);
+  let parent = await getFile(parentPath);
 
-  return parent.createDirectory(...args).then(() => {
+  if (!parent.createDirectory) {
+    parent = await root();
+    filename = path;
+  }
+
+  CACHE[parentPath] = null;
+
+  return parent.createDirectory(filename).then(() => {
     if (window.needsShim) {
-      return createFile(args[0] + '/.empty');
+      return createFile(path + '/.empty');
     }
   });
 }
 
-export async function remove(file, deep) {
+export async function remove(file, deep = true) {
+  // const method = deep ? 'removeDeep' : 'remove';
+  const method = 'removeDeep';
   let path = normalize(file);
-  let parent = await root();
+  const parentPath = path.split('/').slice(0, -1).join('/');
+  let filename = path.slice(path.lastIndexOf('/') + 1);
+  let parent = await getFile(parentPath);
 
-  return parent[deep ? 'removeDeep' : 'remove'](path);
+  if (!parent[method]) {
+    parent = await root();
+    filename = path;
+  }
+
+  CACHE[parentPath] = null;
+
+  return parent[method](filename);
 }
 
 export async function move(file, newPath) {
