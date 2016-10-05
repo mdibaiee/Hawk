@@ -63,7 +63,7 @@ Version 2.0
 - [x] Different views (List, Grid)
 - [ ] Show storage usage statistics (free/used)
 - [ ] Sort Files
-- [ ] Zip / Unzip
+- [x] Zip / Unzip
 - [ ] Image Thumbnails
 - [ ] FTP Browser
 - [ ] Preferences
