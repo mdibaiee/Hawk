@@ -27,7 +27,7 @@
   "homepage": "https://github.com/mdibaiee/",
   "dependencies": {
     "jszip": "2.5.0",
-    "mime": "1.3.4",
+    "mime": "2.4.4",
     "react": "15.0.0",
     "react-dom": "15.0.0",
     "react-hammerjs": "0.4.5",
